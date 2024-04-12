@@ -7,9 +7,9 @@ set(LIBTHEO_VM_SOURCES
   src/instr.cpp
 )
 
-add_library(libTheoVM SHARED ${LIBTHEO_VM_HEADERS} ${LIBTHEO_VM_SOURCES})
+add_library(TheoVM SHARED ${LIBTHEO_VM_HEADERS} ${LIBTHEO_VM_SOURCES})
 
-target_include_directories(libTheoVM PUBLIC
+target_include_directories(TheoVM PUBLIC
   include
-  ${CMAKE_SOURCE_DIR}
+  ${PROJECT_SOURCE_DIR}
 )

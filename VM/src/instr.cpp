@@ -46,12 +46,13 @@ Instruction Instruction::JmpC(JumpOffset offset, RegisterIndex source) {
   };
 }
 
-Instruction Instruction::PrepareExec(RegisterCount count) {
+Instruction Instruction::PrepareExec(RegisterCount count, StackMapIndex index) {
   return {
     .op = OpCode::PREPARE_EXEC,
     .parameters = {
       .prepare = {
-	.count = count
+	.count = count,
+	.index = index
       }
     }
   };

@@ -14,7 +14,7 @@ namespace Theo {
     RET
   };
 
-  typedef int RegisterIndex, JumpOffset, Constant, ProgramIndex, RegisterCount;
+  typedef int RegisterIndex, JumpOffset, Constant, ProgramIndex, RegisterCount, StackMapIndex;
 
   struct Instruction {
     OpCode op;
@@ -34,6 +34,7 @@ namespace Theo {
       } jmpc;
       struct {
 	RegisterCount count;
+	StackMapIndex index;
       } prepare;
       struct {
 	RegisterIndex target;
@@ -70,8 +71,10 @@ namespace Theo {
     /**
      * Creates new stack frame after the current one with <count> registers
      * and initializes those to zero;
+     * StackMapIndex is the index to a stack map assigning names of variables
+     * to virtual registers
      */
-    static Instruction PrepareExec (RegisterCount count);
+    static Instruction PrepareExec (RegisterCount count, StackMapIndex index);
 
     /**
      * copies from register <source> of second to last stack frame
