@@ -2,9 +2,15 @@
 
 using namespace Theo;
 
-Instruction Instruction::Nop() {
+Instruction Instruction::PotentialBreak() {
   return {
-    .op = OpCode::NOP
+    .op = OpCode::POTENTIAL_BREAK
+  };
+}
+
+Instruction Instruction::Break() {
+  return {
+    .op = OpCode::BREAK
   };
 }
 

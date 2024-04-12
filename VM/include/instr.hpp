@@ -3,7 +3,8 @@
 
 namespace Theo {
   enum class OpCode {
-    NOP,
+    POTENTIAL_BREAK,
+    BREAK,
     HALT,
     ADD_CONST,
     JMP,
@@ -13,12 +14,12 @@ namespace Theo {
     EXEC,
     RET
   };
-
+  
   typedef int RegisterIndex, JumpOffset, Constant, ProgramIndex, RegisterCount, StackMapIndex;
-
+  
   struct Instruction {
     OpCode op;
-
+    
     union {
       struct {
 	RegisterIndex target;
@@ -49,9 +50,11 @@ namespace Theo {
       } ret;
     } parameters;
 
-    static Instruction Nop();
+    static Instruction PotentialBreak();
     
     static Instruction Halt();
+
+    static Instruction Break();
     
     /**
      * <target> := <source> + <constant>
