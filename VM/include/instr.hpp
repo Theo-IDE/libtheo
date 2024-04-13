@@ -36,13 +36,13 @@ namespace Theo {
       struct {
 	RegisterCount count;
 	StackMapIndex index;
+	RegisterIndex target;
       } prepare;
       struct {
 	RegisterIndex target;
 	RegisterIndex source;
       } arg;
       struct {
-	RegisterIndex target;
 	ProgramIndex entry;
       } exec;
       struct {
@@ -74,10 +74,11 @@ namespace Theo {
     /**
      * Creates new stack frame after the current one with <count> registers
      * and initializes those to zero;
+     * The new activation will have return register set to target;
      * StackMapIndex is the index to a stack map assigning names of variables
      * to virtual registers
      */
-    static Instruction PrepareExec (RegisterCount count, StackMapIndex index);
+    static Instruction PrepareExec (RegisterCount count, StackMapIndex index, RegisterIndex target);
 
     /**
      * copies from register <source> of second to last stack frame
@@ -87,15 +88,13 @@ namespace Theo {
 
     /**
      * InstructionPointer := <entry>;
-     * sets the return target of the current stack frame to register <target>
-     * of the second to last stack frame
      * used for calling functions:
      * PREPARE 3
      * ARG 1 13
      * ARG 2 14
      * EXEC <entry>
      */
-    static Instruction Exec(RegisterIndex target, ProgramIndex entry);
+    static Instruction Exec(ProgramIndex entry);
 
     /**
      * copies from register <source> of the current stack frame

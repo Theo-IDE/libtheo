@@ -3,7 +3,6 @@
 
 #include <unordered_set>
 #include <vector>
-#include <stack>
 #include <string>
 #include <utility>
 #include <optional>
@@ -44,7 +43,7 @@ namespace Theo {
     ProgramIndex instruction_pointer;
     Program code;
     std::vector<Word> data;
-    std::stack<Activation> stack;
+    std::vector<Activation> stack;
     std::unordered_set<Program::LineBreak> enabled_breakpoints;
 
   public:
@@ -53,7 +52,7 @@ namespace Theo {
     /**
      * get reference to activation stack (for debug purposes)
      */
-    std::stack<VM::Activation>& getActivations();
+    std::vector<VM::Activation>& getActivations();
 
     /**
      * returns the line number of the breakpoint the VM

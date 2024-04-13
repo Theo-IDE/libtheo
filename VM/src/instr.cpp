@@ -52,13 +52,14 @@ Instruction Instruction::JmpC(JumpOffset offset, RegisterIndex source) {
   };
 }
 
-Instruction Instruction::PrepareExec(RegisterCount count, StackMapIndex index) {
+Instruction Instruction::PrepareExec(RegisterCount count, StackMapIndex index, RegisterIndex target) {
   return {
     .op = OpCode::PREPARE_EXEC,
     .parameters = {
       .prepare = {
 	.count = count,
-	.index = index
+	.index = index,
+	.target = target
       }
     }
   };
@@ -76,12 +77,11 @@ Instruction Instruction::Arg(RegisterIndex target, RegisterIndex source) {
   };
 }
 
-Instruction Instruction::Exec(RegisterIndex target, ProgramIndex entry) {
+Instruction Instruction::Exec(ProgramIndex entry) {
   return {
     .op = OpCode::EXEC,
     .parameters = {
       .exec = {
-	.target = target,
 	.entry = entry
       }
     }

@@ -13,6 +13,7 @@ set(LIBTHEO_VM_SOURCES
 add_library(TheoVM SHARED ${LIBTHEO_VM_HEADERS} ${LIBTHEO_VM_SOURCES})
 
 target_include_directories(TheoVM PUBLIC
-  include
   ${PROJECT_SOURCE_DIR}
 )
+
+add_subdirectory(test)
