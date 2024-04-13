@@ -79,7 +79,7 @@ void VM::reset() {
   this->data.clear();
   this->stack.clear();
 }
-    #include<iostream>
+//#include<iostream>
 void VM::execute() {
   for(;;) {
     Instruction i = this->code.code[this->instruction_pointer];
