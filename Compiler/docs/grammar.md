@@ -1,5 +1,5 @@
 # Grammar Specification
-This file specifies the grammar that is to be implemented by libTheo using BNF (adhering to the specification found at https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form).
+This file specifies the grammar that is to be implemented by libTheo using BNF (adhering to the specification found [here](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form)).
 The grammar mostly adheres to the definitions by Uwe Schöning, with a few permissive extensions to make using the language less masochistic.
 
 Changes made:
@@ -13,57 +13,61 @@ Changes made:
 	- with c-like syntax
 	- with infix syntax
 
-The starting symbol is P. C denotes a constant signed integer (-?[0-9]+), X an alphanumeric variable name ([a-Z][a-Z0-9_]*), S any string not containing tabs, spaces or newlines, $ denotes newline characters, \* any string.
+The starting symbol is `P`. `C` denotes a constant signed integer `(-?[0-9]+)`, `X` an alphanumeric variable name `([a-Z][a-Z0-9_]*)`, `S` any string not containing tabs, spaces or newlines, `$` denotes newline characters, `*` any string.
 
-\<P\> ::= (\<body_element\> \| \<program_definition\> \| \<include_statement\>) \<optional_semicolon\> (\<P\> | "")
+```BNF
+<P> ::= (<body_element> | <program_definition> | <include_statement>) <optional_semicolon> (<P> | "")
 
-\<optional_semicolon\> ::= "" | ";"
+<optional_semicolon> ::= "" | ";"
 
-\<body_element\> ::= \<expression\> \| \<loop_statement\> \| \<while_statement\> | \<goto_statement\> \<comment\>
+<body_element> ::= <expression> | <loop_statement> | <while_statement> | <goto_statement> | <comment>
 
-\<body\> ::= "" | (\<body_element\> ("" | (\<optional_semicolon\> \<body\>)))
+<body> ::= "" | (<body_element> ("" | (<optional_semicolon> <body>)))
 
-\<include_statement\> ::= ("INCLUDE" \| "include" \| "Include") \<S\>
+<include_statement> ::= ("INCLUDE" | "include" | "Include") <S>
 
-\<comment\> ::= "#" * $
-
+<comment> ::= "#" * $
+```
 ## Expressions
-\<expression\> ::= \<X\> ("=" \| ":=") (\<addition\> \| \<expression_term\> \| \<infix_call\>)
+```BNF
+<expression> ::= <X> ("=" | ":=") <addition> | <expression_term> | <infix_call>)
 
-\<expresion_term\> ::= \<c_style_call\> \| \<X\> \| \<C\>
+<expresion_term> ::= <c_style_call> | <X> | <C>
 
-\<addition\> ::= \<X\> ("+" \| "-") \<C\>
+<addition> ::= <X> ("+" | "-") <C>
 
-\<infix_call\> ::= \<expression_term\> \<S\> \<expression_term\>
+<infix_call> ::= <expression_term> <S> <expression_term>
 
-\<c_style_call\> ::= \<S\> "(" \<arglist\> ")"
+<c_style_call> ::= <S> "(" <arglist> ")"
 
-\<arglist\> ::= "" \| (\<expression_term\> ("" \| ("," \<arglist\>)))
-
+<arglist> ::= "" | <expression_term> ("" | ("," <arglist>)))
+```
 ## Constructs
-\<end_kw\> = "END" \| "end" \| "End"
+```BNF
+<end_kw> = "END" | "end" | "End"
 
-\<loop_statement\> ::= ("LOOP" \| "loop" \| "Loop") \<expression_term\> ("DO" \| "do" \| "Do") \<body\> \<end_kw\>
+<loop_statement> ::= ("LOOP" | "loop" | "Loop") <expression_term> ("DO" | "do" | "Do") <body> <end_kw>
 
-\<while_statement\> ::= ("WHILE" \| "while" \| "While") \<expression_term\> ("" | ("!=" "0")) ("DO" \| "do" \| "Do") \<body\> \<end_kw\>
+<while_statement> ::= ("WHILE" | "while" | "While") <expression_term> ("" | ("!=" "0")) ("DO" | "do" | "Do") <body> <end_kw>
 
-\<goto_statement\> ::= \<unconditional_goto\> \| \<conditional_goto\> \| ("STOP" \| "stop" \| "Stop")
+<goto_statement> ::= <unconditional_goto> | <conditional_goto> | ("STOP" | "stop" | "Stop")
 
-\<unconditional_goto\> ::= \<goto_kw\> \<mark\>
+<unconditional_goto> ::= <goto_kw> <mark>
 
-\<conditional_goto\> ::= ("IF \| "if" \| "If") \<expression_term\> "=" \<expression_term\> ("THEN" \| "then" \| "Then") \<goto_kw\> \<mark\>
+<conditional_goto> ::= ("IF | "if" | "If") <expression_term> "=" <expression_term> ("THEN" | "then" | "Then") <goto_kw> <mark>
 
-\<goto_kw\> ::= "GOTO" \| "goto" \| "Goto"
+<goto_kw> ::= "GOTO" | "goto" | "Goto"
 
-\<mark\> ::= \<X\> ":"
-
+<mark> ::= <X> ":"
+```
 ## Programs (Functions)
-\<program_definition\> ::= ("PROGRAM" \| "program" \| "Program") \<S\> ("IN" \| "in" \| "In") \<argdef_list\> \<optional_out\> ("DO" \| "do" \| "Do") \<body\> \<end_kw\>
+```BNF
+<program_definition> ::= ("PROGRAM" | "program" | "Program") <S> ("IN" | "in" | "In") <argdef_list> <optional_out> ("DO" | "do" | "Do") <body> <end_kw>
 
-\<argdef_list\> ::= "" \| (\<X\> ("" \| ("," \<argdef_list\>)))
+<argdef_list> ::= "" | (<X> ("" | ("," <argdef_list>)))
 
-\<optional_out\> ::= "" \| (("OUT" \| "out" \| "Out") \<X\>)
-
+<optional_out> ::= "" | (("OUT" | "out" | "Out") <X>)
+```
 # An Example Program
 Here is an example program made up of two files: math.theo and main.theo;
 It only uses the LOOP-features but demonstrates the most important deviations from the "standard" LOOP syntax (Program definition, Include statements and Calls).
