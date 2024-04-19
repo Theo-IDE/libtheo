@@ -1,5 +1,5 @@
 # Grammar Specification
-This file specifies the grammar that is to be implemented by libTheo using BNF (adhering to the specification found at https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form).
+This file specifies the grammar that is to be implemented by libTheo using BNF (adhering to the specification found [here](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form)).
 The grammar mostly adheres to the definitions by Uwe Schöning, with a few permissive extensions to make using the language less masochistic.
 
 Changes made:
