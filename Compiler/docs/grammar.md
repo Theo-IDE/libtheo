@@ -23,7 +23,7 @@ The starting symbol is P. C denotes a constant signed integer (-?[0-9]+), X an a
 
 \<body\> ::= "" | (\<body_element\> ("" | (\<optional_semicolon\> \<body\>)))
 
-\<include_statement\> ::= ("INCLUDE" \| "include" \| "Include") \<S\>
+\<include_statement\> ::= ("INCLUDE" \| "include" \| "Include") "\"" \<S\> "\""
 
 \<comment\> ::= "#" * $
 
@@ -90,7 +90,7 @@ END
 
 ## main.theo
 ```
-INCLUDE math.theo # works like copy-and-paste, or include in C/C++
+INCLUDE "math.theo" # works like copy-and-paste, or include in C/C++
 
 # language-supported instructions
 x0 := 10	# constant assignment is a permissive extension
