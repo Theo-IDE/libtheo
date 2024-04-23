@@ -1,0 +1,52 @@
+
+find_package(BISON)
+find_package(FLEX)
+
+set(GENERATED_OUTPUTS
+	${CMAKE_CURRENT_SOURCE_DIR}/include/parser.tab.h
+	${CMAKE_CURRENT_SOURCE_DIR}/src/parser.tab.c
+)
+
+# if the environment has flex / bison installed, regenerate the parser on build
+# the files are also pregenerated in the source tree to avoid having bison and flex
+# as dependencies on every platform
+if(BISON_FOUND AND FLEX_FOUND)
+	add_custom_command(
+		OUTPUT ${GENERATED_OUTPUTS}
+		COMMAND flex 
+			--outfile="${CMAKE_CURRENT_SOURCE_DIR}/src/lex.yy.c" 
+			--header-file="${CMAKE_CURRENT_SOURCE_DIR}/include/lex.yy.h"  
+			"${CMAKE_CURRENT_SOURCE_DIR}/src/lexer.l"
+                COMMAND bison "${CMAKE_CURRENT_SOURCE_DIR}/src/parser.y" 
+			-o "${CMAKE_CURRENT_SOURCE_DIR}/src/parser.tab.c" 
+			--defines="${CMAKE_CURRENT_SOURCE_DIR}/include/parser.tab.h" 
+			-Wcounterexamples
+	)
+endif()
+
+# bison & flex targets
+add_custom_target(parser-regen
+  COMMAND ./parsergen.sh
+)
+
+set(LIBTHEO_C_HEADERS
+  include/ast.hpp
+  include/parse.hpp
+  include/lexer.hpp
+  include/lexextra.hpp
+)
+
+set(LIBTHEO_C_SOURCES
+  src/ast.cpp
+  src/parse.cpp
+)
+
+set_source_files_properties(src/parser.tab.c PROPERTIES LANGUAGE CXX)
+add_library(TheoC SHARED ${LIBTHEO_C_HEADERS} ${LIBTHEO_C_SOURCES} ${GENERATED_OUTPUTS})
+
+target_include_directories(TheoC PUBLIC
+  ${PROJECT_SOURCE_DIR}
+  ${PROJECT_SOURCE_DIR}/Compiler/include # needed for bison output files to find each other
+)
+
+add_subdirectory(test)
