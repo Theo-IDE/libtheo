@@ -14,7 +14,7 @@ Instruction Instruction::Break() {
   };
 }
 
-Instruction Instruction::Add(RegisterIndex target, RegisterIndex source, Constant constant){
+Instruction Instruction::Add(RegisterIndex target, RegisterIndex source, ::Constant constant){
   return {
     .op = OpCode::ADD_CONST,
     .parameters = {
@@ -94,6 +94,18 @@ Instruction Instruction::Ret(RegisterIndex source) {
     .parameters = {
       .ret = {
 	.source = source
+      }
+    }
+  };
+}
+
+Instruction Instruction::LoadConstant(RegisterIndex target, Constant c) {
+  return {
+    .op = OpCode::CONST,
+    .parameters = {
+      .constant = {
+	.target = target,
+	.constant = c
       }
     }
   };

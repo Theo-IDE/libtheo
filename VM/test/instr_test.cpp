@@ -26,19 +26,27 @@ int main() {
 
   // creating the stack map for our program
   std::vector<Program::StackMap> sm = {
-    { // "main" script
-      {0, "x0"},
-      {1, "x1"}
-    },
-    { // + program
-      {0, "x0"},
-      {1, "x2"}
+    {
+      "main",
+      { // "main" script
+	{0, "x0"},
+	{1, "x1"}
+      }
     },
     {
-      // * program
-      {0, "x0"},
-      {1, "x1"},
-      {2, "x2"}
+      "+",
+      { // + program
+	{0, "x0"},
+	{1, "x2"}
+      }
+    },
+    {
+      "*",
+      {// * program
+	{0, "x0"},
+	{1, "x1"},
+	{2, "x2"}
+      }
     }
   };
 

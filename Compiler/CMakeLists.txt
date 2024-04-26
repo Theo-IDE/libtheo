@@ -29,11 +29,13 @@ set(LIBTHEO_C_HEADERS
   include/parse.hpp
   include/lexer.hpp
   include/lexextra.hpp
+  include/gen.hpp
 )
 
 set(LIBTHEO_C_SOURCES
   src/ast.cpp
   src/parse.cpp
+  src/gen.cpp
 )
 
 set_source_files_properties(src/parser.tab.c PROPERTIES LANGUAGE CXX)
@@ -43,5 +45,11 @@ target_include_directories(TheoC PUBLIC
   ${PROJECT_SOURCE_DIR}
   ${PROJECT_SOURCE_DIR}/Compiler/include # needed for bison output files to find each other
 )
+
+target_link_directories(TheoC PUBLIC
+  ${PROJECT_BINARY_DIR}/VM/
+)
+
+target_link_libraries(TheoC PUBLIC TheoVM)
 
 add_subdirectory(test)

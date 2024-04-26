@@ -1,4 +1,5 @@
 #include "VM/include/vm.hpp"
+#include "VM/include/program.hpp"
 
 using namespace Theo;
 
@@ -17,7 +18,7 @@ VM::Activation::Data VM::Activation::getActivationVariables() {
   VM::Activation::Data res;
   Program::StackMap stack_map = this->vm->code.stack_maps[this->debug_info];
   for(int offset = 0; offset < this->seg_size; offset++) {
-    for(auto &entry : stack_map){
+    for(auto &entry : stack_map.map){
       res[entry.second] = this->vm->data[this->data_start + entry.first];
     }
   }
@@ -25,46 +26,51 @@ VM::Activation::Data VM::Activation::getActivationVariables() {
 }
 
 VM::VM(Program code) {
+  this->stepping_mode_enabled = false;
   this->instruction_pointer = 0;
   this->code = code;
+  this->enabled_breakpoints = {};
+  this->stack = {};
+  this->data = {};
 }
 
 std::vector<VM::Activation>& VM::getActivations() {
   return this->stack;
 }
 
-Program::LineBreak VM::getCurrentBreak() {
+BreakPoint VM::getCurrentBreak() {
   auto itr = this->code.line_info.find(this->instruction_pointer);
-  return (itr == this->code.line_info.end()) ? -1 : itr->second;
+  return (itr == this->code.line_info.end()) ? ((BreakPoint){"none", -1}) : itr->second;
 }
 
 void VM::setSteppingMode(bool mode) {
   this->stepping_mode_enabled = mode;
 }
 
-bool VM::setBreakPoint(Program::LineBreak line, bool value) {
-  auto itr = this->code.potential_breaks.find(line);
+bool VM::setBreakPoint(std::string file, int line, bool value) {
+  BreakPoint bp = {file, line};
+  auto itr = this->code.potential_breaks.find(bp);
   if (itr == this->code.potential_breaks.end())
     return false;
   if(!value){
-    this->enabled_breakpoints.erase(line);
+    this->enabled_breakpoints.erase(bp);
     this->code.code[(*itr).second].op = OpCode::POTENTIAL_BREAK;
   } else {
-    this->enabled_breakpoints.insert(line);
+    this->enabled_breakpoints.insert(bp);
     this->code.code[(*itr).second].op = OpCode::BREAK;
   }
   return true;
 }
 
 void VM::clearBreakpoints() {
-  for(Program::LineBreak const& bp : this->enabled_breakpoints) {
+  for(auto const& bp : this->enabled_breakpoints) {
     ProgramIndex i = this->code.potential_breaks[bp];
     this->code.code[i].op = OpCode::POTENTIAL_BREAK;
   }
   this->enabled_breakpoints.clear();
 }
 
-std::unordered_set<Program::LineBreak> &VM::getEnabledBreakPoints() {
+std::unordered_set<BreakPoint> &VM::getEnabledBreakPoints() {
   return this->enabled_breakpoints;
 }
 
@@ -79,16 +85,15 @@ void VM::reset() {
   this->data.clear();
   this->stack.clear();
 }
-//#include<iostream>
+#include<iostream>
 void VM::execute() {
   for(;;) {
     Instruction i = this->code.code[this->instruction_pointer];
-    
     switch(i.op){
     case OpCode::POTENTIAL_BREAK: {
       //std::cout << "Potential Break" << std::endl;
+      this->instruction_pointer++;
       if(this->stepping_mode_enabled){
-	this->instruction_pointer++;
 	return;
       }
       break;
@@ -110,6 +115,13 @@ void VM::execute() {
       this->data[base + i.parameters.add.target] =
 	this->data[base + i.parameters.add.source] +
 	i.parameters.add.constant;
+      this->instruction_pointer++;
+      break;
+    }
+    case OpCode::CONST: {
+      //std::cout << "Const load" << std::endl;
+      WordIndex base = this->stack.back().data_start;
+      this->data[base + i.parameters.constant.target] = i.parameters.constant.constant;
       this->instruction_pointer++;
       break;
     }
