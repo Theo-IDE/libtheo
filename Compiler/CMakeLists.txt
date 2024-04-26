@@ -24,11 +24,6 @@ if(BISON_FOUND AND FLEX_FOUND)
 	)
 endif()
 
-# bison & flex targets
-add_custom_target(parser-regen
-  COMMAND ./parsergen.sh
-)
-
 set(LIBTHEO_C_HEADERS
   include/ast.hpp
   include/parse.hpp

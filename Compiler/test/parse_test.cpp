@@ -90,5 +90,5 @@ x3 := x2 + *(x0, x1) # this works, as infix is top level and second arg is c-sty
     p.second.clear();
   }
   
-  return 0;
+  return all_clear ? 0 : 1;
 }
