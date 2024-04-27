@@ -45,11 +45,9 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 16 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
 
 #include "Compiler/include/ast.hpp"
 
-#line 53 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/include/parser.tab.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE

@@ -67,7 +67,6 @@
 
 
 /* First part of user prologue.  */
-#line 3 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
 
 #include <iostream>
 #include <cstdint>
@@ -79,7 +78,6 @@ using namespace Theo;
 int yylex (YYSTYPE * yyval_param, struct YYLTYPE * yylloc_param, void * yyscanner);
 void yyerror(YYLTYPE *l, void *scanner, Theo::AST *r, const char *const s);
 
-#line 83 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -1567,193 +1565,130 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* start: program  */
-#line 47 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                           {res->root = yyvsp[0];}
-#line 1573 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 3: /* program: body_element program  */
-#line 50 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                                         {yyval = res->mk(Node::Type::SPLIT, (yylsp[-1]).first_line, NULL, yyvsp[-1], yyvsp[0]);}
-#line 1579 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 4: /* program: funcdef program  */
-#line 51 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                                         {yyval = res->mk(Node::Type::SPLIT, (yylsp[-1]).first_line, NULL, yyvsp[-1], yyvsp[0]);}
-#line 1585 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 5: /* program: incl_stmt program  */
-#line 52 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                                         {yyval = res->mk(Node::Type::SPLIT, (yylsp[-1]).first_line, NULL, yyvsp[-1], yyvsp[0]);}
-#line 1591 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 6: /* program: %empty  */
-#line 53 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                   {yyval = NULL;}
-#line 1597 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 7: /* body: body_element body  */
-#line 56 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                                      {yyval = res->mk(Node::Type::SPLIT, (yylsp[-1]).first_line, NULL, yyvsp[-1], yyvsp[0]);}
-#line 1603 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 8: /* body: %empty  */
-#line 57 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                   {yyval = NULL;}
-#line 1609 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 13: /* expression: NAME_L assign_op rvalue  */
-#line 66 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                                           {yyval = res->mk(Node::Type::ASSIGN, (yylsp[-2]).first_line, NULL, yyvsp[-2], yyvsp[0]);}
-#line 1615 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 19: /* addition: nestable ADD_CONSTANT CONSTANT  */
-#line 78 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                                                  {yyval = res->mk(Node::Type::ADD, (yylsp[-2]).first_line, NULL, yyvsp[-2], yyvsp[0]);}
-#line 1621 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 20: /* addition: nestable SUB_CONSTANT CONSTANT  */
-#line 79 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                                                  {yyval = res->mk(Node::Type::SUB, (yylsp[-2]).first_line, NULL, yyvsp[-2], yyvsp[0]);}
-#line 1627 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 24: /* paren_call: NAME PAREN_OPEN optional_arglist PAREN_CLOSE  */
-#line 87 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                                                                {yyval = res->mk(Node::Type::CALL, (yylsp[-3]).first_line, NULL, yyvsp[-3], yyvsp[-1]);}
-#line 1633 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 28: /* arglist: rvalue DELIM arglist  */
-#line 95 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                                        {yyval = res->mk(Node::Type::SPLIT, (yylsp[-2]).first_line, NULL, yyvsp[-2], yyvsp[0]);}
-#line 1639 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 29: /* infix: nestable NAME nestable  */
-#line 98 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                                          {yyval = res->mk(Node::Type::CALL, (yylsp[-1]).first_line, NULL, yyvsp[-1], res->mk(Node::Type::SPLIT, (yylsp[-1]).first_line, NULL, yyvsp[-2], yyvsp[0]));}
-#line 1645 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 30: /* loop_stmt: KW_LOOP nestable KW_DO body KW_END  */
-#line 101 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                                                      {yyval = res->mk(Node::Type::LOOP, (yylsp[-4]).first_line, NULL, yyvsp[-3], yyvsp[-1]);}
-#line 1651 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 31: /* while_stmt: KW_WHILE nestable opt_ineq KW_DO body KW_END  */
-#line 104 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                                                                {yyval = res->mk(Node::Type::WHILE, (yylsp[-5]).first_line, NULL, yyvsp[-4], yyvsp[-1]);}
-#line 1657 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 32: /* opt_ineq: ZERO_INEQUALITY  */
-#line 107 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                                   {yyval = NULL;}
-#line 1663 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 33: /* opt_ineq: %empty  */
-#line 108 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                   {yyval = NULL;}
-#line 1669 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 34: /* goto_stmt: KW_GOTO NAME  */
-#line 111 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                                {yyval = res->mk(Node::Type::GOTO, (yylsp[-1]).first_line, NULL, yyvsp[0], NULL);}
-#line 1675 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 35: /* goto_stmt: KW_IF eq_test KW_THEN KW_GOTO NAME  */
-#line 112 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                                                      {yyval = res->mk(Node::Type::IF, (yylsp[-4]).first_line, NULL, yyvsp[-3], res->mk(Node::Type::GOTO, (yylsp[-1]).first_line, NULL, yyvsp[0], NULL));}
-#line 1681 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 36: /* goto_stmt: MARK_NAME MARK_DELIM  */
-#line 113 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                                        {yyval = res->mk(Node::Type::MARK, (yylsp[-1]).first_line, NULL, yyvsp[-1], NULL);}
-#line 1687 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 37: /* eq_test: rvalue EQ_OPERATOR rvalue  */
-#line 116 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                                             {yyval = res->mk(Node::Type::EQ, (yylsp[-1]).first_line, NULL, yyvsp[-2], yyvsp[0]);}
-#line 1693 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 38: /* eq_test: NAME_L EQ_OPERATOR rvalue  */
-#line 117 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                                             {yyval = res->mk(Node::Type::EQ, (yylsp[-1]).first_line, NULL, yyvsp[-2], yyvsp[0]);}
-#line 1699 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 39: /* funcdef: KW_PROGRAM funcname KW_DO body KW_END  */
-#line 120 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                                                         {yyval = res->mk(Node::Type::PROGRAM, (yylsp[-4]).first_line, NULL, yyvsp[-3], yyvsp[-1]);}
-#line 1705 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 40: /* funcname: NAME progports  */
-#line 123 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                                  {yyval = res->mk(Node::Type::SPLIT, (yylsp[-1]).first_line, NULL, yyvsp[-1], yyvsp[0]);}
-#line 1711 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 41: /* progports: opt_in opt_out  */
-#line 126 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                                  {yyval = res->mk(Node::Type::SPLIT, (yylsp[-1]).first_line, NULL, yyvsp[-1], yyvsp[0]);}
-#line 1717 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 42: /* opt_in: KW_IN in  */
-#line 129 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                            {yyval = yyvsp[0];}
-#line 1723 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 43: /* opt_in: %empty  */
-#line 130 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                   {yyval = NULL;}
-#line 1729 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 44: /* opt_out: KW_OUT NAME  */
-#line 133 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                               {yyval = yyvsp[0];}
-#line 1735 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 45: /* opt_out: %empty  */
-#line 134 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                   {yyval = NULL;}
-#line 1741 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 47: /* in: NAME DELIM in  */
-#line 138 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                                 {yyval = res->mk(Node::Type::SPLIT, (yylsp[-2]).first_line, NULL, yyvsp[-2], yyvsp[0]);}
-#line 1747 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
   case 48: /* incl_stmt: KW_INCLUDE STR  */
-#line 141 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
                                  {yyval = yyvsp[0];}
-#line 1753 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
     break;
 
 
-#line 1757 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.tab.c"
 
       default: break;
     }
@@ -1982,7 +1917,6 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 144 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/parser.y"
 
 
 #include "lex.yy.c"
