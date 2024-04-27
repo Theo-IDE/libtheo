@@ -22,6 +22,7 @@ namespace Theo {
 	UNKNOWN_PROGRAM_NAME=3, /* tried calling an undefined program*/
 	ARGSIZE_MISMATCH=4, /*function called with wrong number of arguments*/
 	INTERNAL_ERROR=5, /*codegen error, e.g. couldn't backpatch*/
+	UNKNOWN_MARK=6, /*GOTO to undefined jump mark*/
       };
       Type t;
       std::string message;

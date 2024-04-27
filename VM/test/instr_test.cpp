@@ -102,14 +102,14 @@ int main() {
     std::cout << ac.first << " = " << ac.second << std::endl;
   }
 
-  if(res.find("x0") == res.end() || (*res.find("x0")).second != 91){
+  if(res.find("x0") == res.end() || res["x0"] != 91){
     std::cout << "Execution 1 failed" << std::endl;
     return 1;
   }
 
   v.reset();
   v.execute();
-  if(res.find("x0") == res.end() || (*res.find("x0")).second != 91) {
+  if(res.find("x0") == res.end() || res["x0"] != 91) {
     std::cout << "Execution 2 after reset failed" << std::endl;
     return 1;
   }

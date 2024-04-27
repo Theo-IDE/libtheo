@@ -13,7 +13,8 @@ namespace Theo {
     ARG,
     EXEC,
     RET,
-    CONST
+    CONST,
+    TEST
   };
   
   typedef int RegisterIndex, JumpOffset, Constant, ProgramIndex, RegisterCount, StackMapIndex;
@@ -22,6 +23,11 @@ namespace Theo {
     OpCode op;
     
     union {
+      struct {
+	RegisterIndex target;
+	RegisterIndex op1;
+	RegisterIndex op2;
+      } test;
       struct {
 	RegisterIndex target;
 	RegisterIndex source;
@@ -60,6 +66,11 @@ namespace Theo {
     static Instruction Halt();
 
     static Instruction Break();
+
+    /**
+     * <target> := (<op1> == <op2>) ? 0 : 1
+     */
+    static Instruction Test(RegisterIndex target, RegisterIndex op1, RegisterIndex op2);
     
     /**
      * <target> := <source> + <constant>

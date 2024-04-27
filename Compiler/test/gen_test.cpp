@@ -5,24 +5,53 @@
 #include "VM/include/vm.hpp"
 
 int main() {
-  
-  std::string test_code = "\n\
-PROGRAM + IN x0, x1 OUT x0 DO\n\
-  LOOP x1 DO\n\
-    x0 := x0 + 1\n\
-  END\n\
+
+  std::string basemath_code = "\
+PROGRAM + IN x0, x1 OUT x0 DO\n			\
+  WHILE x1 DO\n					\
+    x0 := x0 + 1\n				\
+    x1 := x1 - 1\n				\
+  END\n						\
+END\n						\
+\n\
+Program * In x1, x2 Do\n			\
+  start:\n					\
+   if x2 = 0 then goto finish\n			\
+   x0 := x0 + x1\n				\
+   x2 := x2 - 1\n				\
+   goto start\n					\
+  finish:\n					\
+END\n						\
+";
+
+  std::string fib_code = "\
+INCLUDE \"basemath.theo\"\n\
+PROGRAM fib IN x2 DO\n	  \
+  x0 := 1\n		  \
+  x1 := 1\n		  \
+  x2 := x2 - 2\n	  \
+  LOOP x2 DO \n		  \
+    temp := x1\n	  \
+    x1 := x0\n		  \
+    x0 := temp + x0\n	  \
+  END\n			  \
 END\n\
-Program * In x1, x2 Do\n\
-  LOOP x2 do\n\
-    x0 := x0 + x1\n\
-  END\n\
-END\n\
-x0 := 13\n\
-x1 := 42\n\
-x2 := *(x0 * x1, +(2, 2))\n\
+";
+	     
+  std::string test_code = "\
+INCLUDE \"math.theo\"\n				\
+#NOTE: double include just overrides\n		\
+INCLUDE \"basemath.theo\"\n			\
+x0 := 13\n					\
+x1 := 42\n					\
+x2 := *(x0 * x1, +(2, 2))\n			\
+fibres := fib(25)\n				\
   ";
+  
   std::map<Theo::FileName, Theo::AST> res = Theo::parse({
       {"gen_test.theo", test_code},
+      {"basemath.theo", basemath_code},
+      {"math.theo", fib_code}
     });
 
   Theo::CodegenResult fin = Theo::gen(res, "gen_test.theo");
@@ -54,8 +83,13 @@ x2 := *(x0 * x1, +(2, 2))\n\
     std::cout << ac.first << " = " << ac.second << std::endl;
   }
 
-  if(d.find("x2") == d.end() || d["x2"] != 2184){
+  if(d["x2"] != 2184){
     std::cout << "According to your broken VM (and or Parser/Generator), 13*42*4 = " << d["x2"] << std::endl;
+    return 1;
+  }
+
+  if(d["fibres"] != 75025){
+    std::cout << "According to your broken VM (and/or Parser/Generator), fib(25) = " << d["fibres"] << std::endl;
     return 1;
   }
   

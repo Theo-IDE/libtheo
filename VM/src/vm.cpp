@@ -118,6 +118,15 @@ void VM::execute() {
       this->instruction_pointer++;
       break;
     }
+    case OpCode::TEST: {
+      WordIndex base = this->stack.back().data_start;
+      this->data[base +i.parameters.test.target] =
+	(this->data[base + i.parameters.test.op1] ==
+	 this->data[base + i.parameters.test.op2])
+	? 0 : 1;
+      this->instruction_pointer++;
+      break;
+    }
     case OpCode::CONST: {
       //std::cout << "Const load" << std::endl;
       WordIndex base = this->stack.back().data_start;

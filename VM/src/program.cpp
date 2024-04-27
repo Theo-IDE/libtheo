@@ -21,12 +21,22 @@ void Program::disassemble(std::ostream &o) {
     Instruction i = this->code[line];
     o << std::to_string(line) << ":\t";
     switch(this->code[line].op){
-    case OpCode::POTENTIAL_BREAK:
-      o << "--" << std::endl;
+    case OpCode::TEST: {
+      o << "r[" << i.parameters.test.target << "] = "
+	<< "r[" << i.parameters.test.op1 << "] == "
+	<< "r[" << i.parameters.test.op2 << "] ? 0 : 1"
+	<< std::endl;
       break;
-    case OpCode::BREAK:
-      o << "Breakpoint" << std::endl;
+    }
+    case OpCode::POTENTIAL_BREAK: {
+      BreakPoint bp = this->line_info[line];
+      o << "--\t\t\t\t" << bp.file << ":" << bp.line << std::endl;
+      break;}
+    case OpCode::BREAK:{
+      BreakPoint bp = this->line_info[line];
+      o << "++\t\t\t\t" << bp.file << ":" << bp.line << std::endl;
       break;
+    }
     case OpCode::HALT:
       o << "Halt!" << std::endl;
       break;

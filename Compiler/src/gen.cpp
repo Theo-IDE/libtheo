@@ -16,9 +16,10 @@ struct VReg {
 
 struct FunctionGenState {
   std::string name;
-  std::vector<VReg> register_state;
-  int argnum;
-
+  std::vector<VReg> register_state = {};
+  int argnum = 0;
+  std::map<std::string, int> marks = {};
+  
   // get a temporary register
   RegisterIndex fetchTemporary () {
     // linear search is inefficient, but practically bounded for useful programs
@@ -132,6 +133,13 @@ struct GenState {
   void popSymbols(ProgramIndex addr) {
     FunctionGenState fgs = this->getSymbols();
 
+    for(auto e : fgs.marks) {
+      if(this->labels[e.second] == -1) {
+	this->err(CodegenResult::Error::Type::UNKNOWN_MARK, "In program '" +
+		  fgs.name + "', mark '" + e.first + "' is referenced but is never set");
+      }
+    }
+
     Program::StackMap sm;
     sm.func_name = fgs.name;
     sm.map = {};
@@ -157,9 +165,10 @@ struct GenState {
   void advanceLine(int new_lineno) {
     FileState fs = this->getFileState();
     if(new_lineno > fs.line){
+      (this->file_state.end()-1)->line = new_lineno;
       this->breakpoint();
     }
-    (this->file_state.end()-1)->line = new_lineno;
+
   }
 
   int createLabel() {
@@ -177,15 +186,23 @@ struct GenState {
   }
 
   // performs backpatching on the code
+  void backpatchErr() {
+    this->err(CodegenResult::Error::Type::UNKNOWN_MARK, "backpatching failed because of unknown mark");
+  }
+  
   void backpatch() {
     for(auto loc : this->backpatching_todo) {
       if(this->out.code[loc].op == OpCode::JMP) {
 	int label = this->out.code[loc].parameters.jmp.offset;
 	ProgramIndex tgt = this->labels[label];
+	if(tgt == -1)
+	  this->backpatchErr();
 	this->out.code[loc].parameters.jmp.offset = tgt-loc;
       } else if (this->out.code[loc].op == OpCode::JMPC) {
 	int label = this->out.code[loc].parameters.jmpc.offset;
 	ProgramIndex tgt = this->labels[label];
+	if(tgt == -1)
+	  this->backpatchErr();
 	this->out.code[loc].parameters.jmpc.offset = tgt-loc;
       } else {
 	this->err(CodegenResult::Error::Type::INTERNAL_ERROR, "attempted to backpatch non-jmp at loc " + std::to_string(loc));
@@ -199,6 +216,84 @@ struct GenState {
 /*recursive AST traversal funcs*/
 void dispatchVoid(GenState &gs, Node *c);
 void dispatchValue(GenState &gs, Node *c, RegisterIndex tgt);
+void gen_ast(GenState &gs, std::string fname);
+
+void dispatchInclude(GenState &gs, Node *c) {
+  std::string qname = std::string(c->tok);
+  qname = qname.substr(1, qname.length()-2);
+
+  gen_ast(gs, qname);
+}
+
+void dispatchIf(GenState &gs, Node *c) {
+  RegisterIndex
+    cond = gs.getSymbols().fetchTemporary(),
+    op1 = gs.getSymbols().fetchTemporary(),
+    op2 = gs.getSymbols().fetchTemporary();
+
+  dispatchValue(gs, c->left->left, op1);
+  dispatchValue(gs, c->left->right, op2);
+
+  gs.emit(Instruction::Test(cond, op1, op2));
+
+  std::string name = std::string(c->right->left->tok);
+
+  if(gs.getSymbols().marks.find(name) == gs.getSymbols().marks.end()){
+    gs.getSymbols().marks[name] = gs.createLabel();
+  }
+
+  gs.emitBackpatched(Instruction::JmpC(gs.getSymbols().marks[name], cond));
+  
+  gs.getSymbols().releaseTemporary(cond);
+  gs.getSymbols().releaseTemporary(op1);
+  gs.getSymbols().releaseTemporary(op2);
+}
+
+void dispatchGoto(GenState &gs, Node *c) {
+  std::string name = std::string(c->left->tok);
+  
+  if(gs.getSymbols().marks.find(name) == gs.getSymbols().marks.end())
+    gs.getSymbols().marks[name] = gs.createLabel();
+
+  gs.emitBackpatched(Instruction::Jmp(gs.getSymbols().marks[name]));
+}
+
+// create a mark in the current function
+void dispatchMark(GenState &gs, Node *c) {
+
+  std::string name = std::string(c->left->tok);
+  if(gs.getSymbols().marks.find(name) == gs.getSymbols().marks.end()){
+    gs.getSymbols().marks[name] = gs.createLabel();
+  }
+  
+  gs.setLabel(gs.getSymbols().marks[name], gs.getNextPos());
+}
+
+// dispatch while construct
+void dispatchWhile(GenState &gs, Node *c) {
+  int startLabel = gs.createLabel(),
+    endLabel = gs.createLabel();
+
+  RegisterIndex cond_reg = gs.getSymbols().fetchTemporary();
+  
+  // WHILE:
+  gs.setLabel(startLabel, gs.getNextPos());
+  
+  // calculate condition
+  dispatchValue(gs, c->left, cond_reg);
+  
+  // if cond == 0 GOTO END
+  gs.emitBackpatched(Instruction::JmpC(endLabel, cond_reg));
+
+  dispatchVoid(gs, c->right); // while body
+
+  gs.emitBackpatched(Instruction::Jmp(startLabel)); // goto WHILE
+
+  // END:
+  gs.setLabel(endLabel, gs.getNextPos());
+
+  gs.getSymbols().releaseTemporary(cond_reg);
+}
 
 // dispatch loop construct
 void dispatchLoop(GenState &gs, Node *c) {
@@ -388,6 +483,26 @@ void dispatchVoid(GenState &gs, Node *c) {
     dispatchLoop(gs, c);
     break;
   }
+  case Node::Type::WHILE: {
+    dispatchWhile(gs, c);
+    break;
+  }
+  case Node::Type::MARK: {
+    dispatchMark(gs, c);
+    break;
+  }
+  case Node::Type::GOTO: {
+    dispatchGoto(gs, c);
+    break;
+  }
+  case Node::Type::IF: {
+    dispatchIf(gs, c);
+    break;
+  }
+  case Node::Type::INCLUDE: {
+    dispatchInclude(gs, c);
+    break;
+  }
   default: {
     gs.err(CodegenResult::Error::Type::MALFORMED_AST, "node type " + std::to_string((int)c->t) + " unimplemented in dispatchVoid()");
     break;
@@ -412,7 +527,6 @@ void gen_ast(GenState &gs, std::string fname) {
       return;
     }
     gs.pushFileState(fname);
-    gs.breakpoint();
     dispatchVoid(gs, (*itr).second.root);
     gs.popFileState();
   }

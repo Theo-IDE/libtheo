@@ -14,6 +14,20 @@ Instruction Instruction::Break() {
   };
 }
 
+Instruction Instruction::Test(RegisterIndex target, RegisterIndex op1,
+                              RegisterIndex op2) {
+  return {
+    .op = OpCode::TEST,
+    .parameters = {
+      .test = {
+	.target = target,
+	.op1 = op1,
+	.op2 = op2
+      }
+    }
+  };
+}
+
 Instruction Instruction::Add(RegisterIndex target, RegisterIndex source, ::Constant constant){
   return {
     .op = OpCode::ADD_CONST,
