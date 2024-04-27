@@ -14,7 +14,21 @@ Instruction Instruction::Break() {
   };
 }
 
-Instruction Instruction::Add(RegisterIndex target, RegisterIndex source, Constant constant){
+Instruction Instruction::Test(RegisterIndex target, RegisterIndex op1,
+                              RegisterIndex op2) {
+  return {
+    .op = OpCode::TEST,
+    .parameters = {
+      .test = {
+	.target = target,
+	.op1 = op1,
+	.op2 = op2
+      }
+    }
+  };
+}
+
+Instruction Instruction::Add(RegisterIndex target, RegisterIndex source, ::Constant constant){
   return {
     .op = OpCode::ADD_CONST,
     .parameters = {
@@ -94,6 +108,18 @@ Instruction Instruction::Ret(RegisterIndex source) {
     .parameters = {
       .ret = {
 	.source = source
+      }
+    }
+  };
+}
+
+Instruction Instruction::LoadConstant(RegisterIndex target, Constant c) {
+  return {
+    .op = OpCode::CONST,
+    .parameters = {
+      .constant = {
+	.target = target,
+	.constant = c
       }
     }
   };

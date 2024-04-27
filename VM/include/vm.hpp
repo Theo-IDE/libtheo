@@ -44,7 +44,7 @@ namespace Theo {
     Program code;
     std::vector<Word> data;
     std::vector<Activation> stack;
-    std::unordered_set<Program::LineBreak> enabled_breakpoints;
+    std::unordered_set<BreakPoint> enabled_breakpoints;
 
   public:
     VM(Program code);
@@ -57,9 +57,9 @@ namespace Theo {
     /**
      * returns the line number of the breakpoint the VM
      * is currently on
-     * @return line number only if the VM is currently halted on a breakpoint, -1 otherwise
+     * @return line number != -1 only if the VM is currently halted on a breakpoint, -1 otherwise and file = "none"
      */
-    Program::LineBreak getCurrentBreak();
+    BreakPoint getCurrentBreak();
 
     /**
      * in stepping mode, potential breakpoints get treated as breakpoints
@@ -73,9 +73,9 @@ namespace Theo {
      * enable a breakpoint
      * @param line is the actual source code line to break on
      * @param value true to enable the breakpoint, false to disable
-     * @return true if operation was successfull (false if e.g. line does not exist)
+     * @return true if operation was successfull (false if e.g. line breakpoint does not exist)
      */
-    bool setBreakPoint (Program::LineBreak line, bool value);
+    bool setBreakPoint (std::string file, int line, bool value);
 
     /**
      * disable all breakpoints
@@ -85,7 +85,7 @@ namespace Theo {
     /**
      * reference to the set of currently enabled breakpoints
      */
-    std::unordered_set<Program::LineBreak>& getEnabledBreakPoints();
+    std::unordered_set<BreakPoint>& getEnabledBreakPoints();
 
     /**
      * resets the VM to its initial state;

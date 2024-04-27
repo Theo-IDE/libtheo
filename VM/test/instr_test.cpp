@@ -26,19 +26,27 @@ int main() {
 
   // creating the stack map for our program
   std::vector<Program::StackMap> sm = {
-    { // "main" script
-      {0, "x0"},
-      {1, "x1"}
-    },
-    { // + program
-      {0, "x0"},
-      {1, "x2"}
+    {
+      "main",
+      { // "main" script
+	{0, "x0"},
+	{1, "x1"}
+      }
     },
     {
-      // * program
-      {0, "x0"},
-      {1, "x1"},
-      {2, "x2"}
+      "+",
+      { // + program
+	{0, "x0"},
+	{1, "x2"}
+      }
+    },
+    {
+      "*",
+      {// * program
+	{0, "x0"},
+	{1, "x1"},
+	{2, "x2"}
+      }
     }
   };
 
@@ -94,14 +102,14 @@ int main() {
     std::cout << ac.first << " = " << ac.second << std::endl;
   }
 
-  if(res.find("x0") == res.end() || (*res.find("x0")).second != 91){
+  if(res.find("x0") == res.end() || res["x0"] != 91){
     std::cout << "Execution 1 failed" << std::endl;
     return 1;
   }
 
   v.reset();
   v.execute();
-  if(res.find("x0") == res.end() || (*res.find("x0")).second != 91) {
+  if(res.find("x0") == res.end() || res["x0"] != 91) {
     std::cout << "Execution 2 after reset failed" << std::endl;
     return 1;
   }

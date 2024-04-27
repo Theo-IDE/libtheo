@@ -12,7 +12,9 @@ namespace Theo {
     PREPARE_EXEC,
     ARG,
     EXEC,
-    RET
+    RET,
+    CONST,
+    TEST
   };
   
   typedef int RegisterIndex, JumpOffset, Constant, ProgramIndex, RegisterCount, StackMapIndex;
@@ -23,9 +25,18 @@ namespace Theo {
     union {
       struct {
 	RegisterIndex target;
+	RegisterIndex op1;
+	RegisterIndex op2;
+      } test;
+      struct {
+	RegisterIndex target;
 	RegisterIndex source;
 	Constant constant;
       } add;
+      struct {
+	RegisterIndex target;
+	Constant constant;
+      } constant;
       struct {
 	JumpOffset offset;
       } jmp;
@@ -55,6 +66,11 @@ namespace Theo {
     static Instruction Halt();
 
     static Instruction Break();
+
+    /**
+     * <target> := (<op1> == <op2>) ? 0 : 1
+     */
+    static Instruction Test(RegisterIndex target, RegisterIndex op1, RegisterIndex op2);
     
     /**
      * <target> := <source> + <constant>
@@ -67,7 +83,7 @@ namespace Theo {
     static Instruction Jmp(JumpOffset offset);
 
     /**
-     * IF <source> != 0 THEN InstructionPointer := InstructionPointer + <offset>
+     * IF <source> == 0 THEN InstructionPointer := InstructionPointer + <offset>
      */
     static Instruction JmpC(JumpOffset offset, RegisterIndex source);
 
@@ -102,6 +118,11 @@ namespace Theo {
      * and resets InstructionPointer to the return address
      */
     static Instruction Ret(RegisterIndex source);
+
+    /**
+     * <target> = c
+     */
+    static Instruction LoadConstant(RegisterIndex target, Constant c);
   };
 }
 

@@ -8,6 +8,7 @@ set(LIBTHEO_VM_HEADERS
 set(LIBTHEO_VM_SOURCES
   src/instr.cpp
   src/vm.cpp
+  src/program.cpp
 )
 
 add_library(TheoVM SHARED ${LIBTHEO_VM_HEADERS} ${LIBTHEO_VM_SOURCES})
