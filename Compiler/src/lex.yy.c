@@ -1,6 +1,3 @@
-#line 1 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lex.yy.c"
-
-#line 3 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lex.yy.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -731,14 +728,8 @@ goto find_rule; \
 #define yymore() yymore_used_but_not_detected
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
-#line 1 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
-#line 2 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 #define YY_USER_ACTION yylloc->first_line = yylineno;
-#line 737 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lex.yy.c"
-#line 6 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 #include "Compiler/include/lexextra.hpp"
-#line 740 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lex.yy.c"
-#line 741 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lex.yy.c"
 
 #define INITIAL 0
 
@@ -1037,10 +1028,6 @@ YY_DECL
 		}
 
 	{
-#line 31 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
-
-
-#line 1043 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1134,80 +1121,65 @@ do_action:	/* This label is used only to access EOF actions. */
 	{ /* beginning of action switch */
 case 1:
 YY_RULE_SETUP
-#line 33 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {}
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 34 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {}
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 35 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {*yylval = yyextra->a->mk(Node::Type::INCLUDE, yylineno, strdup(yytext), NULL, NULL); return(STR);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 36 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {*yylval = NULL; return (KW_INCLUDE);}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 37 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {*yylval = NULL; return(KW_PROGRAM);}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 38 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {*yylval = NULL; return(KW_IN);}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 39 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {*yylval = NULL; return(KW_OUT);}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 40 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {*yylval = NULL; return(KW_DO);}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 41 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {*yylval = NULL; return(KW_END);}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 42 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {*yylval = NULL; return(KW_LOOP);}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 43 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {*yylval = NULL; return(KW_WHILE);}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 44 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {*yylval = NULL; return(KW_GOTO);}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 45 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {*yylval = NULL; return(KW_IF);}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 46 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {*yylval = NULL; return(KW_THEN);}
 	YY_BREAK
 case 15:
 /* rule 15 can match eol */
 YY_RULE_SETUP
-#line 47 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {*yylval = NULL; return(ZERO_INEQUALITY);}
 	YY_BREAK
 case 16:
@@ -1217,7 +1189,6 @@ YY_LINENO_REWIND_TO(yy_bp + 1);
 yyg->yy_c_buf_p = yy_cp = yy_bp + 1;
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 48 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {*yylval = NULL; return (SUB_CONSTANT);}
 	YY_BREAK
 case 17:
@@ -1227,67 +1198,54 @@ YY_LINENO_REWIND_TO(yy_bp + 1);
 yyg->yy_c_buf_p = yy_cp = yy_bp + 1;
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 49 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {*yylval = NULL;return (ADD_CONSTANT);}
 	YY_BREAK
 case 18:
 /* rule 18 can match eol */
 YY_RULE_SETUP
-#line 50 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {*yylval = yyextra->a->mk(Node::Type::NAME, yylineno, strdup(yytext), NULL, NULL); return(MARK_NAME);}
 	YY_BREAK
 case 19:
 /* rule 19 can match eol */
 YY_RULE_SETUP
-#line 51 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {*yylval = yyextra->a->mk(Node::Type::NAME, yylineno, strdup(yytext), NULL, NULL); return(NAME_L);}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 52 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {*yylval = yyextra->a->mk(Node::Type::NUMBER, yylineno, strdup(yytext), NULL, NULL);  return(CONSTANT);}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 53 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {*yylval = yyextra->a->mk(Node::Type::NAME, yylineno, strdup(yytext), NULL, NULL); return(NAME);}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 54 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {*yylval = NULL; return (ASSIGN_OPERATOR);}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 55 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {*yylval = NULL; return (EQ_OPERATOR);}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 56 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {*yylval = NULL; return (PAREN_OPEN);}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 57 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {*yylval = NULL; return (PAREN_CLOSE);}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 58 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {*yylval = NULL; return (DELIM);}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 59 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 {*yylval = NULL; return (MARK_DELIM);}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 60 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
 ECHO;
 	YY_BREAK
-#line 1290 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lex.yy.c"
 			case YY_STATE_EOF(INITIAL):
 				yyterminate();
 
@@ -2463,8 +2421,4 @@ void yyfree (void * ptr , yyscan_t yyscanner)
 }
 
 #define YYTABLES_NAME "yytables"
-
-#line 60 "/home/peter/Dokumente/Studium/S6/Projektarbeit/libloop/Compiler/src/lexer.l"
-
-
 
