@@ -32,12 +32,14 @@ set(LIBTHEO_C_HEADERS
   include/lexer.hpp
   include/lexextra.hpp
   include/gen.hpp
+  include/compiler.hpp
 )
 
 set(LIBTHEO_C_SOURCES
   src/ast.cpp
   src/parse.cpp
   src/gen.cpp
+  src/compiler.cpp
 )
 
 set_source_files_properties(src/parser.tab.c PROPERTIES LANGUAGE CXX)

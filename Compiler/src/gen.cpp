@@ -117,7 +117,7 @@ struct GenState {
       .line = fs.line
     };
     this->out.line_info[this->getNextPos()] = bp;
-    this->out.potential_breaks[bp] = this->getNextPos();
+    this->out.potential_breaks[bp].push_back(this->getNextPos());
     this->emit(Instruction::PotentialBreak());
   }
 

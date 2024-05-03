@@ -45,7 +45,7 @@ namespace Theo {
     std::vector<StackMap> stack_maps;
 
     // map from {filename, linenumber} to "bytecode position of potential breakpoint"
-    std::unordered_map<BreakPoint, ProgramIndex> potential_breaks;
+    std::unordered_map<BreakPoint, std::vector<ProgramIndex>> potential_breaks;
     // map from "bytecode position of potential breakpoint" to {filename, linenumber}
     std::unordered_map<ProgramIndex, BreakPoint> line_info;
 
