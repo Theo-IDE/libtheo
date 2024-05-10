@@ -128,7 +128,7 @@ void debug_mode(VM &v, std::map<FileName, FileContent>& files) {
 }
 
 int main(int argc, char *argv[]) {
-  if(argc < 3)
+  if(argc < 2)
     usage();
 
   bool enable_debug = false;
