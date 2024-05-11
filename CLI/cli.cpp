@@ -1,4 +1,5 @@
-#include <exception>
+#define CLI_VER "1.0.0"
+
 #include <fstream>
 #include <iostream>
 #include <ostream>
@@ -7,14 +8,19 @@
 #include "Compiler/include/compiler.hpp"
 #include "Compiler/include/gen.hpp"
 #include "VM/include/vm.hpp"
+#include <getopt.h>
 
 using namespace Theo;
 
 void usage() {
-  std::cout << "Usage: " << std::endl
-	    << "theo [-d] <file-1> <file-2> <file-3> ... <file-n>" << std::endl
-	    << "-d enables debug mode" << std::endl
-	    << "<file-1> is treated as main file" << std::endl;
+  std::cout << "Usage: theo [OPTIONS...] [FILES...]" << std::endl
+	    << "Compiles and Executes Theo-IDE languages (commonly referred to as LOOP/WHILE/GOTO)" << std::endl
+	    << "First encountered file name will be treated as main file." << std::endl
+	    << std::endl
+	    << "OPTIONS:" << std::endl
+	    << "  -d, --debug\t\tenables interactive debug mode" << std::endl
+	    << "  -v, --version\t\treport version and license information" << std::endl
+	    << "  -h, --help\t\tproduce this help message" << std::endl;
 }
 
 void debug_usage() {
@@ -127,18 +133,59 @@ void debug_mode(VM &v, std::map<FileName, FileContent>& files) {
   }
 }
 
+void print_version() {
+  std::cout << "Theo-IDE Command Line Interpreter / Debuger " << CLI_VER << std::endl
+	    << "Copyright (C) 2024 Peter Preinesberger" << std::endl
+	    << "License GPLv3: GNU GPL version 3" << std::endl
+	    << "This is free software: you are free to change and redistribute it." << std::endl
+	    << "There is NO WARRANTY, to the extent permitted by law." << std::endl;
+}
+
 int main(int argc, char *argv[]) {
   if(argc < 2)
     usage();
 
+  // parse optional command line arguments
+
+  static struct option long_options[]= {
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'v'},
+    {"debug", no_argument, nullptr, 'd'},
+    {0,0,0,0}
+  };
+
+  const char *short_options = "hvd";
+
+  int option_index = 0;
+  int c;
   bool enable_debug = false;
+  
+  for(;;) {
+    c = getopt_long(argc, argv, short_options, long_options, nullptr);
+    
+    if(c==-1)
+      break;
+    
+    switch(c) {
+    case 'h':
+      usage();
+      return 0;
+    case 'v':
+      print_version();
+      return 0;
+    case 'd':
+      enable_debug = true;
+      break;
+    }
+  }
+
+
   std::string mainFile = "";
   std::map<FileName, FileContent> files = {};
   
   for(int i = 1; i < argc; i++) {
     std::string cArg = argv[i];
-    if(cArg == "-d"){
-      enable_debug = true;
+    if(cArg[0] == '-'){
       continue;
     }
 
