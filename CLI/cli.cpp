@@ -8,7 +8,6 @@
 #include "Compiler/include/compiler.hpp"
 #include "Compiler/include/gen.hpp"
 #include "VM/include/vm.hpp"
-#include <getopt.h>
 
 using namespace Theo;
 
@@ -145,49 +144,32 @@ int main(int argc, char *argv[]) {
   if(argc < 2)
     usage();
 
-  // parse optional command line arguments
-
-  static struct option long_options[]= {
-    {"help", no_argument, nullptr, 'h'},
-    {"version", no_argument, nullptr, 'v'},
-    {"debug", no_argument, nullptr, 'd'},
-    {0,0,0,0}
-  };
-
-  const char *short_options = "hvd";
-
-  int option_index = 0;
-  int c;
-  bool enable_debug = false;
-  
-  for(;;) {
-    c = getopt_long(argc, argv, short_options, long_options, nullptr);
-    
-    if(c==-1)
-      break;
-    
-    switch(c) {
-    case 'h':
+  for(int i = 1; i < argc; i++) {
+    std::string cArg = argv[i];
+    if (cArg == "-h" || cArg == "--help"){
       usage();
       return 0;
-    case 'v':
+    }
+    if(cArg == "-v" || cArg == "--version") {
       print_version();
       return 0;
-    case 'd':
-      enable_debug = true;
-      break;
     }
   }
-
-
+  
+  bool enable_debug = false;
+  
   std::string mainFile = "";
   std::map<FileName, FileContent> files = {};
   
   for(int i = 1; i < argc; i++) {
     std::string cArg = argv[i];
-    if(cArg[0] == '-'){
+    if(cArg == "-d" || cArg == "--debug"){
+      enable_debug = true;
       continue;
     }
+
+    if(cArg[0] == '-')
+      continue;
 
     // read in file
     std::ifstream f(cArg);
