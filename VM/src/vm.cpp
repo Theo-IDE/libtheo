@@ -39,7 +39,7 @@ std::vector<VM::Activation>& VM::getActivations() {
 }
 
 BreakPoint VM::getCurrentBreak() {
-  auto itr = this->code.line_info.find(this->instruction_pointer);
+  auto itr = this->code.line_info.find(this->instruction_pointer-1);
   return (itr == this->code.line_info.end()) ? ((BreakPoint){"none", -1}) : itr->second;
 }
 
@@ -54,18 +54,20 @@ bool VM::setBreakPoint(std::string file, int line, bool value) {
     return false;
   if(!value){
     this->enabled_breakpoints.erase(bp);
-    this->code.code[(*itr).second].op = OpCode::POTENTIAL_BREAK;
+    for(auto ind : itr->second)
+      this->code.code[ind].op = OpCode::POTENTIAL_BREAK;
   } else {
     this->enabled_breakpoints.insert(bp);
-    this->code.code[(*itr).second].op = OpCode::BREAK;
+    for(auto ind : itr->second)
+      this->code.code[ind].op = OpCode::BREAK;
   }
   return true;
 }
 
 void VM::clearBreakpoints() {
   for(auto const& bp : this->enabled_breakpoints) {
-    ProgramIndex i = this->code.potential_breaks[bp];
-    this->code.code[i].op = OpCode::POTENTIAL_BREAK;
+    for(auto ind : this->code.potential_breaks[bp])
+      this->code.code[ind].op = OpCode::POTENTIAL_BREAK;
   }
   this->enabled_breakpoints.clear();
 }

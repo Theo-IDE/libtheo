@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Compiler/include/ast.hpp"
+#include "Compiler/include/compiler.hpp"
 #include "Compiler/include/gen.hpp"
 #include "Compiler/include/parse.hpp"
 #include "VM/include/vm.hpp"
@@ -48,18 +49,13 @@ x2 := *(x0 * x1, +(2, 2))\n			\
 fibres := fib(25)\n				\
   ";
   
-  std::map<Theo::FileName, Theo::AST> res = Theo::parse({
-      {"gen_test.theo", test_code},
-      {"basemath.theo", basemath_code},
-      {"math.theo", fib_code}
-    });
+  std::map<Theo::FileName, Theo::FileContent> files = {
+    {"gen_test.theo", test_code},
+    {"basemath.theo", basemath_code},
+    {"math.theo", fib_code}
+  };
 
-  Theo::CodegenResult fin = Theo::gen(res, "gen_test.theo");
-
-  // clear asts
-  for(auto a : res) {
-    a.second.clear();
-  }
+  Theo::CodegenResult fin = Theo::compile(files, "gen_test.theo");
 
   if (!fin.generated_correctly) {
     std::cout << "Errors: " << std::endl;

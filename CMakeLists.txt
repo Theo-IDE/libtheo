@@ -7,3 +7,4 @@ enable_testing()
 
 add_subdirectory(VM)
 add_subdirectory(Compiler)
+add_subdirectory(CLI)
