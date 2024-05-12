@@ -69,20 +69,18 @@ extern int yydebug;
     KW_IF = 266,                   /* KW_IF  */
     KW_THEN = 267,                 /* KW_THEN  */
     KW_INCLUDE = 268,              /* KW_INCLUDE  */
-    ADD_CONSTANT = 269,            /* ADD_CONSTANT  */
-    SUB_CONSTANT = 270,            /* SUB_CONSTANT  */
-    ZERO_INEQUALITY = 271,         /* ZERO_INEQUALITY  */
-    CONSTANT = 272,                /* CONSTANT  */
-    NAME = 273,                    /* NAME  */
-    STR = 274,                     /* STR  */
-    MARK_NAME = 275,               /* MARK_NAME  */
-    MARK_DELIM = 276,              /* MARK_DELIM  */
-    NAME_L = 277,                  /* NAME_L  */
-    PAREN_OPEN = 278,              /* PAREN_OPEN  */
-    PAREN_CLOSE = 279,             /* PAREN_CLOSE  */
-    DELIM = 280,                   /* DELIM  */
-    ASSIGN_OPERATOR = 281,         /* ASSIGN_OPERATOR  */
-    EQ_OPERATOR = 282              /* EQ_OPERATOR  */
+    ZERO_INEQUALITY = 269,         /* ZERO_INEQUALITY  */
+    CONSTANT = 270,                /* CONSTANT  */
+    NAME = 271,                    /* NAME  */
+    STR = 272,                     /* STR  */
+    MARK_NAME = 273,               /* MARK_NAME  */
+    MARK_DELIM = 274,              /* MARK_DELIM  */
+    NAME_L = 275,                  /* NAME_L  */
+    PAREN_OPEN = 276,              /* PAREN_OPEN  */
+    PAREN_CLOSE = 277,             /* PAREN_CLOSE  */
+    DELIM = 278,                   /* DELIM  */
+    ASSIGN_OPERATOR = 279,         /* ASSIGN_OPERATOR  */
+    EQ_OPERATOR = 280              /* EQ_OPERATOR  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif

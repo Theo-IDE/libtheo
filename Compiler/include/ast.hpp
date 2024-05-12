@@ -15,10 +15,6 @@ namespace Theo {
       NAME = 1,
       /*whole number (left = right = -1)*/
       NUMBER = 2,
-      /*constant addition (left = name, right = constant)*/
-      ADD = 3,
-      /*constant subtraction (left = name, right = constant)*/
-      SUB = 4,
       /*call node (left = name of func, right = value or tree of values)*/
       CALL = 5,
       /*assign node (left = name, right = value)*/

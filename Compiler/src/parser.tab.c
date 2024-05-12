@@ -119,46 +119,43 @@ enum yysymbol_kind_t
   YYSYMBOL_KW_IF = 11,                     /* KW_IF  */
   YYSYMBOL_KW_THEN = 12,                   /* KW_THEN  */
   YYSYMBOL_KW_INCLUDE = 13,                /* KW_INCLUDE  */
-  YYSYMBOL_ADD_CONSTANT = 14,              /* ADD_CONSTANT  */
-  YYSYMBOL_SUB_CONSTANT = 15,              /* SUB_CONSTANT  */
-  YYSYMBOL_ZERO_INEQUALITY = 16,           /* ZERO_INEQUALITY  */
-  YYSYMBOL_CONSTANT = 17,                  /* CONSTANT  */
-  YYSYMBOL_NAME = 18,                      /* NAME  */
-  YYSYMBOL_STR = 19,                       /* STR  */
-  YYSYMBOL_MARK_NAME = 20,                 /* MARK_NAME  */
-  YYSYMBOL_MARK_DELIM = 21,                /* MARK_DELIM  */
-  YYSYMBOL_NAME_L = 22,                    /* NAME_L  */
-  YYSYMBOL_PAREN_OPEN = 23,                /* PAREN_OPEN  */
-  YYSYMBOL_PAREN_CLOSE = 24,               /* PAREN_CLOSE  */
-  YYSYMBOL_DELIM = 25,                     /* DELIM  */
-  YYSYMBOL_ASSIGN_OPERATOR = 26,           /* ASSIGN_OPERATOR  */
-  YYSYMBOL_EQ_OPERATOR = 27,               /* EQ_OPERATOR  */
-  YYSYMBOL_YYACCEPT = 28,                  /* $accept  */
-  YYSYMBOL_start = 29,                     /* start  */
-  YYSYMBOL_program = 30,                   /* program  */
-  YYSYMBOL_body = 31,                      /* body  */
-  YYSYMBOL_body_element = 32,              /* body_element  */
-  YYSYMBOL_expression = 33,                /* expression  */
-  YYSYMBOL_assign_op = 34,                 /* assign_op  */
-  YYSYMBOL_rvalue = 35,                    /* rvalue  */
-  YYSYMBOL_addition = 36,                  /* addition  */
-  YYSYMBOL_nestable = 37,                  /* nestable  */
-  YYSYMBOL_paren_call = 38,                /* paren_call  */
-  YYSYMBOL_optional_arglist = 39,          /* optional_arglist  */
-  YYSYMBOL_arglist = 40,                   /* arglist  */
-  YYSYMBOL_infix = 41,                     /* infix  */
-  YYSYMBOL_loop_stmt = 42,                 /* loop_stmt  */
-  YYSYMBOL_while_stmt = 43,                /* while_stmt  */
-  YYSYMBOL_opt_ineq = 44,                  /* opt_ineq  */
-  YYSYMBOL_goto_stmt = 45,                 /* goto_stmt  */
-  YYSYMBOL_eq_test = 46,                   /* eq_test  */
-  YYSYMBOL_funcdef = 47,                   /* funcdef  */
-  YYSYMBOL_funcname = 48,                  /* funcname  */
-  YYSYMBOL_progports = 49,                 /* progports  */
-  YYSYMBOL_opt_in = 50,                    /* opt_in  */
-  YYSYMBOL_opt_out = 51,                   /* opt_out  */
-  YYSYMBOL_in = 52,                        /* in  */
-  YYSYMBOL_incl_stmt = 53                  /* incl_stmt  */
+  YYSYMBOL_ZERO_INEQUALITY = 14,           /* ZERO_INEQUALITY  */
+  YYSYMBOL_CONSTANT = 15,                  /* CONSTANT  */
+  YYSYMBOL_NAME = 16,                      /* NAME  */
+  YYSYMBOL_STR = 17,                       /* STR  */
+  YYSYMBOL_MARK_NAME = 18,                 /* MARK_NAME  */
+  YYSYMBOL_MARK_DELIM = 19,                /* MARK_DELIM  */
+  YYSYMBOL_NAME_L = 20,                    /* NAME_L  */
+  YYSYMBOL_PAREN_OPEN = 21,                /* PAREN_OPEN  */
+  YYSYMBOL_PAREN_CLOSE = 22,               /* PAREN_CLOSE  */
+  YYSYMBOL_DELIM = 23,                     /* DELIM  */
+  YYSYMBOL_ASSIGN_OPERATOR = 24,           /* ASSIGN_OPERATOR  */
+  YYSYMBOL_EQ_OPERATOR = 25,               /* EQ_OPERATOR  */
+  YYSYMBOL_YYACCEPT = 26,                  /* $accept  */
+  YYSYMBOL_start = 27,                     /* start  */
+  YYSYMBOL_program = 28,                   /* program  */
+  YYSYMBOL_body = 29,                      /* body  */
+  YYSYMBOL_body_element = 30,              /* body_element  */
+  YYSYMBOL_expression = 31,                /* expression  */
+  YYSYMBOL_assign_op = 32,                 /* assign_op  */
+  YYSYMBOL_rvalue = 33,                    /* rvalue  */
+  YYSYMBOL_nestable = 34,                  /* nestable  */
+  YYSYMBOL_paren_call = 35,                /* paren_call  */
+  YYSYMBOL_optional_arglist = 36,          /* optional_arglist  */
+  YYSYMBOL_arglist = 37,                   /* arglist  */
+  YYSYMBOL_infix = 38,                     /* infix  */
+  YYSYMBOL_loop_stmt = 39,                 /* loop_stmt  */
+  YYSYMBOL_while_stmt = 40,                /* while_stmt  */
+  YYSYMBOL_opt_ineq = 41,                  /* opt_ineq  */
+  YYSYMBOL_goto_stmt = 42,                 /* goto_stmt  */
+  YYSYMBOL_eq_test = 43,                   /* eq_test  */
+  YYSYMBOL_funcdef = 44,                   /* funcdef  */
+  YYSYMBOL_funcname = 45,                  /* funcname  */
+  YYSYMBOL_progports = 46,                 /* progports  */
+  YYSYMBOL_opt_in = 47,                    /* opt_in  */
+  YYSYMBOL_opt_out = 48,                   /* opt_out  */
+  YYSYMBOL_in = 49,                        /* in  */
+  YYSYMBOL_incl_stmt = 50                  /* incl_stmt  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -487,21 +484,21 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  37
+#define YYFINAL  36
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   74
+#define YYLAST   68
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  28
+#define YYNTOKENS  26
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  26
+#define YYNNTS  25
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  48
+#define YYNRULES  45
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  85
+#define YYNSTATES  80
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   282
+#define YYMAXUTOK   280
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -543,18 +540,18 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
-      25,    26,    27
+      25
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    47,    47,    50,    51,    52,    53,    56,    57,    60,
-      61,    62,    63,    66,    69,    70,    73,    74,    75,    78,
-      79,    82,    83,    84,    87,    90,    91,    94,    95,    98,
-     101,   104,   107,   108,   111,   112,   113,   116,   117,   120,
-     123,   126,   129,   130,   133,   134,   137,   138,   141
+       0,    46,    46,    49,    50,    51,    52,    55,    56,    59,
+      60,    61,    62,    65,    68,    69,    72,    73,    76,    77,
+      78,    81,    84,    85,    88,    89,    92,    95,    98,   101,
+     102,   105,   106,   107,   110,   111,   114,   117,   120,   123,
+     124,   127,   128,   131,   132,   135
 };
 #endif
 
@@ -572,11 +569,10 @@ static const char *const yytname[] =
 {
   "\"end of file\"", "error", "\"invalid token\"", "KW_PROGRAM", "KW_IN",
   "KW_OUT", "KW_DO", "KW_END", "KW_LOOP", "KW_WHILE", "KW_GOTO", "KW_IF",
-  "KW_THEN", "KW_INCLUDE", "ADD_CONSTANT", "SUB_CONSTANT",
-  "ZERO_INEQUALITY", "CONSTANT", "NAME", "STR", "MARK_NAME", "MARK_DELIM",
-  "NAME_L", "PAREN_OPEN", "PAREN_CLOSE", "DELIM", "ASSIGN_OPERATOR",
-  "EQ_OPERATOR", "$accept", "start", "program", "body", "body_element",
-  "expression", "assign_op", "rvalue", "addition", "nestable",
+  "KW_THEN", "KW_INCLUDE", "ZERO_INEQUALITY", "CONSTANT", "NAME", "STR",
+  "MARK_NAME", "MARK_DELIM", "NAME_L", "PAREN_OPEN", "PAREN_CLOSE",
+  "DELIM", "ASSIGN_OPERATOR", "EQ_OPERATOR", "$accept", "start", "program",
+  "body", "body_element", "expression", "assign_op", "rvalue", "nestable",
   "paren_call", "optional_arglist", "arglist", "infix", "loop_stmt",
   "while_stmt", "opt_ineq", "goto_stmt", "eq_test", "funcdef", "funcname",
   "progports", "opt_in", "opt_out", "in", "incl_stmt", YY_NULLPTR
@@ -589,7 +585,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-43)
+#define YYPACT_NINF (-42)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -603,15 +599,14 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      18,   -11,    -1,    -1,    -8,    -9,    11,    13,    -4,    32,
-     -43,    18,   -43,   -43,   -43,   -43,    18,    18,    31,    30,
-     -43,    14,    39,   -43,    23,   -43,    21,    22,   -43,     0,
-     -43,    38,   -43,   -43,   -43,   -43,    -1,   -43,   -43,   -43,
-     -43,    34,   -43,    49,    33,    -1,    33,   -43,    50,    -1,
-      -1,    40,    41,    -1,    51,   -43,    35,   -43,    44,   -43,
-      52,    33,    42,    45,   -43,    56,    33,   -43,   -43,   -43,
-     -43,   -43,    46,    34,   -43,   -43,   -43,    -1,   -43,   -43,
-      58,   -43,   -43,   -43,   -43
+      16,    -9,    -1,    -1,    -6,    -7,    11,    12,    -4,    30,
+     -42,    16,   -42,   -42,   -42,   -42,    16,    16,    31,    10,
+     -42,    20,    27,   -42,    28,   -42,    18,    19,    34,   -42,
+      39,   -42,   -42,   -42,   -42,    -1,   -42,   -42,   -42,   -42,
+      36,   -42,    48,    29,    -1,    29,   -42,    49,    -1,    -1,
+      -1,    44,   -42,    33,   -42,    41,   -42,    51,    29,    37,
+      40,   -42,    52,    29,   -42,   -42,   -42,    45,    36,   -42,
+     -42,   -42,    -1,   -42,   -42,    56,   -42,   -42,   -42,   -42
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -620,30 +615,29 @@ static const yytype_int8 yypact[] =
 static const yytype_int8 yydefact[] =
 {
        6,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       2,     6,     9,    10,    11,    12,     6,     6,    43,     0,
-      22,    21,     0,    23,    33,    34,     0,     0,    16,    17,
-      18,     0,    48,    36,    14,    15,     0,     1,     3,     4,
-       5,     0,    40,    45,     8,    26,     8,    32,     0,     0,
-       0,     0,     0,     0,     0,    13,    46,    42,     0,    41,
-       0,     8,    27,     0,    25,     0,     8,    38,    37,    19,
-      20,    29,     0,     0,    44,    39,     7,     0,    24,    30,
-       0,    35,    47,    28,    31
+       2,     6,     9,    10,    11,    12,     6,     6,    40,     0,
+      19,    18,     0,    20,    30,    31,     0,     0,    16,    17,
+       0,    45,    33,    14,    15,     0,     1,     3,     4,     5,
+       0,    37,    42,     8,    23,     8,    29,     0,     0,     0,
+       0,     0,    13,    43,    39,     0,    38,     0,     8,    24,
+       0,    22,     0,     8,    35,    34,    26,     0,     0,    41,
+      36,     7,     0,    21,    27,     0,    32,    44,    25,    28
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -43,   -43,    -5,   -42,   -41,   -43,   -43,    -3,   -43,    -2,
-     -43,   -43,    -7,   -43,   -43,   -43,   -43,   -43,   -43,   -43,
-     -43,   -43,   -43,   -43,     1,   -43
+     -42,   -42,    -5,   -41,   -40,   -42,   -42,    -3,    -2,   -42,
+     -42,    -8,   -42,   -42,   -42,   -42,   -42,   -42,   -42,   -42,
+     -42,   -42,   -42,     0,   -42
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     9,    10,    60,    11,    12,    36,    62,    28,    29,
-      23,    63,    64,    30,    13,    14,    48,    15,    31,    16,
-      19,    42,    43,    59,    57,    17
+       0,     9,    10,    57,    11,    12,    35,    59,    28,    23,
+      60,    61,    29,    13,    14,    47,    15,    30,    16,    19,
+      41,    42,    56,    54,    17
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -651,61 +645,58 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      22,    24,    27,    61,    65,    61,    38,    18,    20,    21,
-      25,    39,    40,    26,    51,    52,    20,    21,    53,    76,
-      61,     1,    34,    35,    80,    61,     2,     3,     4,     5,
-      32,     6,    37,    55,    33,    41,    44,    45,     7,    47,
-       8,     2,     3,     4,     5,    46,    67,    68,    49,    50,
-      54,    71,    56,     7,    58,     8,    66,    69,    70,    75,
-      73,    72,    74,    79,    81,    84,     0,    77,     0,    78,
-      83,     0,     0,     0,    82
+      22,    24,    27,    58,    62,    58,    37,    18,    20,    21,
+      25,    38,    39,    26,    20,    21,    43,    71,    58,     1,
+      33,    34,    75,    58,     2,     3,     4,     5,    31,     6,
+      36,    32,    52,    45,     7,    40,     8,     2,     3,     4,
+       5,    44,    46,    48,    49,    64,    65,     7,    66,     8,
+      50,    51,    53,    55,    67,    63,    68,    69,    70,    74,
+      72,    76,    73,    79,    78,     0,     0,     0,    77
 };
 
 static const yytype_int8 yycheck[] =
 {
-       2,     3,     5,    44,    46,    46,    11,    18,    17,    18,
-      18,    16,    17,    22,    14,    15,    17,    18,    18,    61,
-      61,     3,    26,    27,    66,    66,     8,     9,    10,    11,
-      19,    13,     0,    36,    21,     4,     6,    23,    20,    16,
-      22,     8,     9,    10,    11,     6,    49,    50,    27,    27,
-      12,    53,    18,    20,     5,    22,     6,    17,    17,     7,
-      25,    10,    18,     7,    18,     7,    -1,    25,    -1,    24,
-      77,    -1,    -1,    -1,    73
+       2,     3,     5,    43,    45,    45,    11,    16,    15,    16,
+      16,    16,    17,    20,    15,    16,     6,    58,    58,     3,
+      24,    25,    63,    63,     8,     9,    10,    11,    17,    13,
+       0,    19,    35,     6,    18,     4,    20,     8,     9,    10,
+      11,    21,    14,    25,    25,    48,    49,    18,    50,    20,
+      16,    12,    16,     5,    10,     6,    23,    16,     7,     7,
+      23,    16,    22,     7,    72,    -1,    -1,    -1,    68
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     3,     8,     9,    10,    11,    13,    20,    22,    29,
-      30,    32,    33,    42,    43,    45,    47,    53,    18,    48,
-      17,    18,    37,    38,    37,    18,    22,    35,    36,    37,
-      41,    46,    19,    21,    26,    27,    34,     0,    30,    30,
-      30,     4,    49,    50,     6,    23,     6,    16,    44,    27,
-      27,    14,    15,    18,    12,    35,    18,    52,     5,    51,
-      31,    32,    35,    39,    40,    31,     6,    35,    35,    17,
-      17,    37,    10,    25,    18,     7,    31,    25,    24,     7,
-      31,    18,    52,    40,     7
+       0,     3,     8,     9,    10,    11,    13,    18,    20,    27,
+      28,    30,    31,    39,    40,    42,    44,    50,    16,    45,
+      15,    16,    34,    35,    34,    16,    20,    33,    34,    38,
+      43,    17,    19,    24,    25,    32,     0,    28,    28,    28,
+       4,    46,    47,     6,    21,     6,    14,    41,    25,    25,
+      16,    12,    33,    16,    49,     5,    48,    29,    30,    33,
+      36,    37,    29,     6,    33,    33,    34,    10,    23,    16,
+       7,    29,    23,    22,     7,    29,    16,    49,    37,     7
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    28,    29,    30,    30,    30,    30,    31,    31,    32,
-      32,    32,    32,    33,    34,    34,    35,    35,    35,    36,
-      36,    37,    37,    37,    38,    39,    39,    40,    40,    41,
-      42,    43,    44,    44,    45,    45,    45,    46,    46,    47,
-      48,    49,    50,    50,    51,    51,    52,    52,    53
+       0,    26,    27,    28,    28,    28,    28,    29,    29,    30,
+      30,    30,    30,    31,    32,    32,    33,    33,    34,    34,
+      34,    35,    36,    36,    37,    37,    38,    39,    40,    41,
+      41,    42,    42,    42,    43,    43,    44,    45,    46,    47,
+      47,    48,    48,    49,    49,    50
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
        0,     2,     1,     2,     2,     2,     0,     2,     0,     1,
-       1,     1,     1,     3,     1,     1,     1,     1,     1,     3,
-       3,     1,     1,     1,     4,     1,     0,     1,     3,     3,
-       5,     6,     1,     0,     2,     5,     2,     3,     3,     5,
-       2,     2,     2,     0,     2,     0,     1,     3,     2
+       1,     1,     1,     3,     1,     1,     1,     1,     1,     1,
+       1,     4,     1,     0,     1,     3,     3,     5,     6,     1,
+       0,     2,     5,     2,     3,     3,     5,     2,     2,     2,
+       0,     2,     0,     1,     3,     2
 };
 
 
@@ -1596,95 +1587,87 @@ yyreduce:
                                           {yyval = res->mk(Node::Type::ASSIGN, (yylsp[-2]).first_line, NULL, yyvsp[-2], yyvsp[0]);}
     break;
 
-  case 19: /* addition: nestable ADD_CONSTANT CONSTANT  */
-                                                 {yyval = res->mk(Node::Type::ADD, (yylsp[-2]).first_line, NULL, yyvsp[-2], yyvsp[0]);}
-    break;
-
-  case 20: /* addition: nestable SUB_CONSTANT CONSTANT  */
-                                                 {yyval = res->mk(Node::Type::SUB, (yylsp[-2]).first_line, NULL, yyvsp[-2], yyvsp[0]);}
-    break;
-
-  case 24: /* paren_call: NAME PAREN_OPEN optional_arglist PAREN_CLOSE  */
+  case 21: /* paren_call: NAME PAREN_OPEN optional_arglist PAREN_CLOSE  */
                                                                {yyval = res->mk(Node::Type::CALL, (yylsp[-3]).first_line, NULL, yyvsp[-3], yyvsp[-1]);}
     break;
 
-  case 28: /* arglist: rvalue DELIM arglist  */
+  case 25: /* arglist: rvalue DELIM arglist  */
                                        {yyval = res->mk(Node::Type::SPLIT, (yylsp[-2]).first_line, NULL, yyvsp[-2], yyvsp[0]);}
     break;
 
-  case 29: /* infix: nestable NAME nestable  */
+  case 26: /* infix: nestable NAME nestable  */
                                          {yyval = res->mk(Node::Type::CALL, (yylsp[-1]).first_line, NULL, yyvsp[-1], res->mk(Node::Type::SPLIT, (yylsp[-1]).first_line, NULL, yyvsp[-2], yyvsp[0]));}
     break;
 
-  case 30: /* loop_stmt: KW_LOOP nestable KW_DO body KW_END  */
-                                                     {yyval = res->mk(Node::Type::LOOP, (yylsp[-4]).first_line, NULL, yyvsp[-3], yyvsp[-1]);}
+  case 27: /* loop_stmt: KW_LOOP nestable KW_DO body KW_END  */
+                                                     {yyval = res->mk(Node::Type::SPLIT, (yylsp[-4]).first_line, NULL, res->mk(Node::Type::LOOP, (yylsp[-4]).first_line, NULL, yyvsp[-3], yyvsp[-1]), res->mk(Node::Type::MARK, (yylsp[0]).first_line, NULL, yyvsp[0], NULL));}
     break;
 
-  case 31: /* while_stmt: KW_WHILE nestable opt_ineq KW_DO body KW_END  */
-                                                               {yyval = res->mk(Node::Type::WHILE, (yylsp[-5]).first_line, NULL, yyvsp[-4], yyvsp[-1]);}
+  case 28: /* while_stmt: KW_WHILE nestable opt_ineq KW_DO body KW_END  */
+                                                               {yyval = res->mk(Node::Type::SPLIT, (yylsp[-5]).first_line, NULL, res->mk(Node::Type::WHILE, (yylsp[-5]).first_line, NULL, yyvsp[-4], yyvsp[-1]), res->mk(Node::Type::MARK, (yylsp[0]).first_line, NULL, yyvsp[0], NULL));}
     break;
 
-  case 32: /* opt_ineq: ZERO_INEQUALITY  */
+  case 29: /* opt_ineq: ZERO_INEQUALITY  */
                                   {yyval = NULL;}
     break;
 
-  case 33: /* opt_ineq: %empty  */
+  case 30: /* opt_ineq: %empty  */
                   {yyval = NULL;}
     break;
 
-  case 34: /* goto_stmt: KW_GOTO NAME  */
+  case 31: /* goto_stmt: KW_GOTO NAME  */
                                {yyval = res->mk(Node::Type::GOTO, (yylsp[-1]).first_line, NULL, yyvsp[0], NULL);}
     break;
 
-  case 35: /* goto_stmt: KW_IF eq_test KW_THEN KW_GOTO NAME  */
+  case 32: /* goto_stmt: KW_IF eq_test KW_THEN KW_GOTO NAME  */
                                                      {yyval = res->mk(Node::Type::IF, (yylsp[-4]).first_line, NULL, yyvsp[-3], res->mk(Node::Type::GOTO, (yylsp[-1]).first_line, NULL, yyvsp[0], NULL));}
     break;
 
-  case 36: /* goto_stmt: MARK_NAME MARK_DELIM  */
+  case 33: /* goto_stmt: MARK_NAME MARK_DELIM  */
                                        {yyval = res->mk(Node::Type::MARK, (yylsp[-1]).first_line, NULL, yyvsp[-1], NULL);}
     break;
 
-  case 37: /* eq_test: rvalue EQ_OPERATOR rvalue  */
+  case 34: /* eq_test: rvalue EQ_OPERATOR rvalue  */
                                             {yyval = res->mk(Node::Type::EQ, (yylsp[-1]).first_line, NULL, yyvsp[-2], yyvsp[0]);}
     break;
 
-  case 38: /* eq_test: NAME_L EQ_OPERATOR rvalue  */
+  case 35: /* eq_test: NAME_L EQ_OPERATOR rvalue  */
                                             {yyval = res->mk(Node::Type::EQ, (yylsp[-1]).first_line, NULL, yyvsp[-2], yyvsp[0]);}
     break;
 
-  case 39: /* funcdef: KW_PROGRAM funcname KW_DO body KW_END  */
-                                                        {yyval = res->mk(Node::Type::PROGRAM, (yylsp[-4]).first_line, NULL, yyvsp[-3], yyvsp[-1]);}
+  case 36: /* funcdef: KW_PROGRAM funcname KW_DO body KW_END  */
+                                                        {yyval = res->mk(Node::Type::PROGRAM, (yylsp[-4]).first_line, NULL, yyvsp[-3], res->mk(Node::Type::SPLIT, (yylsp[-4]).first_line, NULL, yyvsp[-1], res->mk(Node::Type::MARK, (yylsp[0]).first_line, NULL, yyvsp[0], NULL)));}
     break;
 
-  case 40: /* funcname: NAME progports  */
+  case 37: /* funcname: NAME progports  */
                                  {yyval = res->mk(Node::Type::SPLIT, (yylsp[-1]).first_line, NULL, yyvsp[-1], yyvsp[0]);}
     break;
 
-  case 41: /* progports: opt_in opt_out  */
+  case 38: /* progports: opt_in opt_out  */
                                  {yyval = res->mk(Node::Type::SPLIT, (yylsp[-1]).first_line, NULL, yyvsp[-1], yyvsp[0]);}
     break;
 
-  case 42: /* opt_in: KW_IN in  */
+  case 39: /* opt_in: KW_IN in  */
                            {yyval = yyvsp[0];}
     break;
 
-  case 43: /* opt_in: %empty  */
+  case 40: /* opt_in: %empty  */
                   {yyval = NULL;}
     break;
 
-  case 44: /* opt_out: KW_OUT NAME  */
+  case 41: /* opt_out: KW_OUT NAME  */
                               {yyval = yyvsp[0];}
     break;
 
-  case 45: /* opt_out: %empty  */
+  case 42: /* opt_out: %empty  */
                   {yyval = NULL;}
     break;
 
-  case 47: /* in: NAME DELIM in  */
+  case 44: /* in: NAME DELIM in  */
                                 {yyval = res->mk(Node::Type::SPLIT, (yylsp[-2]).first_line, NULL, yyvsp[-2], yyvsp[0]);}
     break;
 
-  case 48: /* incl_stmt: KW_INCLUDE STR  */
+  case 45: /* incl_stmt: KW_INCLUDE STR  */
                                  {yyval = yyvsp[0];}
     break;
 
