@@ -1,4 +1,4 @@
-#define CLI_VER "1.0.0"
+#define CLI_VER "1.1.0"
 
 #include <fstream>
 #include <iostream>
@@ -34,6 +34,7 @@ void debug_usage() {
 	    << "d <file> <line> - unset a breakpoint" << std::endl
 	    << "c - clear all breakpoints" << std::endl
 	    << "a - list active breakpoints" << std::endl
+	    << "o - list bytecode" << std::endl
 	    << "h - print this menu" << std::endl
 	    << "q - quit" << std::endl;
 }
@@ -67,7 +68,7 @@ void sectionPrint(std::map<FileName, FileContent> &files, FileName file,
   }
 }
 
-void debug_mode(VM &v, std::map<FileName, FileContent>& files) {
+void debug_mode(VM &v, std::map<FileName, FileContent>& files, CodegenResult &cr) {
   std::cout << "debug mode, type 'h' and enter for a list of commands" << std::endl;
   bool running = true;
   while(running) {
@@ -128,6 +129,9 @@ void debug_mode(VM &v, std::map<FileName, FileContent>& files) {
       for(auto b : v.getEnabledBreakPoints()){
 	std::cout << "- " << b.file << ":" << b.line << std::endl;
       }
+    }
+    if(cmd == "o") {
+      cr.code.disassemble(std::cout);
     }
   }
 }
@@ -207,7 +211,7 @@ int main(int argc, char *argv[]) {
   VM v(cr.code);
   
   if(enable_debug) {
-    debug_mode(v, files);
+    debug_mode(v, files, cr);
   } else {
     v.execute();
     std::cout << "variables after execution:" << std::endl;

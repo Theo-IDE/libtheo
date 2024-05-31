@@ -1,8 +1,10 @@
 #include "Compiler/include/gen.hpp"
 #include "VM/include/instr.hpp"
 #include <cstddef>
+#include <cstdio>
 #include <map>
 #include <string>
+#include <algorithm>
 
 using namespace Theo;
 
@@ -106,6 +108,22 @@ struct GenState {
     return out.code.size();
   }
 
+  ProgramIndex getMarkPos() {
+    if (out.code.back().op == OpCode::POTENTIAL_BREAK) {
+      return this->getNextPos()-1;
+    }
+    return this->getNextPos();
+  }
+
+  void removeTopPotBreak() {
+    if(out.code.back().op == OpCode::POTENTIAL_BREAK) {
+      BreakPoint bp = this->out.line_info[this->getNextPos()-1];
+      this->out.line_info.erase(this->out.line_info.find(this->getNextPos()-1));
+      this->out.potential_breaks.erase(this->out.potential_breaks.find(bp));
+      out.code.pop_back();
+    }
+  }
+
   void emit(Instruction i) {
     this->out.code.push_back(i);
   }
@@ -161,6 +179,7 @@ struct GenState {
 
     this->symbols.pop_back();
   }
+
 
   void advanceLine(int new_lineno) {
     FileState fs = this->getFileState();
@@ -265,8 +284,8 @@ void dispatchMark(GenState &gs, Node *c) {
   if(gs.getSymbols().marks.find(name) == gs.getSymbols().marks.end()){
     gs.getSymbols().marks[name] = gs.createLabel();
   }
-  
-  gs.setLabel(gs.getSymbols().marks[name], gs.getNextPos());
+
+  gs.setLabel(gs.getSymbols().marks[name], gs.getMarkPos());
 }
 
 // dispatch while construct
@@ -405,23 +424,26 @@ void dispatchValue(GenState &gs, Node *c, RegisterIndex tgt) {
     gs.emit(Instruction::LoadConstant(tgt, cs));
     break;
   }
-  case Node::Type::ADD: {
-    int cs = std::stoi(std::string(c->right->tok));
-    RegisterIndex src = gs.getSymbols().fetchVariableRegister(std::string(c->left->tok));
-    gs.emit(Instruction::Add(tgt, src, cs));
-    break;
-  }
-  case Node::Type::SUB: {
-    int cs = std::stoi(std::string(c->right->tok));
-    RegisterIndex src = gs.getSymbols().fetchVariableRegister(std::string(c->left->tok));
-    gs.emit(Instruction::Add(tgt, src, -cs));
-    break;
-  }
   case Node::Type::CALL: {
     std::vector<RegisterIndex> arglocs;
     dispatchCallArgs(gs, c->right, arglocs);
 
     std::string funcname = std::string(c->left->tok);
+
+    // check if these are inbuilt operations (add constant, sub constant):
+    bool register_constant_operation =
+      arglocs.size() == 2 &&
+      c->right->left->t == Node::Type::NAME &&
+      c->right->right->t == Node::Type::NUMBER;
+    
+    if((funcname == "+" || funcname == "-") && register_constant_operation){
+      int cs = std::stoi(std::string(c->right->right->tok));
+      if(funcname == "+")
+	gs.emit(Instruction::Add(tgt, arglocs[0], cs));
+      else
+	gs.emit(Instruction::Add(tgt, arglocs[0], -cs));
+      break;
+    }
 
     if(gs.funcAddrs.find(funcname) == gs.funcAddrs.end()){ // is there such a function?
       gs.err(CodegenResult::Error::Type::UNKNOWN_PROGRAM_NAME, "unknown name " + funcname);
@@ -463,6 +485,7 @@ void dispatchAssign(GenState &gs, Node *c) {
 // dispatch an AST node that corresponds to a <element> in the source
 void dispatchVoid(GenState &gs, Node *c) {
   if(c==NULL) return;
+
   gs.advanceLine(c->line);
 
   switch(c->t) {
@@ -472,6 +495,7 @@ void dispatchVoid(GenState &gs, Node *c) {
     break;
   }
   case Node::Type::PROGRAM: {
+    gs.removeTopPotBreak();
     dispatchProgram(gs, c);
     break;
   }

@@ -38,15 +38,13 @@ include (INCLUDE|include|Include)
 {in} {*yylval = NULL; return(KW_IN);}
 {out} {*yylval = NULL; return(KW_OUT);}
 {do} {*yylval = NULL; return(KW_DO);}
-{end} {*yylval = NULL; return(KW_END);}
+{end} {*yylval = yyextra->a->mk(Node::Type::NAME, yylineno, strdup(yytext), NULL, NULL); return(KW_END);}
 {loop} {*yylval = NULL; return(KW_LOOP);}
 {while} {*yylval = NULL; return(KW_WHILE);}
 {goto} {*yylval = NULL; return(KW_GOTO);}
 {if} {*yylval = NULL; return(KW_IF);}
 {then} {*yylval = NULL; return(KW_THEN);}
 \!\={delim}*0 {*yylval = NULL; return(ZERO_INEQUALITY);}
-\-/{ws}+{number} {*yylval = NULL; return (SUB_CONSTANT);}
-\+/{ws}+{number} {*yylval = NULL;return (ADD_CONSTANT);}
 {id}/{delim}*\: {*yylval = yyextra->a->mk(Node::Type::NAME, yylineno, strdup(yytext), NULL, NULL); return(MARK_NAME);}
 {id}/{delim}*(\=|\:\=) {*yylval = yyextra->a->mk(Node::Type::NAME, yylineno, strdup(yytext), NULL, NULL); return(NAME_L);}
 {number} {*yylval = yyextra->a->mk(Node::Type::NUMBER, yylineno, strdup(yytext), NULL, NULL);  return(CONSTANT);}

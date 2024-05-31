@@ -27,8 +27,7 @@ void yyerror(YYLTYPE *l, void *scanner, Theo::AST *r, const char *const s);
 /*keyword tokens*/
 %token KW_PROGRAM KW_IN KW_OUT KW_DO KW_END KW_LOOP KW_WHILE KW_GOTO KW_IF KW_THEN KW_INCLUDE
 
-/*+ or - when followed by a Constant*/
-%token ADD_CONSTANT SUB_CONSTANT ZERO_INEQUALITY
+%token ZERO_INEQUALITY
 
 /* constant,  variable / function name, include string*/
 %token CONSTANT NAME STR
@@ -70,13 +69,8 @@ assign_op	: ASSIGN_OPERATOR
 		| EQ_OPERATOR
 		;
 
-rvalue 		: addition
-       		| nestable
+rvalue 		: nestable
        		| infix
-		;
-
-addition	: nestable ADD_CONSTANT CONSTANT {$$ = res->mk(Node::Type::ADD, @1.first_line, NULL, $1, $3);}
-		| nestable SUB_CONSTANT CONSTANT {$$ = res->mk(Node::Type::SUB, @1.first_line, NULL, $1, $3);}
 		;
 
 nestable	: NAME
@@ -98,10 +92,10 @@ arglist		: rvalue
 infix		: nestable NAME nestable {$$ = res->mk(Node::Type::CALL, @2.first_line, NULL, $2, res->mk(Node::Type::SPLIT, @2.first_line, NULL, $1, $3));}
 		;
 
-loop_stmt	: KW_LOOP nestable KW_DO body KW_END {$$ = res->mk(Node::Type::LOOP, @1.first_line, NULL, $2, $4);}
+loop_stmt	: KW_LOOP nestable KW_DO body KW_END {$$ = res->mk(Node::Type::SPLIT, @1.first_line, NULL, res->mk(Node::Type::LOOP, @1.first_line, NULL, $2, $4), res->mk(Node::Type::MARK, @5.first_line, NULL, $5, NULL));}
 		;
 
-while_stmt	: KW_WHILE nestable opt_ineq KW_DO body KW_END {$$ = res->mk(Node::Type::WHILE, @1.first_line, NULL, $2, $5);}
+while_stmt	: KW_WHILE nestable opt_ineq KW_DO body KW_END {$$ = res->mk(Node::Type::SPLIT, @1.first_line, NULL, res->mk(Node::Type::WHILE, @1.first_line, NULL, $2, $5), res->mk(Node::Type::MARK, @6.first_line, NULL, $6, NULL));}
 		;
 
 opt_ineq	: ZERO_INEQUALITY {$$ = NULL;}
@@ -117,7 +111,7 @@ eq_test		: rvalue EQ_OPERATOR rvalue {$$ = res->mk(Node::Type::EQ, @2.first_line
 		| NAME_L EQ_OPERATOR rvalue {$$ = res->mk(Node::Type::EQ, @2.first_line, NULL, $1, $3);}
 		;
 
-funcdef		: KW_PROGRAM funcname KW_DO body KW_END {$$ = res->mk(Node::Type::PROGRAM, @1.first_line, NULL, $2, $4);}
+funcdef		: KW_PROGRAM funcname KW_DO body KW_END {$$ = res->mk(Node::Type::PROGRAM, @1.first_line, NULL, $2, res->mk(Node::Type::SPLIT, @1.first_line, NULL, $4, res->mk(Node::Type::MARK, @5.first_line, NULL, $5, NULL)));}
 		;
 
 funcname	: NAME progports {$$ = res->mk(Node::Type::SPLIT, @1.first_line, NULL, $1, $2);}
