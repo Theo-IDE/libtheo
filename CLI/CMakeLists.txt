@@ -3,7 +3,7 @@ set(CLI_SOURCES
   cli.cpp
 )
 
-add_executable(theo cli.cpp)
+add_executable(theo ${CLI_SOURCES})
 
 target_include_directories(theo PUBLIC
   ${PROJECT_SOURCE_DIR}

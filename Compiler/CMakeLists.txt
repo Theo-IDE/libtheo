@@ -46,7 +46,7 @@ set(LIBTHEO_C_SOURCES
 )
 
 set_source_files_properties(src/parser.tab.c PROPERTIES LANGUAGE CXX)
-add_library(TheoC SHARED ${LIBTHEO_C_HEADERS} ${LIBTHEO_C_SOURCES} ${GENERATED_OUTPUTS})
+add_library(TheoC ${LIBTHEO_C_HEADERS} ${LIBTHEO_C_SOURCES} ${GENERATED_OUTPUTS})
 
 target_include_directories(TheoC PUBLIC
   ${PROJECT_SOURCE_DIR}
