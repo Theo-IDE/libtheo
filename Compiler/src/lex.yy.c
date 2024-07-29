@@ -720,6 +720,7 @@ goto find_rule; \
 #define YY_RESTORE_YY_MORE_OFFSET
 #define YY_USER_ACTION yylloc->first_line = yylineno;
 #include "Compiler/include/lexextra.hpp"
+#define YY_NO_UNISTD_H 1
 
 #define INITIAL 0
 
@@ -1050,7 +1051,7 @@ yy_match:
 			*yyg->yy_state_ptr++ = yy_current_state;
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 688 );
+		while ( yy_current_state != 121 );
 
 yy_find_action:
 		yy_current_state = *--yyg->yy_state_ptr;
@@ -1786,7 +1787,7 @@ static void yy_load_buffer_state  (yyscan_t yyscanner)
         b->yy_bs_column = 0;
     }
 
-        b->yy_is_interactive = file ? (isatty( fileno(file) ) > 0) : 0;
+        b->yy_is_interactive = 0;
     
 	errno = oerrno;
 }
