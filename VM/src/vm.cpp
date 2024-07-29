@@ -40,7 +40,7 @@ std::vector<VM::Activation>& VM::getActivations() {
 
 BreakPoint VM::getCurrentBreak() {
   auto itr = this->code.line_info.find(this->instruction_pointer-1);
-  return (itr == this->code.line_info.end()) ? ((BreakPoint){"none", -1}) : itr->second;
+  return (itr == this->code.line_info.end()) ? (BreakPoint{"none", -1}) : itr->second;
 }
 
 void VM::setSteppingMode(bool mode) {

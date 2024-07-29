@@ -246,14 +246,6 @@ void yyfree ( void * , yyscan_t yyscanner );
 
 #endif
 
-#ifndef YY_NO_UNISTD_H
-/* Special case for "unistd.h", since it is non-ANSI. We include it way
- * down here because we want the user's section 1 to have been scanned first.
- * The user has a chance to override it with an option.
- */
-#include <unistd.h>
-#endif
-
 #define YY_EXTRA_TYPE Theo::yyLexExtra*
 
 int yylex_init (yyscan_t* scanner);

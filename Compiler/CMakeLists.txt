@@ -17,6 +17,7 @@ if(BISON_FOUND AND FLEX_FOUND)
 			--outfile="${CMAKE_CURRENT_SOURCE_DIR}/src/lex.yy.c" 
 			--header-file="${CMAKE_CURRENT_SOURCE_DIR}/include/lex.yy.h"  
 			--noline
+			--nounistd
 			"${CMAKE_CURRENT_SOURCE_DIR}/src/lexer.l"
 			DEPENDS src/lexer.l
                 COMMAND bison "${CMAKE_CURRENT_SOURCE_DIR}/src/parser.y" 

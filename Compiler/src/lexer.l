@@ -6,6 +6,7 @@
 #include "Compiler/include/lexextra.hpp"
 %}
 
+%option nounistd never-interactive
 %option reentrant noyywrap yylineno noline
 %option bison-bridge bison-locations
 %option extra-type="Theo::yyLexExtra*"
