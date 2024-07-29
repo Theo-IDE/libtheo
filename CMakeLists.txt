@@ -4,6 +4,8 @@ project(libtheo)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 
 enable_testing()
