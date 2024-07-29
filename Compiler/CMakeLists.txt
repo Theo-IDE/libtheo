@@ -14,18 +14,19 @@ if(BISON_FOUND AND FLEX_FOUND)
 	add_custom_command(
 		OUTPUT ${GENERATED_OUTPUTS}
 		COMMAND flex 
-			--outfile="${CMAKE_CURRENT_SOURCE_DIR}/src/lex.yy.c" 
-			--header-file="${CMAKE_CURRENT_SOURCE_DIR}/include/lex.yy.h"  
+			--outfile="./src/lex.yy.c" 
+			--header-file="./include/lex.yy.h"  
 			--noline
 			--nounistd
-			"${CMAKE_CURRENT_SOURCE_DIR}/src/lexer.l"
+			"./src/lexer.l"
 			DEPENDS src/lexer.l
-                COMMAND bison "${CMAKE_CURRENT_SOURCE_DIR}/src/parser.y" 
-			-o "${CMAKE_CURRENT_SOURCE_DIR}/src/parser.tab.c" 
-			--defines="${CMAKE_CURRENT_SOURCE_DIR}/include/parser.tab.h" 
+                COMMAND bison "./src/parser.y" 
+			-o "./src/parser.tab.c" 
+			--defines="./include/parser.tab.h" 
 			--no-lines
 			-Wcounterexamples
 			DEPENDS src/parser.y
+		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 			
 	)
 endif()
