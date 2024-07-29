@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_YY_HOME_PETER_DOKUMENTE_STUDIUM_S6_PROJEKTARBEIT_LIBLOOP_COMPILER_INCLUDE_PARSER_TAB_H_INCLUDED
-# define YY_YY_HOME_PETER_DOKUMENTE_STUDIUM_S6_PROJEKTARBEIT_LIBLOOP_COMPILER_INCLUDE_PARSER_TAB_H_INCLUDED
+#ifndef YY_YY_INCLUDE_PARSER_TAB_H_INCLUDED
+# define YY_YY_INCLUDE_PARSER_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 1
@@ -112,4 +112,4 @@ struct YYLTYPE
 int yyparse (void *scanner, Theo::AST *res);
 
 
-#endif /* !YY_YY_HOME_PETER_DOKUMENTE_STUDIUM_S6_PROJEKTARBEIT_LIBLOOP_COMPILER_INCLUDE_PARSER_TAB_H_INCLUDED  */
+#endif /* !YY_YY_INCLUDE_PARSER_TAB_H_INCLUDED  */
