@@ -17,6 +17,7 @@ if(BISON_FOUND AND FLEX_FOUND)
 			--outfile="./src/lex.yy.c" 
 			--header-file="./include/lex.yy.h"  
 			--noline
+			--nounistd
 			"./src/lexer.l"
 			DEPENDS src/lexer.l
                 COMMAND bison "./src/parser.y" 
