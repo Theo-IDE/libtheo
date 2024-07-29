@@ -10,6 +10,8 @@ option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 
 enable_testing()
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
 add_subdirectory(VM)
 add_subdirectory(Compiler)
 add_subdirectory(CLI)
