@@ -6,7 +6,6 @@
 #include <vector>
 
 namespace Theo {
-  // (Node *) is YYSTYPE
   struct Node {
     enum class Type {
       /*a split in the tree, for concatenating nodex*/
@@ -34,41 +33,37 @@ namespace Theo {
       /*goto mark (left = name)*/
       MARK = 13,
       /* Equality Test (left = op1, right = op2*/
-      EQ = 14,
-      /* Include node (tok = filename in quotations)*/
-      INCLUDE = 15
+      EQ = 14
     };
 
     Type t;
     
-    char *tok; // c-string token
+    std::string tok;
 
-    int line; // line of the token
+    std::string file;
+    int line; 
 
     /* children of this node; these pointers are owned by this object*/
     Node *left, *right; 
 
-    ~Node();
-    
-    static Node *mk(Type t, int line, char *tok, Node *left, Node *right);
+    static Node *mk(Type t, int line, std::string tok, Node *left, Node *right);
   };
 
   struct SyntaxError {
     int line;
+    std::string file;
     std::string msg;
   };
   
   struct AST {
-
     bool parsed_correctly;
 
     std::vector<SyntaxError> errors;
-    
+
     std::vector<Node*> all_allocated_nodes;
     Node *root;
 
-    // interface used from lex.yy.c and parser.tab.c to create nodes
-    Node *mk(Node::Type t, int line, char *tok, Node *left, Node *right);
+    Node *mk(Node::Type t, int line, std::string tok, Node *left, Node *right);
 
     /**
      * print a textual visualization of the AST for debug purposes;

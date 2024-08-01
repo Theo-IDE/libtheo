@@ -66,29 +66,28 @@ x3 := x2 + *(x0, x1) # this works, as infix is top level and second arg is c-sty
     END\n						\
   ";
 
-  std::map<Theo::FileName, Theo::AST> res = Theo::parse({
+  Theo::AST res = Theo::parse({
       {"syntax_test.theo", test_code},
       {"main.theo", main_theo},
       {"math.theo", math_theo}
-    });
+    }, "main.theo");
 
   bool all_clear = true;
 
-  for(auto p : res) {
-    if(!p.second.parsed_correctly){
-      std::cout << "Syntax Errors in \"" << p.first << "\":" << std::endl;
-      for(auto e : p.second.errors) {
-	std::cout << "Line " << e.line << ": " << e.msg << std::endl;
-      }
-      all_clear = false;
-    } else {
-      std::cout << "AST of \"" << p.first << "\"" << std::endl;
-      p.second.visualize(std::cout);
+  auto p =  res;
+  if(!res.parsed_correctly){
+    std::cout << "Syntax Errors:" << std::endl;
+    for(auto e : res.errors) {
+      std::cout << "Line " << e.line << ": " << e.msg << std::endl;
     }
-
-    // do not forget to free
-    p.second.clear();
+    all_clear = false;
+  } else {
+    std::cout << "AST: " << std::endl;
+    res.visualize(std::cout);
   }
-  
+
+  // do not forget to free
+  res.clear();
+
   return all_clear ? 0 : 1;
 }

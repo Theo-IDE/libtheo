@@ -64,11 +64,11 @@ struct Prog {
 };
 
 struct GenState {
-  std::map<Theo::FileName, Theo::AST> in;
+  Theo::AST in;
   
   Program out;
   std::vector<CodegenResult::Error> errors;
-  std::vector<FileState> file_state; // last generated line number of generating file
+
   std::vector<FunctionGenState> symbols; // symbol table stack
 
   std::map<std::string, Prog> funcAddrs; // functionName -> Address
@@ -77,26 +77,13 @@ struct GenState {
 
   std::vector<ProgramIndex> backpatching_todo;
 
-  void pushFileState(std::string name) {
-    this->file_state.push_back({name, 0});
-  }
-
-  FileState &getFileState() {
-    return *(file_state.end()-1);
-  }
-
-  void popFileState() {
-    file_state.pop_back();
-  }
+  FileState fs;
 
   void err(CodegenResult::Error::Type t, std::string msg) {
     std::string in_file = "root";
     int on_line = 0;
-    if(this->file_state.size() != 0){
-      FileState fs = this->getFileState();
-      in_file = fs.name;
-      on_line = fs.line;
-    }
+    in_file = fs.name;
+    on_line = fs.line;
     this->errors.push_back({t, msg, in_file, on_line});  
   }
 
@@ -129,7 +116,6 @@ struct GenState {
   }
   
   void breakpoint() {
-    FileState fs = this->getFileState();
     BreakPoint bp = {
       .file = fs.name,
       .line = fs.line
@@ -181,13 +167,16 @@ struct GenState {
   }
 
 
-  void advanceLine(int new_lineno) {
-    FileState fs = this->getFileState();
-    if(new_lineno > fs.line){
-      (this->file_state.end()-1)->line = new_lineno;
+  void advanceLine(int new_lineno, std::string file) {
+    if (fs.name == file && new_lineno > fs.line) {
+      fs.line = new_lineno;
       this->breakpoint();
     }
-
+    if (fs.name != file){
+      fs.name = file;
+      fs.line = new_lineno;
+      //this->breakpoint()
+    }
   }
 
   int createLabel() {
@@ -236,13 +225,6 @@ struct GenState {
 void dispatchVoid(GenState &gs, Node *c);
 void dispatchValue(GenState &gs, Node *c, RegisterIndex tgt);
 void gen_ast(GenState &gs, std::string fname);
-
-void dispatchInclude(GenState &gs, Node *c) {
-  std::string qname = std::string(c->tok);
-  qname = qname.substr(1, qname.length()-2);
-
-  gen_ast(gs, qname);
-}
 
 void dispatchIf(GenState &gs, Node *c) {
   RegisterIndex
@@ -317,8 +299,8 @@ void dispatchWhile(GenState &gs, Node *c) {
 // dispatch loop construct
 void dispatchLoop(GenState &gs, Node *c) {
 
-  std::string loop_counter = "Loop Variable " + gs.getFileState().name
-    + ":" + std::to_string(gs.getFileState().line);
+  std::string loop_counter = "Loop Variable " + gs.fs.name
+    + ":" + std::to_string(gs.fs.line);
 
   RegisterIndex counter = gs.getSymbols().fetchVariableRegister(loop_counter);
 
@@ -411,7 +393,7 @@ void dispatchCallArgs(GenState &gs, Node *c,
 
 void dispatchValue(GenState &gs, Node *c, RegisterIndex tgt) {
   if(c==NULL) return;
-  gs.advanceLine(c->line);
+  gs.advanceLine(c->line, c->file);
 
   switch(c->t) {
   case Node::Type::NAME: { // value copying : target = source + 0
@@ -486,7 +468,7 @@ void dispatchAssign(GenState &gs, Node *c) {
 void dispatchVoid(GenState &gs, Node *c) {
   if(c==NULL) return;
 
-  gs.advanceLine(c->line);
+  gs.advanceLine(c->line, c->file);
 
   switch(c->t) {
   case Node::Type::SPLIT: {
@@ -523,10 +505,6 @@ void dispatchVoid(GenState &gs, Node *c) {
     dispatchIf(gs, c);
     break;
   }
-  case Node::Type::INCLUDE: {
-    dispatchInclude(gs, c);
-    break;
-  }
   default: {
     gs.err(CodegenResult::Error::Type::MALFORMED_AST, "node type " + std::to_string((int)c->t) + " unimplemented in dispatchVoid()");
     break;
@@ -534,29 +512,21 @@ void dispatchVoid(GenState &gs, Node *c) {
   }
 }
 
-/**/
-void gen_ast(GenState &gs, std::string fname) {
-  auto itr = gs.in.find(fname);
-  if(itr == gs.in.end()) { // file not loaded
-    gs.err(CodegenResult::Error::Type::MISSING_INCLUDE, "missing file " + fname);
-    return;
-  } else {
-    if(!(*itr).second.parsed_correctly) { // file loaded but parsed with errors
-      for(auto e : (*itr).second.errors) {
-	gs.verr(CodegenResult::Error::Type::PARSE_ERROR,
-		e.msg,
-		fname,
-		e.line);
-      }
-      return;
+
+void gen_ast(GenState &gs) {
+  if(!gs.in.parsed_correctly) { // file loaded but parsed with errors
+    for(auto e : gs.in.errors) {
+      gs.verr(CodegenResult::Error::Type::PARSE_ERROR,
+	      e.msg,
+	      e.file,
+	      e.line);
     }
-    gs.pushFileState(fname);
-    dispatchVoid(gs, (*itr).second.root);
-    gs.popFileState();
+    return;
   }
+  dispatchVoid(gs, gs.in.root);
 }
 
-CodegenResult Theo::gen(std::map<Theo::FileName, Theo::AST> in, std::string main_file) {
+CodegenResult Theo::gen(Theo::AST in) {
   GenState gs = {
     .in = in,
     .out = {
@@ -566,16 +536,19 @@ CodegenResult Theo::gen(std::map<Theo::FileName, Theo::AST> in, std::string main
       .line_info = {},
     },
     .errors = {},
-    .file_state = {},
     .symbols = {},
-    .funcAddrs = {}
+    .funcAddrs = {},
+    .fs = {
+      .name = "#root_file_context",
+      .line = 0,
+    },
   };
 
   // first prep instruction, args determined later
   gs.emit(Instruction::PrepareExec(-1, -1, 0));
   
   gs.pushSymbols("#root"); // symbol table of root script
-  gen_ast(gs, main_file);
+  gen_ast(gs);
   gs.popSymbols(0); // finish root function
 
   Prog p = gs.funcAddrs["#root"];

@@ -11,10 +11,8 @@ namespace Theo {
 
   /**
    * parse a number of strings;
-   * When all ASTs of the output have been successfully parsed,
-   * the output map can be passed to the code generator;
    */
-  std::map<FileName, AST> parse(std::map<FileName, FileContent> files);
+  AST parse(std::map<FileName, FileContent> files, FileName main);
   
 };
 

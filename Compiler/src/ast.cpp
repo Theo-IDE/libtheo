@@ -2,7 +2,7 @@
 
 using namespace Theo;
 
-Node *Node::mk(Node::Type t, int line, char *tok, Node *left, Node *right){
+Node *Node::mk(Node::Type t, int line, std::string tok, Node *left, Node *right){
   Node *n = new Node();
   n->t = t;
   n->left = left;
@@ -12,7 +12,7 @@ Node *Node::mk(Node::Type t, int line, char *tok, Node *left, Node *right){
   return n;
 }
 
-Node *AST::mk(Node::Type t, int line, char *tok, Node *left, Node *right) {
+Node *AST::mk(Node::Type t, int line, std::string tok, Node *left, Node *right) {
   Node *n = Node::mk(t, line, tok, left, right);
   this->all_allocated_nodes.push_back(n);
   return n;
@@ -22,12 +22,6 @@ void AST::clear() {
   for(auto n : this->all_allocated_nodes)
     delete n;
   this->all_allocated_nodes.clear();
-}
-
-#include <cstdlib>
-Node::~Node() {
-  if(tok != NULL)
-    free(tok);
 }
 
 
@@ -41,8 +35,7 @@ static void recurse(Node *n, std::ostream& o, int lvl) {
   }
 
   o << "[" << (int)n->t << "] (" << n->line << ") ";
-  if(n->tok != NULL)
-    o << std::string(n->tok);
+  o << n->tok;
   o << std::endl;
   
   recurse(n->left, o, lvl+1);
