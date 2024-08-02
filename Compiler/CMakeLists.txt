@@ -2,7 +2,6 @@ find_package(FLEX)
 
 set(GENERATED_OUTPUTS
 	${CMAKE_CURRENT_SOURCE_DIR}/src/lex.yy.c
-	${CMAKE_CURRENT_SOURCE_DIR}/include/lex.yy.h
 )
 
 # if the environment has flex installed, regenerate the initial scanner on build
@@ -29,6 +28,8 @@ set(LIBTHEO_C_HEADERS
   include/lexer.hpp
   include/gen.hpp
   include/compiler.hpp
+  include/scanner_info.hpp
+  include/token.hpp
 )
 
 set(LIBTHEO_C_SOURCES
