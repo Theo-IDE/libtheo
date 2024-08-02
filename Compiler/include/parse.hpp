@@ -2,12 +2,10 @@
 #define __LIBTHEO_C_PARSE_HPP_
 
 #include "Compiler/include/ast.hpp"
+#include "Compiler/include/scan.hpp"
 #include <map>
-#include <string>
 
 namespace Theo {
-
-  typedef std::string FileName, FileContent;
 
   /**
    * parse a number of strings;

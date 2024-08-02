@@ -7,6 +7,7 @@ namespace Theo {
 
   struct Token {
     enum Type {
+      T_EOF = 0,
       ID = 1,
       INT,
       PAREN_CLOSE,
@@ -46,7 +47,7 @@ namespace Theo {
     std::string text;
     std::string file;
     int line;
-
+    Token () {};
     Token (Type t, std::string text, std::string file, int line) : t(t), text(text), file(file), line(line) {};
   };
   

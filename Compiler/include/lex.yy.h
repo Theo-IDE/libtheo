@@ -222,7 +222,7 @@ void yyfree ( void * , yyscan_t yyscanner );
 
 #endif
 
-#define YY_EXTRA_TYPE Theo::ScannerInfo*
+#define YY_EXTRA_TYPE Theo::ScannerInfo
 
 int yylex_init (yyscan_t* scanner);
 
