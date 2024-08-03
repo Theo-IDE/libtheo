@@ -79,7 +79,48 @@ ScanResult Theo::scan(std::map<FileName, FileContent> files,
     }
     res.push_back(t);
   }
-
   return {res, errors};
 }
 
+std::string token_map[] = {
+  "end of file",
+  "variable name, function name, id",
+  "operator, delimiter",
+  "integer",
+  ")",
+  "(",
+  ",",
+  ";",
+  ":",
+  ":=",
+  "!= 0",
+  "=",
+  "'do' keyword",
+  "'loop' keyword",
+  "'while' keyword",
+  "'goto' keyword",
+  "'if' keyword",
+  "'then' keyword",
+  "'stop' keyword",
+  "'end' keyword",
+  "'program' keyword",
+  "'in' keyword",
+  "'out' keyword",
+  "'include' keyword",
+  "filename in quotation",
+  "'define' keyword",
+  "'as' keyword",
+  "'priority' keyword",
+  "'end define' keyword",
+  "program template",
+  "value template",
+  "id template",
+  "integer template",
+  "arguments template",
+  "macro insertion operator",
+  "macro temporary designator"
+};
+
+std::string Theo::token_string(Theo::Token::Type t) {
+  return token_map[t];
+}

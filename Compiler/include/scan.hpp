@@ -15,6 +15,12 @@ namespace Theo {
     std::vector<Theo::Token> toks;
     std::vector<ParseError> errors;
   };
+
+  /**
+   * get a verbal description for a token type
+   * (useful for debugging purposes)
+   */
+  std::string token_string(Theo::Token::Type t);
   
   /**
    * convert multiple files to one token stream;

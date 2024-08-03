@@ -31,6 +31,7 @@ set(LIBTHEO_C_HEADERS
   include/scanner_info.hpp
   include/token.hpp
   include/scan.hpp
+  include/macro.hpp
 )
 
 set(LIBTHEO_C_SOURCES
@@ -39,6 +40,7 @@ set(LIBTHEO_C_SOURCES
   src/gen.cpp
   src/compiler.cpp
   src/scan.cpp
+  src/macro.cpp
 )
 
 set_source_files_properties(${GENERATED_OUTPUTS} PROPERTIES LANGUAGE CXX)

@@ -9,6 +9,7 @@ namespace Theo {
     enum Type {
       T_EOF = 0,
       ID = 1,
+      NV_ID, 
       INT,
       PAREN_CLOSE,
       PAREN_OPEN,
@@ -39,6 +40,7 @@ namespace Theo {
       VALUE_TEMP,
       ID_TEMP,
       INT_TEMP,
+      ARGS_TEMP,
       INSERTION,
       TEMP_VAL
     };
@@ -50,7 +52,7 @@ namespace Theo {
     Token () {};
     Token (Type t, std::string text, std::string file, int line) : t(t), text(text), file(file), line(line) {};
   };
-  
+
 }
 
 #endif

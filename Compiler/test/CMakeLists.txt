@@ -18,3 +18,7 @@ add_test(NAME gen_test COMMAND gen_test)
 # scan test
 add_executable(scan_test scan_test.cpp)
 add_test(NAME scan_test COMMAND scan_test)
+
+# macro extraction test
+add_executable(macro_extraction_test macro_extraction_test.cpp)
+add_test(NAME macro_extraction_test COMMAND macro_extraction_test)

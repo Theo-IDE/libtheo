@@ -12,7 +12,8 @@
 %option reentrant noyywrap yylineno noline
 %option extra-type="Theo::ScannerInfo"
 
-id [a-zA-Z\!\?\|\_\+\*/\&\^\\\%\§\@\{\}\[\]\'\~\<\>][a-zA-Z0-9\!\?\|\_\+\*/\&\^\\%§@\{\}\[\]\'~<>]*
+id [a-zA-Z\_][a-zA-Z0-9_]*
+nv_id [\!\?\|\_\+\*/\&\^\\\%\§\@\{\}\[\]\'\~\<\>][\!\?\|\_\+\*/\&\^\\%§@\{\}\[\]\'~<>]*
 int (0|([1-9][0-9]*))
 include (INCLUDE|Include|include)
 fname \"[^\"]*\"
@@ -36,6 +37,7 @@ value (VALUE|Value|value|VAL|Val|val)
 valtemp (<{value}>|<V>|<v>)
 idtemp (<ID>|<id>)
 inttemp (<INT>|<Int>|<int>)
+argstemp (<ARGS>|<Args>|<args>|<A>|<a>)
 ws [ \t\n]+
 
 %%
@@ -73,7 +75,9 @@ ws [ \t\n]+
 \${int} {TOK(Theo::Token::Type::INSERTION)}
 \#{int} {TOK(Theo::Token::Type::TEMP_VAL)}
 {id} {TOK(Theo::Token::Type::ID)}
+{nv_id} {TOK(Theo::Token::Type::NV_ID)}
 {int} {TOK(Theo::Token::Type::INT)}
+{argstemp} {TOK(Theo::Token::Type::ARGS_TEMP)}
 \/\/.* {}
 %%
 
