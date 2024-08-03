@@ -1,5 +1,6 @@
 #include "Compiler/include/macro.hpp"
 #include "Compiler/include/scan.hpp"
+#include <string>
 
 #define MIN(a,b) (((a) < (b)) ? (a) : (b))
 
@@ -23,7 +24,7 @@ Theo::Token::Type lookahead(ExtractionState &es) {
   return es.tokens[es.tok_pos].t;
 }
 
-void match(ExtractionState &es, Theo::Token::Type expect) {
+bool match(ExtractionState &es, Theo::Token::Type expect) {
   if (lookahead(es) != expect){
     int tp = MIN(es.tok_pos, es.tokens.size()-1);
     es.encountered_errors.push_back({
@@ -32,8 +33,11 @@ void match(ExtractionState &es, Theo::Token::Type expect) {
 	es.tokens[tp].file,
 	es.tokens[tp].line
       });
+    es.tok_pos++;
+    return false;
   }
   es.tok_pos++;
+  return true;
 }
 
 void copy(ExtractionState &es) { es.output.push_back(es.tokens[MIN(es.tok_pos, es.tokens.size()-1)]); }
@@ -42,6 +46,7 @@ void advance(ExtractionState &es) { match(es, lookahead(es)); }
 
 void push_macro(ExtractionState &es) {
   MacroDefinition md = {
+    .priority = 0,
     .rule = {},
     .content_constraint_token_indices = {},
     .template_token_indices = {},
@@ -102,9 +107,18 @@ void S(ExtractionState &es) {
     advance(es);
     return;
   }
-  case Theo::Token::DEFINE: { // S -> "DEFINE" D S
+  case Theo::Token::DEFINE: { // S -> "DEFINE" ["PRIORITY" INT] D S
     advance(es);
     push_macro(es);
+
+    if (lookahead(es) == Theo::Token::PRIORITY){
+      advance(es);
+      if (match(es, Theo::Token::INT)) {
+	es.incomplete_macros.back().priority =
+	  std::stoi(es.tokens[es.tok_pos-1].text);
+      }
+    }
+    
     D(es);
     S(es);
     return;

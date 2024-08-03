@@ -8,6 +8,7 @@
 namespace Theo {
 
   struct MacroDefinition {
+    int priority;
     /*sequence of tokens to match*/
     std::vector<Token> rule;
     // location of ID and INT tokens in .rule (to match specific var-names)

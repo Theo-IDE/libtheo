@@ -10,7 +10,7 @@ using namespace Theo;
 
 int main() {
   std::string included_theo = "\
-DEFINE\n\
+DEFINE \n\
   <V> + <V>\n\
 AS add($1, $2) END DEFINE\n\
 1 +2 +3 +4\n\
@@ -18,13 +18,13 @@ AS add($1, $2) END DEFINE\n\
 
   std::string main_theo = "\
 INCLUDE \"included.theo\"\n\
-DEFINE\n\
+DEFINE PRIORITY 10\n\
   <V> <V> * \n\
 AS mul($1, $2) END DEFINE\n\
 DEFINE AS illegal END DEFINE \n\
 DEFINE DEFINE AS illegal2 illegal3 END DEFINE\n\
 this is some nonsensical input\n\
-DEFINE unfinished macro\n\
+DEFINE PRIORITY unfinished macro\n\
 ";
 
   bool error = false;
@@ -58,18 +58,20 @@ DEFINE unfinished macro\n\
     if (mer.macros[1].rule.size() != 3
 	|| mer.macros[1].content_constraint_token_indices[0] != 2
 	|| mer.macros[1].template_token_indices[0] != 0
-	|| mer.macros[1].template_token_indices[1] != 1) {
+	|| mer.macros[1].template_token_indices[1] != 1
+	|| mer.macros[1].priority != 10) {
       std::cerr << "second macro of unexpected format:" << std::endl
 		<< 3 << " == " << mer.macros[1].rule.size() << std::endl
 		<< 2 << " == " << mer.macros[1].content_constraint_token_indices[0] << std::endl
 		<< 0 << " == " << mer.macros[1].template_token_indices[0] << std::endl
-		<< 1 << " == " << mer.macros[1].template_token_indices[1] << std::endl;
+		<< 1 << " == " << mer.macros[1].template_token_indices[1] << std::endl
+		<< 10 << " == " << mer.macros[1].priority << std::endl;
       error = true;
     }
   }
 
-  if (mer.errors.size() != 4) {
-    std::cerr << "expected to find four errors, but found " << mer.errors.size() << std::endl;
+  if (mer.errors.size() != 5) {
+    std::cerr << "expected to find five errors, but found " << mer.errors.size() << std::endl;
     for (ParseError pe : mer.errors) {
       std::cerr << pe.t << std::endl
 		<< pe.msg << std::endl
@@ -82,6 +84,7 @@ DEFINE unfinished macro\n\
     std::vector<ParseError> compare = {
       {Theo::ParseError::Type::MACRO_EXTRACT_EMPTY_DEFINE, "", "main.theo", 5},
       {Theo::ParseError::Type::MACRO_EXTRACT_NESTED, "", "main.theo", 6},
+      {Theo::ParseError::Type::MACRO_EXTRACT_EXPECT, "", "main.theo", 8},
       {Theo::ParseError::Type::MACRO_EXTRACT_EXPECT, "", "main.theo", 8},
       {Theo::ParseError::Type::MACRO_EXTRACT_EXPECT, "", "main.theo", 8}
     };
