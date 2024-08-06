@@ -30,6 +30,11 @@ Theo::operator>>(const Grammar::Symbol left,
   return std::make_pair(left, right);
 }
 
+std::pair<Grammar::Symbol, Grammar::Alternative>
+Theo::operator>>(const Grammar::Symbol left, const Grammar::Symbol right) {
+  return std::make_pair(left, Grammar::Alternative{right});
+}
+
 Grammar::Symbol Grammar::createNonTerminal() {
   Symbol s = {Symbol::NON_TERMINAL, total_non_terminals};
   total_non_terminals++;
@@ -63,18 +68,18 @@ void Grammar::calculateFirstSets() {
     for (auto &rule : right_sides) {
       Symbol left = rule.first;
       for (auto &alternative : rule.second) {
-	Symbol first = alternative[0];
-	if (first.t == Symbol::EPSILON) { // 2
+	if (alternative.size() == 0) { // 2 -> empty right side is implicit epsilon
 	  if (!first_sets.contains(left)) {
 	    changed = true;
-	    first_sets.insert(std::make_pair(left, std::set<Symbol>{first}));
-	  } else if (!first_sets[left].contains(first)) {
+	    // epsilons in the first sets are now explicitly managed
+	    first_sets.insert(std::make_pair(left, std::set<Symbol>{Symbol::Epsilon()}));
+	  } else if (!first_sets[left].contains(Symbol::Epsilon())) {
 	    changed = true;
-	    first_sets[left].insert(first);
+	    first_sets[left].insert(Symbol::Epsilon());
 	  }
 	}
 	for (auto &symbol : alternative) {
-	  if (symbol.t != Symbol::TERMINAL){ // 1
+	  if (symbol.t != Symbol::TERMINAL){ // 1 -> symbol is a terminal appearing within the grammar
 	    if (symbol.t == Symbol::NON_TERMINAL && !first_sets.contains(symbol))
 	      first_sets.insert(std::make_pair(symbol, std::set<Symbol>{}));
 	    continue;

@@ -33,21 +33,21 @@ int main() {
 
   sg.add(X >> (A, B, C), nothing); // X -> ABC
   sg.add(Y >> (A, B, C, D), nothing); // Y -> ABCD
-  sg.add(A >> (a, e), nothing); // A -> a
-  sg.add(A >> (e, e), nothing); // A -> ø
-  sg.add(B >> (b, e), nothing); // B -> b
-  sg.add(B >> (e, e), nothing); // B -> ø
-  sg.add(C >> (c, e), nothing); // C -> c
-  sg.add(C >> (e, e), nothing); // C -> ø
-  sg.add(D >> (d, e), nothing); // D -> d
+  sg.add(A >> a, nothing); // A -> a
+  sg.add(A >> e, nothing); // A -> ø
+  sg.add(B >> b, nothing); // B -> b
+  sg.add(B >> e, nothing); // B -> ø
+  sg.add(C >> c, nothing); // C -> c
+  sg.add(C >> e, nothing); // C -> ø
+  sg.add(D >> d, nothing); // D -> d
   
-  sg.add(E >> (e, e), nothing); // E -> ø; to have FIRST(E) contain + 
+  sg.add(E >> e, nothing); // E -> ø; to have FIRST(E) contain + 
   sg.add(E >> (E,  plus, T), nothing); // E -> E + T
-  sg.add(E >> (T, e), nothing); // E -> T
+  sg.add(E >> T, nothing); // E -> T
   sg.add(T >> (T, times, F), nothing); // T -> T * F
-  sg.add(T >> (F, e) , nothing); // T -> F
+  sg.add(T >> F , nothing); // T -> F
   sg.add(F >> (p_open, E, p_close), nothing); // F -> ( E )
-  sg.add(F >> (id, e), nothing); // F -> id
+  sg.add(F >> id, nothing); // F -> id
 
   // Constructing the FIRST set of all rules (should be {(, id} in all cases)
   sg.calculateFirstSets();

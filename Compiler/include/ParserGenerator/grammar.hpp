@@ -53,6 +53,9 @@ namespace Theo {
   /* rule construction */
   std::pair<Grammar::Symbol, Grammar::Alternative>
   operator>>(const Grammar::Symbol left, const Grammar::Alternative right);
+
+  std::pair<Grammar::Symbol, Grammar::Alternative>
+  operator>>(const Grammar::Symbol left, const Grammar::Symbol right);
   
   template <typename SemanticType>
   struct SemanticGrammar : public Grammar {
@@ -65,6 +68,8 @@ namespace Theo {
     void add(std::pair<Symbol, std::vector<Symbol>> rule, Action a) {
       if (rule.first.t != Symbol::NON_TERMINAL)
 	return;
+      // remove all epsilons from the rule, empty left sides are implicitly interpreted as epsilon
+      std::erase_if(rule.second, [](Symbol s) {return s.t == Symbol::EPSILON;});
       if (!right_sides.contains(rule.first)) {
 	right_sides.insert(std::make_pair(rule.first, std::vector<Alternative>{rule.second}));
 	actions.insert(std::make_pair(rule.first, std::vector<Action>{a}));
