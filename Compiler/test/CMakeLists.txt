@@ -22,3 +22,7 @@ add_test(NAME scan_test COMMAND scan_test)
 # macro extraction test
 add_executable(macro_extraction_test macro_extraction_test.cpp)
 add_test(NAME macro_extraction_test COMMAND macro_extraction_test)
+
+# grammar test
+add_executable(grammar_test grammar_test.cpp)
+add_test(NAME grammar_test COMMAND grammar_test)
