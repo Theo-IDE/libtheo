@@ -81,3 +81,20 @@ std::set<LRElement> Theo::hull(std::set<LRElement> I, Grammar& G) {
   }
   return I;
 }
+
+std::set<LRElement> Theo::jump(std::set<LRElement> I, Grammar::Symbol X,
+                               Grammar &G) {
+  std::set<LRElement> J = {};
+
+  for (auto &i : I) {
+    Grammar::Alternative right = fetch_right(i, G);
+    Grammar::Symbol expecting = get_before(right, i);
+    if (!(expecting < X || X < expecting)){ // expecting == X
+      LRElement next = i;
+      next.dot++;
+      J.insert(next);
+    }
+  }
+  
+  return hull(J, G);
+}

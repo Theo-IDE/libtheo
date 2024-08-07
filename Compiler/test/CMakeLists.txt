@@ -30,3 +30,7 @@ add_test(NAME grammar_test COMMAND grammar_test)
 # test of the hull of LR(1) Elements
 add_executable(hull_test hull_test.cpp)
 add_test(NAME hull_test COMMAND hull_test)
+
+# test of Jump of set LR(1) Elements
+add_executable(jump_test jump_test.cpp)
+add_test(NAME jump_test COMMAND jump_test)
