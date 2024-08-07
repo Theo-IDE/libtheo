@@ -33,6 +33,7 @@ set(LIBTHEO_C_HEADERS
   include/scan.hpp
   include/macro.hpp
   include/ParserGenerator/grammar.hpp
+  include/ParserGenerator/lrdea.hpp
 )
 
 set(LIBTHEO_C_SOURCES
@@ -43,6 +44,7 @@ set(LIBTHEO_C_SOURCES
   src/scan.cpp
   src/macro.cpp
   src/ParserGenerator/grammar.cpp
+  src/ParserGenerator/lrdea.cpp
 )
 
 set_source_files_properties(${GENERATED_OUTPUTS} PROPERTIES LANGUAGE CXX)

@@ -26,3 +26,7 @@ add_test(NAME macro_extraction_test COMMAND macro_extraction_test)
 # grammar test
 add_executable(grammar_test grammar_test.cpp)
 add_test(NAME grammar_test COMMAND grammar_test)
+
+# test of the hull of LR(1) Elements
+add_executable(hull_test hull_test.cpp)
+add_test(NAME hull_test COMMAND hull_test)

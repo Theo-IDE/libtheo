@@ -26,7 +26,6 @@ namespace Theo {
     
     unsigned int total_non_terminals;
     std::map<Symbol, std::vector<Alternative>> right_sides; // index is non_terminal, value is all the alternatives for that symbol
-
     std::map<Symbol, std::set<Symbol>> first_sets;
 
     Grammar() : total_non_terminals(0), right_sides({}) {};
@@ -59,6 +58,7 @@ namespace Theo {
   
   template <typename SemanticType>
   struct SemanticGrammar : public Grammar {
+    
     using Action = SemanticType (*)(std::vector<SemanticType>);
     using RightSideAction = std::vector<Action>;
     std::map<Symbol, RightSideAction> actions;
