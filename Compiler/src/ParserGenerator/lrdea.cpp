@@ -25,7 +25,7 @@ static Grammar::Alternative fetch_right(const LRElement &e, Grammar &G) {
 }
 
 static Grammar::Symbol get_before(Grammar::Alternative &a, const LRElement &e) {
-  if (a.size() == 0)
+  if (a.size() == 0 || e.dot >= a.size())
     return Grammar::Symbol::Epsilon();
   return a[e.dot];
 }
@@ -97,4 +97,61 @@ std::set<LRElement> Theo::jump(std::set<LRElement> I, Grammar::Symbol X,
   }
   
   return hull(J, G);
+}
+
+bool Theo::operator<(const LRState &l1, const LRState &l2) {
+  return l1.elements < l2.elements;
+}
+
+std::set<Grammar::Symbol> get_befores(std::set<LRElement> I, Grammar &G) {
+  std::set<Grammar::Symbol> res = {};
+  for (const LRElement &s : I) {
+    Grammar::Alternative a = fetch_right(s, G);
+    Grammar::Symbol before = get_before(a, s);
+    if (before.t == Grammar::Symbol::EPSILON)
+      continue;
+    res.insert(before);
+  }
+  return res;
+}
+
+std::vector<LRState> Theo::elements(Grammar::Symbol S, Grammar::Symbol eof, Grammar &G) {
+  std::vector<LRState> result = {};
+
+  // insert S' -> S into grammar
+  auto S_prime = G.createNonTerminal();
+  G.right_sides.insert(std::make_pair(S_prime, std::vector<Grammar::Alternative>{}));
+  G.right_sides[S_prime].push_back(Grammar::Alternative{S});
+
+  // make sure that FIRST(EOF) is calculated
+  auto E = G.createNonTerminal();
+  G.right_sides.insert(std::make_pair(E, std::vector<Grammar::Alternative>{}));
+  G.right_sides[E].push_back(Grammar::Alternative{eof});
+
+  G.calculateFirstSets();
+  
+  // initial state is Hull({[S' -> . S, $]})
+  std::set<LRElement> h = hull(std::set<LRElement>{{S_prime, 0, 0, eof}}, G);
+  LRState init = {h, {}};
+  result.push_back(init);
+  std::map<LRState, int> registry = {{init, 0}};
+
+  for(unsigned int i = 0; i < result.size(); i++) {
+    // fetch jump characters
+    std::set<Grammar::Symbol> possible_transitions = get_befores(result[i].elements, G);
+    // construct jumps
+    for(const Grammar::Symbol &t : possible_transitions) {
+      std::set<LRElement> r = jump(result[i].elements, t, G);
+      LRState candidate = {r, {}};
+      if (!registry.contains(candidate)) {
+	result.push_back(candidate);
+	registry.insert(std::make_pair(candidate, result.size() - 1));
+      }
+      if (!result[i].jump.contains(t)) {
+	result[i].jump.insert(std::make_pair(t, registry[candidate]));
+      }
+    }
+  }
+  
+  return result;
 }

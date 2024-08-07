@@ -34,3 +34,7 @@ add_test(NAME hull_test COMMAND hull_test)
 # test of Jump of set LR(1) Elements
 add_executable(jump_test jump_test.cpp)
 add_test(NAME jump_test COMMAND jump_test)
+
+# test of sets-of-elements construction
+add_executable(elements_test elements_test.cpp)
+add_test(NAME elements_test COMMAND elements_test)

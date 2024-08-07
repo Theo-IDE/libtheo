@@ -37,6 +37,23 @@ namespace Theo {
    * @return  delta(I, X)
    */
   std::set<LRElement> jump (std::set<LRElement> I, Grammar::Symbol X, Grammar& G);
+
+  struct LRState {
+    std::set<LRElement> elements;
+    std::map<Grammar::Symbol, int> jump; // int is index into elements()
+  };
+
+  bool operator< (const LRState& l1, const LRState& l2);
+  
+  /**
+   * construction of the sets-of-elements, i.e. the states of
+   * the lr prefix dea
+   * @param S   starting symbol
+   * @param eof the symbol serving as eof or '$'
+   * @param G   grammar
+   * @return    the states of the dea, 0 is the starting state
+   */ 
+  std::vector<LRState> elements (Grammar::Symbol S, Grammar::Symbol eof, Grammar &G);
 };
 
 #endif
