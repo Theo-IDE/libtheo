@@ -34,6 +34,7 @@ set(LIBTHEO_C_HEADERS
   include/macro.hpp
   include/ParserGenerator/grammar.hpp
   include/ParserGenerator/lrdea.hpp
+  include/ParserGenerator/lrparser.hpp
 )
 
 set(LIBTHEO_C_SOURCES

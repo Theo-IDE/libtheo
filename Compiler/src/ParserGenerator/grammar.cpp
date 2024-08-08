@@ -1,4 +1,5 @@
 #include "Compiler/include/ParserGenerator/grammar.hpp"
+#include <algorithm>
 
 using namespace Theo;
 
@@ -61,6 +62,7 @@ void add_terminals(std::set<Grammar::Symbol> &to,
 void Grammar::calculateFirstSets() {
   bool changed = true;
   first_sets.insert(std::make_pair(Symbol::Epsilon(), std::set<Symbol>{}));
+  max_used_terminal = 0;
   while(changed) { // repeat until nothing changes:
     changed = false;
     // 1) if X is a terminal, FIRST(X) = {X}
@@ -84,6 +86,7 @@ void Grammar::calculateFirstSets() {
 	      first_sets.insert(std::make_pair(symbol, std::set<Symbol>{}));
 	    continue;
 	  }
+	  max_used_terminal = std::max(symbol.index, max_used_terminal);
 	  if (!first_sets.contains(symbol)) {
 	    changed = true;
 	    first_sets.insert(std::make_pair(symbol, std::set<Symbol>{symbol}));

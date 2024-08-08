@@ -1,6 +1,7 @@
 #ifndef __LIBTHEO_C_PARSER_GENERATOR_GRAMMAR_HPP_
 #define __LIBTHEO_C_PARSER_GENERATOR_GRAMMAR_HPP_
 
+#include <functional>
 #include <utility>
 #include <vector>
 #include <set>
@@ -27,6 +28,7 @@ namespace Theo {
     unsigned int total_non_terminals;
     std::map<Symbol, std::vector<Alternative>> right_sides; // index is non_terminal, value is all the alternatives for that symbol
     std::map<Symbol, std::set<Symbol>> first_sets;
+    unsigned int max_used_terminal; // maximum .index value of a terminal symbol, filled after first sets are calculated
 
     Grammar() : total_non_terminals(0), right_sides({}) {};
 
@@ -59,20 +61,20 @@ namespace Theo {
   template <typename SemanticType>
   struct SemanticGrammar : public Grammar {
     
-    using Action = SemanticType (*)(std::vector<SemanticType>);
-    using RightSideAction = std::vector<Action>;
+    using SemanticAction = std::function<SemanticType(std::vector<SemanticType>)>;
+    using RightSideAction = std::vector<SemanticAction>;
     std::map<Symbol, RightSideAction> actions;
 
     SemanticGrammar() : Grammar() {};
 
-    void add(std::pair<Symbol, std::vector<Symbol>> rule, Action a) {
+    void add(std::pair<Symbol, std::vector<Symbol>> rule, SemanticAction a) {
       if (rule.first.t != Symbol::NON_TERMINAL)
 	return;
       // remove all epsilons from the rule, empty left sides are implicitly interpreted as epsilon
       std::erase_if(rule.second, [](Symbol s) {return s.t == Symbol::EPSILON;});
       if (!right_sides.contains(rule.first)) {
 	right_sides.insert(std::make_pair(rule.first, std::vector<Alternative>{rule.second}));
-	actions.insert(std::make_pair(rule.first, std::vector<Action>{a}));
+	actions.insert(std::make_pair(rule.first, std::vector<SemanticAction>{a}));
 	return;
       }
       right_sides[rule.first].push_back(rule.second);

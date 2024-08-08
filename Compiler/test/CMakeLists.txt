@@ -38,3 +38,7 @@ add_test(NAME jump_test COMMAND jump_test)
 # test of sets-of-elements construction
 add_executable(elements_test elements_test.cpp)
 add_test(NAME elements_test COMMAND elements_test)
+
+# test of LRParser with closed end grammars
+add_executable(lrparser_test lrparser_test.cpp)
+add_test(NAME lrparser_test COMMAND lrparser_test)
