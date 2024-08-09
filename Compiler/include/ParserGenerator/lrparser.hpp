@@ -51,6 +51,8 @@ namespace Theo {
       : G(G), accept_prefix(accept_prefix), translator(t), creator(c),
 	S(S), eof(eof){};
 
+    LRParser() {};
+
     /**
      * generate the parse tables from the Grammar;
      * needs to be called before any parsing takes place
@@ -218,6 +220,8 @@ namespace Theo {
     for(;;) {
       int s = states.back();
       int a = translator(*ip).index;
+      if (action[s].size() <= a)
+	return {ParseResult::REJECT, "not ok"};	
       switch(action[s][a].t) {
       case Action::SHIFT: {
 	int s_prime = action[s][a].state;

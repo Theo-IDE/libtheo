@@ -1,9 +1,11 @@
 #ifndef __LIBTHEO_C_MACRO_HPP_
 #define __LIBTHEO_C_MACRO_HPP_
 
+#include <optional>
 #include <vector>
 #include "Compiler/include/token.hpp"
 #include "Compiler/include/parse_error.hpp"
+#include "Compiler/include/ParserGenerator/lrparser.hpp"
 
 namespace Theo {
 
@@ -26,12 +28,29 @@ namespace Theo {
     std::vector<Theo::MacroDefinition> macros;
   };
 
+  struct MacroApplicationResult {
+    std::vector<ParseError> errors;
+    std::vector<Token> transformed_sequence;
+  };
+  
   /**
    * Extract the macro definitions from a token stream;
    * @param tokens output from scanner
    */
   Theo::MacroExtractionResult extract_macros (std::vector<Theo::Token> tokens);
-  
+
+  /**
+   * Apply macros to a token stream;
+   * Possible Erros:
+   *  - a macro is not linearly parseable (because of open-endedness or else)
+   *  - the maximum number of passes was reached
+   * @param input       input, cleared of macro definitions (output of extract_macros)
+   * @param definitions macro definitions extracted by extract_macros
+   * @param passes      maximum number of macro expansions to perform
+   */
+  Theo::MacroApplicationResult apply_macros(std::vector<Theo::Token> input,
+					    std::vector<Theo::MacroDefinition> &definitions,
+					    unsigned int passes);
 };
 
 #endif

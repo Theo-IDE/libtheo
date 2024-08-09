@@ -12,7 +12,8 @@ namespace Theo {
       FILE_NOT_FOUND,
       MACRO_EXTRACT_EXPECT,
       MACRO_EXTRACT_NESTED,
-      MACRO_EXTRACT_EMPTY_DEFINE
+      MACRO_EXTRACT_EMPTY_DEFINE,
+      MACRO_COMPILE_NON_LR
     };
     Type t;
     std::string msg;

@@ -42,7 +42,9 @@ namespace Theo {
       INT_TEMP,
       ARGS_TEMP,
       INSERTION,
-      TEMP_VAL
+      TEMP_VAL,
+      RUN,
+      WITH
     };
 
     Type t;

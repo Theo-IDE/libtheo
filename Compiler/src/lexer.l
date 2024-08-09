@@ -38,6 +38,8 @@ valtemp (<{value}>|<V>|<v>)
 idtemp (<ID>|<id>)
 inttemp (<INT>|<Int>|<int>)
 argstemp (<ARGS>|<Args>|<args>|<A>|<a>)
+run (RUN|Run|run)
+with (WITH|With|with)
 ws [ \t\n]+
 
 %%
@@ -51,6 +53,8 @@ ws [ \t\n]+
 \:\= {TOK(Theo::Token::Type::ASSIGN)}
 !=\ 0 {TOK(Theo::Token::Type::NEQ_ZERO)}
 = {TOK(Theo::Token::Type::EQ)}
+{run} {TOK(Theo::Token::Type::RUN)}
+{with} {TOK(Theo::Token::Type::WITH)}
 {do} {TOK(Theo::Token::Type::DO)}
 {loop} {TOK(Theo::Token::Type::LOOP)}
 {while} {TOK(Theo::Token::Type::WHILE)}
