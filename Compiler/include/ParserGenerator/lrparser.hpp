@@ -233,7 +233,7 @@ namespace Theo {
       case Action::REDUCE: {
 	int beta = action[s][a].beta;
 	int left = action[s][a].left;
-	std::vector<int> popped = {};
+	std::vector<SemanticType> popped = {};
 	for(int i = 0; i < beta; i++){
 	  popped.push_back(values.back());
 	  values.pop_back();

@@ -1,6 +1,7 @@
 #include "Compiler/include/macro.hpp"
 #include "Compiler/include/scan.hpp"
-#include <algorithm>
+#include <ranges>
+#include <bits/ranges_util.h>
 #include <string>
 
 #define MIN(a,b) (((a) < (b)) ? (a) : (b))
@@ -92,7 +93,6 @@ void push_rule(ExtractionState &es) {
 void push_replacement(ExtractionState &es) {
   Token l = es.tokens[es.tok_pos];
   MacroDefinition &md = es.incomplete_macros.back();
-
   md.replacement.push_back(l);
 }
 
@@ -275,7 +275,7 @@ struct MacroDetector {
       Accumulation a = {{},{}};
       std::for_each(i.begin(), i.end(), [&a](Accumulation &i) -> void {
 	a.total_sequence.insert(
-				a.total_sequence.end(),
+				a.total_sequence.begin(),
 				i.total_sequence.begin(),
 				i.total_sequence.end());
       });
@@ -351,6 +351,7 @@ struct MacroDetector {
 				i.total_sequence.begin(),
 				i.total_sequence.end());
       });
+      std::reverse(a.split_sequence.begin(), a.split_sequence.end());
       return a;
     });
 
@@ -380,7 +381,35 @@ struct MacroDetector {
     return res;
   }
 
-  std::optional<Response> detect (std::vector<Token> &in); //TODO: detect
+  bool check_constraint(const std::vector<std::vector<Token>>& matched) {
+    auto def = md;
+
+    for(auto cindex : def.content_constraint_token_indices) {
+      Token requirement = def.rule[cindex];
+      std::vector<Token> found = matched[cindex];
+      if (found.size() != 1)
+	return false;
+      if (found[0].text != requirement.text)
+	return false;
+    }
+    return true;
+  }
+  
+  std::optional<Response> detect (std::vector<Token> &in){
+    for(auto i = 0; i < in.size(); i++){
+      auto p = parser.parse(std::ranges::subrange(in.begin()+i, in.end()));
+      if(p.t == p.ACCEPT && check_constraint(p.st.split_sequence)) {
+	return std::optional<Response>{
+	  {
+	    i,
+	    (int)p.st.total_sequence.size(),
+	    p.st.split_sequence
+	  }
+	};
+      }
+    }
+    return std::nullopt;
+  } 
 
 private:
 
@@ -403,13 +432,46 @@ get_detectors(std::vector<Theo::MacroDefinition> &defs) {
   return res;
 }
 
+
+
+std::vector<Token>
+get_replacement(std::pair<MacroDetector, MacroDetector::Response> in, int pass) {
+  auto resp = in.second;
+  auto def = in.first.md;
+
+  std::vector<Token> result = {};
+  for (const Token& cand : def.replacement) {
+    switch(cand.t) {
+    case Theo::Token::INSERTION:{
+      int ind = std::stoi(cand.text.substr(1, cand.text.size()-1));
+      std::vector<Token> &to_insert = resp.matched[def.template_token_indices[ind]];
+      result.insert(result.end(), to_insert.begin(), to_insert.end());   
+      break;
+    }
+    case Theo::Token::TEMP_VAL:{
+      int ind = std::stoi(cand.text.substr(1, cand.text.size()-1));
+      std::string text = cand.text + ":" + cand.file + ":" + std::to_string(def.replacement[0].line) + "_(M" + std::to_string(pass) + ")";
+      Token next = cand;
+      next.text = text;
+      next.t = Theo::Token::ID;
+      result.push_back(next);
+      break;
+    }
+    default:
+      result.push_back(cand);
+      break;
+    }
+  }
+  return result;
+}
+
 Theo::MacroApplicationResult
 Theo::apply_macros(std::vector<Theo::Token> input,
              std::vector<Theo::MacroDefinition> &definitions,
              unsigned int passes) {
 
   std::vector<MacroDetector> detectors = get_detectors(definitions);
-  std::vector<MacroDetector> usable = get_detectors(definitions);
+  std::vector<MacroDetector> usable = {};
   Theo::MacroApplicationResult res = {{},{}};
   // check for errs
   for(auto &detector : detectors) {
@@ -418,7 +480,83 @@ Theo::apply_macros(std::vector<Theo::Token> input,
     if(lerrs.size() == 0)
       usable.push_back(detector);
   }
+  // detectors into priority bins
+  std::map<int, std::vector<MacroDetector>> prios = {};
+  std::for_each(usable.begin(), usable.end(), [&prios](const MacroDetector& md) -> void {
+    if(!prios.contains(md.md.priority)) {
+      prios.insert(std::make_pair(md.md.priority, std::vector<MacroDetector>{md}));
+    } else {
+      prios[md.md.priority].push_back(md);
+    }
+  });
 
-  // TODO: actual application
+  // replace p macros
+  bool changed = false;
+  for(int pass = 0; pass < passes; pass++) {
+    changed = false;
+
+    for(auto p = prios.rbegin(); p != prios.rend(); p++) {
+      auto detectors = p->second;
+      std::vector<std::pair<MacroDetector, MacroDetector::Response>> detected_macros = {};
+      for ( auto &d : detectors )
+	if(auto ir = d.detect(input)){
+	  detected_macros.push_back(std::make_pair(d, *ir));
+	}
+      // get the leftest, longest match
+      auto it = std::min_element(detected_macros.begin(), detected_macros.end(),
+				 [](auto &p1, auto& p2) -> bool {
+				   if (p1.second.location < p2.second.location)
+				     return true;
+				   if (p2.second.location < p1.second.location)
+				     return false;
+				   if (p1.second.length > p2.second.length)
+				     return true;
+				   return p2.second.length > p1.second.length;
+				 });
+      if (it != detected_macros.end()) {
+	changed = true;
+	std::vector<Token> replacement = get_replacement(*it, pass);
+	input.erase(input.begin() + it->second.location,
+		    input.begin() + it->second.location + it->second.length);
+	input.insert(input.begin() + it->second.location,
+		     replacement.begin(),
+		     replacement.end());
+      }
+
+      if (changed)
+	break; // start over : attempt high priority macros again
+    }
+    if (!changed)
+      break;
+  }
+
+  if(changed)
+    res.errors.push_back(ParseError {
+	ParseError::MACRO_APPLY_REACHED_MAX_PASSES,
+	"Error: After " + std::to_string(passes) + " passes, the input still changed, too many macro substitutions",
+	"-",
+	-1
+      });
+  res.transformed_sequence = input;
   return res;
 }
+
+std::string Theo::recover_from_tokens(const std::vector<Token> &tok) {
+  std::string out = "";
+
+  std::string cfile = "root";
+  int line = -1;
+
+  for( auto &t : tok ) {
+    if (cfile != t.file || line != t.line) {
+      out += "\n";
+      cfile = t.file;
+      line = t.line;
+    }
+    out += t.text;
+    out += " ";
+  }
+  return out;
+}
+
+

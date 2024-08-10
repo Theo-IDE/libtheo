@@ -51,8 +51,8 @@ INCLUDE \"nothing\"\n\
     Theo::Token(Theo::Token::Type::PAREN_OPEN, "(", "main.theo", 3)
   };
 
-  if(compare.size() != res.toks.size()) {
-    std::cerr << "expected 4 tokens, got " << res.toks.size() << std::endl;
+  if(compare.size() + 1 != res.toks.size()) {
+    std::cerr << "expected 5 tokens, got " << res.toks.size() << std::endl;
     err = true;
   } else
     for (ssize_t i = 0; i < compare.size(); i++) {

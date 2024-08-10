@@ -79,6 +79,12 @@ ScanResult Theo::scan(std::map<FileName, FileContent> files,
     }
     res.push_back(t);
   }
+  res.push_back(Theo::Token {
+      Theo::Token::T_EOF,
+      "EOF",
+      res.back().file,
+      res.back().line
+    });
   return {res, errors};
 }
 

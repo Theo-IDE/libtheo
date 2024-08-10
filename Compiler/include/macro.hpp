@@ -49,8 +49,13 @@ namespace Theo {
    * @param passes      maximum number of macro expansions to perform
    */
   Theo::MacroApplicationResult apply_macros(std::vector<Theo::Token> input,
-					    std::vector<Theo::MacroDefinition> &definitions,
+                                            std::vector<Theo::MacroDefinition> &definitions,
 					    unsigned int passes);
+
+  /**
+   * attempt to back-convert a token sequence into a string;
+   */
+  std::string recover_from_tokens (const std::vector<Token> &tok);
 };
 
 #endif

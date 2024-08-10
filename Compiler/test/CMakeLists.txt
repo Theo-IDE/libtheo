@@ -46,3 +46,7 @@ add_test(NAME lrparser_test COMMAND lrparser_test)
 # test if LRParser generates for actual macros
 add_executable(macro_compilation_test macro_compilation_test.cpp)
 add_test(NAME macro_compilation_test COMMAND macro_compilation_test)
+
+# macro application text
+add_executable(macro_application_test macro_application_test.cpp)
+add_test(NAME macro_application_test COMMAND macro_application_test)

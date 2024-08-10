@@ -13,7 +13,8 @@ namespace Theo {
       MACRO_EXTRACT_EXPECT,
       MACRO_EXTRACT_NESTED,
       MACRO_EXTRACT_EMPTY_DEFINE,
-      MACRO_COMPILE_NON_LR
+      MACRO_COMPILE_NON_LR,
+      MACRO_APPLY_REACHED_MAX_PASSES,
     };
     Type t;
     std::string msg;
