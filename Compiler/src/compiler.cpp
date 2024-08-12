@@ -4,10 +4,11 @@
 using namespace Theo;
 
 CodegenResult Theo::compile(std::map<FileName, FileContent> files, FileName main) {
-  AST intermediate = parse(files, main);
-  CodegenResult result = gen(intermediate);
+  ParseResult intermediate = parse(files, main);
+  CodegenResult result = gen(intermediate.a);
 
-  intermediate.clear();
+  intermediate.a.clear();
+  result.file_requests = intermediate.missing_files;
   
   return result;
 }

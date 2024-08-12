@@ -45,7 +45,7 @@ ScanResult Theo::scan(std::map<FileName, FileContent> files,
   if (files.contains(main))
     lex_stack.push_back(create_scanner(files[main], main));
   else {
-    errors.push_back({ParseError::Type::MAIN_FILE_NOT_FOUND, "main file '" + main + "' not found", "-", -1});
+    errors.push_back({ParseError::Type::MAIN_FILE_NOT_FOUND, "main file '" + main + "' not found", "-", -1, main});
   }
   while(!lex_stack.empty()) {
     Scanner &s = lex_stack.back();
@@ -71,7 +71,7 @@ ScanResult Theo::scan(std::map<FileName, FileContent> files,
       nfn = nfn.substr(1, nfn.size()-2);
 
       if (!files.contains(nfn)){
-	errors.push_back({ParseError::Type::FILE_NOT_FOUND, "file '" + nfn + "' not found", s.f, t.line});
+	errors.push_back({ParseError::Type::FILE_NOT_FOUND, "file '" + nfn + "' not found", s.f, t.line, nfn});
 	continue;
       }
 

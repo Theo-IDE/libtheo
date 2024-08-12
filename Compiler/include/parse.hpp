@@ -9,10 +9,15 @@
 
 namespace Theo {
 
+  struct ParseResult {
+    std::vector<std::string> missing_files;
+    AST a;
+  };
+  
   /**
    * parse a number of strings;
    */
-  AST parse(std::map<FileName, FileContent> files, FileName main);
+  ParseResult parse(std::map<FileName, FileContent> files, FileName main);
   
 };
 

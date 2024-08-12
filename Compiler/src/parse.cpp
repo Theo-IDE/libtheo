@@ -364,7 +364,7 @@ Theo::Node *MVARGS(ParseState &ps) {
 		 m);
 }
 
-AST Theo::parse(std::map<FileName, FileContent> files, FileName main) {
+ParseResult Theo::parse(std::map<FileName, FileContent> files, FileName main) {
 
   std::string standard_macros = "\
 DEFINE PRIO 1000000 <ID> + <INT> AS RUN __INC__ WITH $0, $1 END END DEFINE\n\
@@ -383,6 +383,13 @@ DEFINE PRIO 1000000 <ID> - <INT> AS RUN __DEC__ WITH $0, $1 END END DEFINE\n\
   a.errors = {};
 
   Theo::ScanResult sr = Theo::scan(files, main);
+
+  std::vector<std::string> file_requests;
+
+  std::for_each(sr.errors.begin(), sr.errors.end(), [&file_requests](const ParseError &pe) -> void {
+    if (pe.t == ParseError::FILE_NOT_FOUND || pe.t == ParseError::MAIN_FILE_NOT_FOUND)
+      file_requests.push_back(pe.file_request);
+  });
 
   Theo::MacroExtractionResult mer = Theo::extract_macros(sr.toks);
 
@@ -408,5 +415,6 @@ DEFINE PRIO 1000000 <ID> - <INT> AS RUN __DEC__ WITH $0, $1 END END DEFINE\n\
     }
   if (a.errors.size() == 0)
     a.parsed_correctly = true;
-  return a;
+  
+  return {file_requests, a};
 }

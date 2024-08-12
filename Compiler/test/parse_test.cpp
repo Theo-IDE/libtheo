@@ -56,13 +56,15 @@ x3 := x2 + mul(x0, x1) //this works, as infix is top level and second arg is c-s
 						  ";
   
 
-  Theo::AST res = Theo::parse({
+ Theo::ParseResult pres = Theo::parse({
       {"main.theo", main_theo},
       {"math.theo", math_theo}
     }, "main.theo");
 
   bool all_clear = true;
 
+  Theo::AST res = pres.a;
+  
   auto p =  res;
   if(!res.parsed_correctly){
     std::cout << "Syntax Errors:" << std::endl;

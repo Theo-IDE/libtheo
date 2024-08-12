@@ -33,7 +33,7 @@ INCLUDE \"nothing\"\n\
     std::cerr << "did not recognize missing file error" << std::endl;
     err = true;
   } else {
-    if (res.errors[0].t != Theo::ParseError::FILE_NOT_FOUND) {
+    if (res.errors[0].t != Theo::ParseError::FILE_NOT_FOUND || res.errors[0].file_request != "nothing") {
       std::cerr << "reported wrong error " << res.errors[0].t << " " << res.errors[0].msg << std::endl;
       err = true;
     }
@@ -61,6 +61,7 @@ INCLUDE \"nothing\"\n\
 	<< compare[i].text << " " << res.toks[i].text << std::endl
 	<< compare[i].file << " " << res.toks[i].file << std::endl
 	<< compare[i].line << " " << res.toks[i].line << std::endl;
+      
       if (compare[i].t != res.toks[i].t ||
 	  compare[i].text != res.toks[i].text ||
 	  compare[i].file != res.toks[i].file ||

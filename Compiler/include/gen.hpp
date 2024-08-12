@@ -32,6 +32,9 @@ namespace Theo {
     bool generated_correctly;
     std::vector<Error> errors;
     Theo::Program code;
+
+    /* file names that weren't found in the inpu */
+    std::vector<std::string> file_requests;
   };
 
   CodegenResult gen(Theo::AST);
