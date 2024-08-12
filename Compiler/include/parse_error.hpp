@@ -5,24 +5,24 @@
 
 namespace Theo {
 
-  struct ParseError {
-    enum Type {
-      MAIN_FILE_NOT_FOUND,
-      EXPECTED_FILENAME,
-      FILE_NOT_FOUND,
-      MACRO_EXTRACT_EXPECT,
-      MACRO_EXTRACT_NESTED,
-      MACRO_EXTRACT_EMPTY_DEFINE,
-      MACRO_COMPILE_NON_LR,
-      MACRO_APPLY_REACHED_MAX_PASSES,
-    };
-    Type t;
-    std::string msg;
-    std::string file;
-    int line;
-    std::string file_request;
+struct ParseError {
+  enum Type {
+    MAIN_FILE_NOT_FOUND,
+    EXPECTED_FILENAME,
+    FILE_NOT_FOUND,
+    MACRO_EXTRACT_EXPECT,
+    MACRO_EXTRACT_NESTED,
+    MACRO_EXTRACT_EMPTY_DEFINE,
+    MACRO_COMPILE_NON_LR,
+    MACRO_APPLY_REACHED_MAX_PASSES,
   };
-  
+  Type t;
+  std::string msg;
+  std::string file;
+  int line;
+  std::string file_request;
 };
+
+};  // namespace Theo
 
 #endif

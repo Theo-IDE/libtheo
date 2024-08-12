@@ -4,9 +4,9 @@
 #include <string>
 
 namespace Theo {
-  struct ScannerInfo {
-    std::string filename;
-  };
+struct ScannerInfo {
+  std::string filename;
 };
+};  // namespace Theo
 
 #endif

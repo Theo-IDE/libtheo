@@ -16,7 +16,7 @@
       {
         "command": "clang-format",
         "exts": ["cpp", "hpp"]
-      },
+      }
     ]
   },
   "excludes": [

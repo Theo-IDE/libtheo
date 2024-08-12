@@ -1,11 +1,11 @@
 #include <iostream>
+
 #include "Compiler/include/ast.hpp"
 #include "Compiler/include/parse.hpp"
 
-
 int main() {
-
-  std::string math_theo = "\
+  std::string math_theo =
+      "\
 DEFINE PRIO 30\n\
    <ID>(<ARGS>)\n\
 AS \n\
@@ -39,7 +39,8 @@ PROGRAM mul IN x0, x1 OUT x2 DO\n\
 END\n\
   ";
 
-  std::string main_theo = "\n\
+  std::string main_theo =
+      "\n\
 INCLUDE \"math.theo\" // works like copy-and-paste, or include in C/C++\n\
 \n\
 // language-supported instructions\n\
@@ -54,22 +55,20 @@ x2 := add(x0, x1) ; // c-style\n\
 // note that x3 := x0 + x1 + x2 would NOT be valid syntax; infix calls can only appear top level in expressions to avoid operator-hierachy confusion\n\
 x3 := x2 + mul(x0, x1) //this works, as infix is top level and second arg is c-style call						  \n\
 						  ";
-  
 
- Theo::ParseResult pres = Theo::parse({
-      {"main.theo", main_theo},
-      {"math.theo", math_theo}
-    }, "main.theo");
+  Theo::ParseResult pres = Theo::parse(
+      {{"main.theo", main_theo}, {"math.theo", math_theo}}, "main.theo");
 
   bool all_clear = true;
 
   Theo::AST res = pres.a;
-  
-  auto p =  res;
-  if(!res.parsed_correctly){
+
+  auto p = res;
+  if (!res.parsed_correctly) {
     std::cout << "Syntax Errors:" << std::endl;
-    for(auto e : res.errors) {
-      std::cout << "File " << e.file << " Line " << e.line << ": " << e.msg << std::endl;
+    for (auto e : res.errors) {
+      std::cout << "File " << e.file << " Line " << e.line << ": " << e.msg
+                << std::endl;
     }
     all_clear = false;
   } else {

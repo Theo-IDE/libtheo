@@ -1,5 +1,5 @@
-#include "Compiler/include/scan.hpp"
 #include "Compiler/include/lexer.hpp"
+#include "Compiler/include/scan.hpp"
 
 using namespace Theo;
 
@@ -10,13 +10,13 @@ struct Scanner {
 };
 
 #include <iostream>
-Scanner create_scanner(FileContent& in, FileName key) {
+Scanner create_scanner(FileContent &in, FileName key) {
   Scanner s;
   yylex_init(&s.s);
   const char *str = in.c_str();
   s.buf = yy_scan_string(str, s.s);
   yyset_lineno(1, s.s);
-  yyset_extra(ScannerInfo {key}, s.s);
+  yyset_extra(ScannerInfo{key}, s.s);
   s.f = key;
   return s;
 }
@@ -27,16 +27,13 @@ void cleanup_scanner(Scanner &s) {
 }
 
 bool exists_scanner(std::vector<Scanner> &ss, FileName key) {
-  for(Scanner &s : ss) {
-    if (s.f == key)
-      return true;
+  for (Scanner &s : ss) {
+    if (s.f == key) return true;
   }
   return false;
 }
 
-ScanResult Theo::scan(std::map<FileName, FileContent> files,
-                              FileName main) {
-
+ScanResult Theo::scan(std::map<FileName, FileContent> files, FileName main) {
   std::vector<ParseError> errors = {};
   std::vector<Token> res = {};
 
@@ -45,16 +42,17 @@ ScanResult Theo::scan(std::map<FileName, FileContent> files,
   if (files.contains(main))
     lex_stack.push_back(create_scanner(files[main], main));
   else {
-    errors.push_back({ParseError::Type::MAIN_FILE_NOT_FOUND, "main file '" + main + "' not found", "-", -1, main});
+    errors.push_back({ParseError::Type::MAIN_FILE_NOT_FOUND,
+                      "main file '" + main + "' not found", "-", -1, main});
   }
-  while(!lex_stack.empty()) {
+  while (!lex_stack.empty()) {
     Scanner &s = lex_stack.back();
 
     Token t;
     int d = yylex(&t, s.s);
 
     // EOF for this file
-    if (d == 0){
+    if (d == 0) {
       cleanup_scanner(s);
       lex_stack.pop_back();
       continue;
@@ -62,17 +60,19 @@ ScanResult Theo::scan(std::map<FileName, FileContent> files,
 
     if (t.t == Token::Type::INCLUDE) {
       d = yylex(&t, s.s);
-      if(d == 0 || t.t != Token::Type::FNAME) {
-	errors.push_back({ParseError::Type::EXPECTED_FILENAME, "expected filename after include", s.f, t.line});
-	continue;
+      if (d == 0 || t.t != Token::Type::FNAME) {
+        errors.push_back({ParseError::Type::EXPECTED_FILENAME,
+                          "expected filename after include", s.f, t.line});
+        continue;
       }
 
       FileName nfn = t.text;
-      nfn = nfn.substr(1, nfn.size()-2);
+      nfn = nfn.substr(1, nfn.size() - 2);
 
-      if (!files.contains(nfn)){
-	errors.push_back({ParseError::Type::FILE_NOT_FOUND, "file '" + nfn + "' not found", s.f, t.line, nfn});
-	continue;
+      if (!files.contains(nfn)) {
+        errors.push_back({ParseError::Type::FILE_NOT_FOUND,
+                          "file '" + nfn + "' not found", s.f, t.line, nfn});
+        continue;
       }
 
       lex_stack.push_back(create_scanner(files[nfn], nfn));
@@ -80,56 +80,49 @@ ScanResult Theo::scan(std::map<FileName, FileContent> files,
     }
     res.push_back(t);
   }
-  res.push_back(Theo::Token {
-      Theo::Token::T_EOF,
-      "EOF",
-      res.back().file,
-      res.back().line
-    });
+  res.push_back(
+      Theo::Token{Theo::Token::T_EOF, "EOF", res.back().file, res.back().line});
   return {res, errors};
 }
 
-std::string token_map[] = {
-  "end of file",
-  "variable name, function name, id",
-  "operator, delimiter",
-  "integer",
-  ")",
-  "(",
-  ",",
-  ";",
-  ":",
-  ":=",
-  "!= 0",
-  "=",
-  "'do' keyword",
-  "'loop' keyword",
-  "'while' keyword",
-  "'goto' keyword",
-  "'if' keyword",
-  "'then' keyword",
-  "'stop' keyword",
-  "'end' keyword",
-  "'program' keyword",
-  "'in' keyword",
-  "'out' keyword",
-  "'include' keyword",
-  "filename in quotation",
-  "'define' keyword",
-  "'as' keyword",
-  "'priority' keyword",
-  "'end define' keyword",
-  "program template",
-  "value template",
-  "id template",
-  "integer template",
-  "arguments template",
-  "macro insertion operator",
-  "macro temporary designator"
-};
+std::string token_map[] = {"end of file",
+                           "variable name, function name, id",
+                           "operator, delimiter",
+                           "integer",
+                           ")",
+                           "(",
+                           ",",
+                           ";",
+                           ":",
+                           ":=",
+                           "!= 0",
+                           "=",
+                           "'do' keyword",
+                           "'loop' keyword",
+                           "'while' keyword",
+                           "'goto' keyword",
+                           "'if' keyword",
+                           "'then' keyword",
+                           "'stop' keyword",
+                           "'end' keyword",
+                           "'program' keyword",
+                           "'in' keyword",
+                           "'out' keyword",
+                           "'include' keyword",
+                           "filename in quotation",
+                           "'define' keyword",
+                           "'as' keyword",
+                           "'priority' keyword",
+                           "'end define' keyword",
+                           "program template",
+                           "value template",
+                           "id template",
+                           "integer template",
+                           "arguments template",
+                           "macro insertion operator",
+                           "macro temporary designator"};
 
 std::string Theo::token_string(Theo::Token::Type t) {
-  if ((int) t < 0 || (int) t >= 36)
-    return "";
+  if ((int)t < 0 || (int)t >= 36) return "";
   return token_map[t];
 }
