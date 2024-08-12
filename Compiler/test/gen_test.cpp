@@ -28,6 +28,19 @@ DEFINE PRIO 10 <V> + <V> AS add($0,$1) END DEFINE\n\
 DEFINE PRIO 20 <V> * <V> AS mul($0,$1) END DEFINE\n\
 DEFINE PRIO 30 <ID>(<ARGS>) AS RUN $0 WITH $1 END END DEFINE\n\
 DEFINE NOP AS _ := 0 END DEFINE\n\
+DEFINE \n\
+  IF <V> THEN <P> ELSE <P> END\n\
+AS \n\
+  #0 := 0;\n\
+  #1 := 1;\n\
+  #2 := $0;\n\
+  loop #2 do\n\
+    #0 := 1;\n\
+    #1 := 0\n\
+  end;\n\
+  loop #0 do $1 end;\n\
+  loop #1 do $2 end\n\
+END DEFINE\n\
 ";
 
   std::string fib_code =
@@ -53,7 +66,9 @@ INCLUDE \"basemath.theo\"\n			\
 x0 := 13;\n					\
 x1 := 42;\n					\
 x2 := mul(x0 * x1, add(2, 2));\n			\
-fibres := fib(25)\n				\
+fibres := fib(25);\n				\
+IF fibres THEN one := 1 ELSE one := 2 END;\n\
+IF 0 THEN two := 1 ELSE two := 2 END\n\
   ";
 
   std::map<Theo::FileName, Theo::FileContent> files = {
@@ -99,6 +114,20 @@ fibres := fib(25)\n				\
     std::cout
         << "According to your broken VM (and/or Parser/Generator), fib(25) = "
         << d["fibres"] << std::endl;
+    return 1;
+  }
+
+  if (d["one"] != 1) {
+    std::cout
+      << "Macro error: "
+      << d["one"] << " should be 1" << std::endl;
+    return 1;
+  }
+
+  if (d["two"] != 2) {
+    std::cout
+      << "Macro error: "
+      << d["two"] << " should be 2" << std::endl;
     return 1;
   }
 
