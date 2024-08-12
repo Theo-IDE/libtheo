@@ -2,18 +2,19 @@
 
 using namespace Theo;
 
-Node *Node::mk(Node::Type t, int line, std::string tok, Node *left, Node *right){
+Node *Node::mk(Node::Type t, int line, std::string file, std::string tok, Node *left, Node *right){
   Node *n = new Node();
   n->t = t;
   n->left = left;
   n->right = right;
   n->line = line;
   n->tok = tok;
+  n->file = file;
   return n;
 }
 
-Node *AST::mk(Node::Type t, int line, std::string tok, Node *left, Node *right) {
-  Node *n = Node::mk(t, line, tok, left, right);
+Node *AST::mk(Node::Type t, int line, std::string file, std::string tok, Node *left, Node *right) {
+  Node *n = Node::mk(t, line, file, tok, left, right);
   this->all_allocated_nodes.push_back(n);
   return n;
 }

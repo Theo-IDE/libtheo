@@ -168,14 +168,16 @@ struct GenState {
 
 
   void advanceLine(int new_lineno, std::string file) {
-    if (fs.name == file && new_lineno > fs.line) {
+    if (file == "__standards__")
+      return; // standard macros for (id + int, id - int are not visible)
+    if (fs.name == file && new_lineno != fs.line) {
       fs.line = new_lineno;
       this->breakpoint();
     }
     if (fs.name != file){
       fs.name = file;
       fs.line = new_lineno;
-      //this->breakpoint()
+      this->breakpoint();
     }
   }
 
@@ -416,11 +418,11 @@ void dispatchValue(GenState &gs, Node *c, RegisterIndex tgt) {
     bool register_constant_operation =
       arglocs.size() == 2 &&
       c->right->left->t == Node::Type::NAME &&
-      c->right->right->t == Node::Type::NUMBER;
-    
-    if((funcname == "+" || funcname == "-") && register_constant_operation){
-      int cs = std::stoi(std::string(c->right->right->tok));
-      if(funcname == "+")
+      c->right->right->left->t == Node::Type::NUMBER;
+
+    if((funcname == "__INC__" || funcname == "__DEC__") && register_constant_operation){
+      int cs = std::stoi(std::string(c->right->right->left->tok));
+      if(funcname == "__INC__")
 	gs.emit(Instruction::Add(tgt, arglocs[0], cs));
       else
 	gs.emit(Instruction::Add(tgt, arglocs[0], -cs));
@@ -503,6 +505,10 @@ void dispatchVoid(GenState &gs, Node *c) {
   }
   case Node::Type::IF: {
     dispatchIf(gs, c);
+    break;
+  }
+  case Node::Type::STOP: {
+    gs.emit(Instruction::Halt());
     break;
   }
   default: {

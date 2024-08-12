@@ -9,6 +9,7 @@ struct Scanner {
   FileName f;
 };
 
+#include <iostream>
 Scanner create_scanner(FileContent& in, FileName key) {
   Scanner s;
   yylex_init(&s.s);
@@ -128,5 +129,7 @@ std::string token_map[] = {
 };
 
 std::string Theo::token_string(Theo::Token::Type t) {
+  if ((int) t < 0 || (int) t >= 36)
+    return "";
   return token_map[t];
 }

@@ -355,8 +355,8 @@ static void yynoreturn yy_fatal_error ( const char* msg , yyscan_t yyscanner );
 	yyg->yy_hold_char = *yy_cp; \
 	*yy_cp = '\0'; \
 	yyg->yy_c_buf_p = yy_cp;
-#define YY_NUM_RULES 40
-#define YY_END_OF_BUFFER 41
+#define YY_NUM_RULES 41
+#define YY_END_OF_BUFFER 42
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -366,7 +366,7 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[273] =
     {   0,
-        0,    0,   41,   40,    1,   36,   40,   40,   40,   36,
+        0,    0,   42,   40,    1,   36,   40,   40,   40,   36,
         2,    3,    4,   36,   37,   37,    6,    5,   36,    9,
        35,   35,   35,   35,   35,   35,   35,   35,   35,   35,
        35,   35,   35,   35,   35,   35,   35,   35,   35,   35,
@@ -622,11 +622,11 @@ static const flex_int16_t yy_chk[475] =
     } ;
 
 /* Table of booleans, true if rule could match eol. */
-static const flex_int32_t yy_rule_can_match_eol[41] =
+static const flex_int32_t yy_rule_can_match_eol[42] =
     {   0,
 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
     0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0,     };
+    1, 0,     };
 
 /* The intent behind this definition is that it'll catch
  * any uses of REJECT which flex missed.
@@ -1112,6 +1112,11 @@ YY_RULE_SETUP
 {}
 	YY_BREAK
 case 40:
+/* rule 40 can match eol */
+YY_RULE_SETUP
+{}
+	YY_BREAK
+case 41:
 YY_RULE_SETUP
 ECHO;
 	YY_BREAK

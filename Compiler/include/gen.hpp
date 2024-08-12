@@ -17,7 +17,7 @@ namespace Theo {
     struct Error {
       enum class Type {
 	MALFORMED_AST=0, /* ast malformed, hints at implementation bug*/
-	PARSE_ERROR=2, /*one of the input ASTs has reported a parse error*/
+	PARSE_ERROR=2, /*error during parse process*/
 	UNKNOWN_PROGRAM_NAME=3, /* tried calling an undefined program*/
 	ARGSIZE_MISMATCH=4, /*function called with wrong number of arguments*/
 	INTERNAL_ERROR=5, /*codegen error, e.g. couldn't backpatch*/

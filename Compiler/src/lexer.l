@@ -83,5 +83,6 @@ ws [ \t\n]+
 {int} {TOK(Theo::Token::Type::INT)}
 {argstemp} {TOK(Theo::Token::Type::ARGS_TEMP)}
 \/\/.* {}
+.|\n   {}
 %%
 

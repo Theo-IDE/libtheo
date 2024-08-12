@@ -8,32 +8,36 @@
 int main() {
 
   std::string basemath_code = "\
-PROGRAM + IN x0, x1 OUT x0 DO\n			\
-  WHILE x1 DO\n					\
-    x0 := x0 + 1\n				\
+PROGRAM add IN x0, x1 OUT x0 DO\n			\
+  WHILE x1 != 0 DO\n					\
+    x0 := x0 + 1;\n				\
     x1 := x1 - 1\n				\
   END\n						\
 END\n						\
 \n\
-Program * In x1, x2 Do\n			\
-  start:\n					\
-   if x2 = 0 then goto finish\n			\
-   x0 := x0 + x1\n				\
-   x2 := x2 - 1\n				\
-   goto start\n					\
-  finish:\n					\
+Program mul In x1, x2 Do\n			\
+  start: \n					\
+   if x2 = 0 then goto finish;\n			\
+   x0 := x0 + x1;\n				\
+   x2 := x2 - 1;\n				\
+   goto start;\n					\
+  finish: NOP\n					\
 END\n						\
+DEFINE PRIO 10 <V> + <V> AS add($0,$1) END DEFINE\n\
+DEFINE PRIO 20 <V> * <V> AS mul($0,$1) END DEFINE\n\
+DEFINE PRIO 30 <ID>(<ARGS>) AS RUN $0 WITH $1 END END DEFINE\n\
+DEFINE NOP AS _ := 0 END DEFINE\n\
 ";
 
   std::string fib_code = "\
 INCLUDE \"basemath.theo\"\n\
 PROGRAM fib IN x2 DO\n	  \
-  x0 := 1\n		  \
-  x1 := 1\n		  \
-  x2 := x2 - 2\n	  \
+  x0 := 1;\n		  \
+  x1 := 1;\n		  \
+  x2 := x2 - 2;\n	  \
   LOOP x2 DO \n		  \
-    temp := x1\n	  \
-    x1 := x0\n		  \
+    temp := x1;\n	  \
+    x1 := x0;\n		  \
     x0 := temp + x0\n	  \
   END\n			  \
 END\n\
@@ -41,11 +45,11 @@ END\n\
 	     
   std::string test_code = "\
 INCLUDE \"math.theo\"\n				\
-#NOTE: double include just overrides\n		\
+//NOTE: double include just overrides\n		\
 INCLUDE \"basemath.theo\"\n			\
-x0 := 13\n					\
-x1 := 42\n					\
-x2 := *(x0 * x1, +(2, 2))\n			\
+x0 := 13;\n					\
+x1 := 42;\n					\
+x2 := mul(x0 * x1, add(2, 2));\n			\
 fibres := fib(25)\n				\
   ";
   

@@ -33,7 +33,9 @@ namespace Theo {
       /*goto mark (left = name)*/
       MARK = 13,
       /* Equality Test (left = op1, right = op2*/
-      EQ = 14
+      EQ = 14,
+      /* STOP */
+      STOP = 15
     };
 
     Type t;
@@ -46,7 +48,7 @@ namespace Theo {
     /* children of this node; these pointers are owned by this object*/
     Node *left, *right; 
 
-    static Node *mk(Type t, int line, std::string tok, Node *left, Node *right);
+    static Node *mk(Type t, int line, std::string file, std::string tok, Node *left, Node *right);
   };
 
   struct SyntaxError {
@@ -63,7 +65,7 @@ namespace Theo {
     std::vector<Node*> all_allocated_nodes;
     Node *root;
 
-    Node *mk(Node::Type t, int line, std::string tok, Node *left, Node *right);
+    Node *mk(Node::Type t, int line, std::string file, std::string tok, Node *left, Node *right);
 
     /**
      * print a textual visualization of the AST for debug purposes;

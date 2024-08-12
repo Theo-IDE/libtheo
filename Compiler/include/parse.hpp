@@ -5,6 +5,8 @@
 #include "Compiler/include/scan.hpp"
 #include <map>
 
+#define THEO_MACRO_PASSES 1024
+
 namespace Theo {
 
   /**
