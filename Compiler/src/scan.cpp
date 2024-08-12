@@ -7,16 +7,18 @@ struct Scanner {
   yyscan_t s;
   YY_BUFFER_STATE buf;
   FileName f;
+  ScannerInfo *si;
 };
 
 #include <iostream>
 Scanner create_scanner(FileContent &in, FileName key) {
   Scanner s;
+  s.si = new ScannerInfo {key};
   yylex_init(&s.s);
   const char *str = in.c_str();
   s.buf = yy_scan_string(str, s.s);
   yyset_lineno(1, s.s);
-  yyset_extra(ScannerInfo{key}, s.s);
+  yyset_extra(s.si, s.s);
   s.f = key;
   return s;
 }
@@ -24,6 +26,7 @@ Scanner create_scanner(FileContent &in, FileName key) {
 void cleanup_scanner(Scanner &s) {
   yy_delete_buffer(s.buf, s.s);
   yylex_destroy(s.s);
+  delete s.si;
 }
 
 bool exists_scanner(std::vector<Scanner> &ss, FileName key) {

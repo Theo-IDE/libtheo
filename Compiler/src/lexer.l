@@ -1,6 +1,6 @@
 %{
 #define YY_DECL int yylex(Theo::Token *ret, yyscan_t yyscanner)
-#define TOK(t) {*ret = Theo::Token(t, std::string(yytext), yyextra.filename, yylineno); return 1;}
+#define TOK(t) {*ret = Theo::Token(t, std::string(yytext), yyextra->filename, yylineno); return 1;}
 %}
 
 %{
@@ -10,7 +10,7 @@
 
 %option nounistd never-interactive
 %option reentrant noyywrap yylineno noline
-%option extra-type="Theo::ScannerInfo"
+%option extra-type="Theo::ScannerInfo*"
 
 id [a-zA-Z\_][a-zA-Z0-9_]*
 nv_id [\!\?\|\_\+\*/\&\^\\\%\§\@\{\}\[\]\'\~\<\>][\!\?\|\_\+\*/\&\^\\%§@\{\}\[\]\'~<>]*

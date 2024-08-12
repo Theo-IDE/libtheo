@@ -636,14 +636,14 @@ static const flex_int32_t yy_rule_can_match_eol[42] =
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 #define YY_DECL int yylex(Theo::Token *ret, yyscan_t yyscanner)
-#define TOK(t) {*ret = Theo::Token(t, std::string(yytext), yyextra.filename, yylineno); return 1;}
+#define TOK(t) {*ret = Theo::Token(t, std::string(yytext), yyextra->filename, yylineno); return 1;}
 #include "Compiler/include/token.hpp"
 #include "Compiler/include/scanner_info.hpp"
 #define YY_NO_UNISTD_H 1
 
 #define INITIAL 0
 
-#define YY_EXTRA_TYPE Theo::ScannerInfo
+#define YY_EXTRA_TYPE Theo::ScannerInfo*
 
 /* Holds the entire state of the reentrant scanner. */
 struct yyguts_t
