@@ -100,7 +100,7 @@ DEFINE PRIORITY unfinished macro\n\
         {Theo::ParseError::Type::MACRO_EXTRACT_EXPECT, "", "main.theo", 8},
         {Theo::ParseError::Type::MACRO_EXTRACT_EXPECT, "", "main.theo", 8}};
 
-    for (ssize_t i = 0; i < mer.errors.size(); i++) {
+    for (auto i = 0; i < mer.errors.size(); i++) {
       ParseError pe = mer.errors[i];
       if (mer.errors[i].t != compare[i].t ||
           mer.errors[i].file != compare[i].file ||
