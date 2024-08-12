@@ -18,7 +18,7 @@ struct LRElement {
   Grammar::Symbol follow;
 };
 
-bool operator<(const LRElement& l1, const LRElement& ö2);
+bool operator<(const LRElement& l1, const LRElement& l2);
 
 /**
  * Constructs a State of the LR(1) prefix DEA;

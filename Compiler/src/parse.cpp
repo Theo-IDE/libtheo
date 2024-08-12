@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "Compiler/include/lexer.hpp"
 #include "Compiler/include/macro.hpp"
 #include "Compiler/include/parse.hpp"

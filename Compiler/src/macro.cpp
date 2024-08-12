@@ -1,6 +1,6 @@
 #include <ranges>
 #include <string>
-
+#include <algorithm>
 #include "Compiler/include/macro.hpp"
 #include "Compiler/include/scan.hpp"
 
