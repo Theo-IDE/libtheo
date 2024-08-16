@@ -1,7 +1,4 @@
-
-include_directories(PUBLIC
-  ${PROJECT_SOURCE_DIR}
-)
+include_directories(PUBLIC ${PROJECT_SOURCE_DIR})
 
 link_directories(PUBLIC ${PROJECT_BINARY_DIR}/VM/)
 

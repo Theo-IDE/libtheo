@@ -1,9 +1,10 @@
+include_directories(PUBLIC ${PROJECT_SOURCE_DIR})
 
-include_directories(PUBLIC
-  ${PROJECT_SOURCE_DIR}
+link_directories(
+    PUBLIC
+    ${PROJECT_BINARY_DIR}/Compiler/
+    ${PROJECT_BINARY_DIR}/VM/
 )
-
-link_directories(PUBLIC ${PROJECT_BINARY_DIR}/Compiler/ ${PROJECT_BINARY_DIR}/VM/)
 
 link_libraries(TheoC TheoVM)
 

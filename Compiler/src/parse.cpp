@@ -1,4 +1,5 @@
 #include <algorithm>
+
 #include "Compiler/include/lexer.hpp"
 #include "Compiler/include/macro.hpp"
 #include "Compiler/include/parse.hpp"
@@ -152,13 +153,13 @@ Theo::Node *P(ParseState &ps) {
         Node *p = P(ps);
         comb = ps.a.mk(Node::Type::SPLIT, left->line, left->file, "", comb, p);
       } else {
-	ps.a.errors.push_back(
-			      {ps.pos->line, ps.pos->file,
-				  "expected assignment (:=), label declaration (:) "
-				  ", but found '" +
-				  ps.pos->text + "'"});
+        ps.a.errors.push_back(
+            {ps.pos->line, ps.pos->file,
+             "expected assignment (:=), label declaration (:) "
+             ", but found '" +
+                 ps.pos->text + "'"});
       }
-      
+
       Node *more = MOREP(ps);
       return ps.a.mk(Node::Type::SPLIT, left->line, left->file, "", comb, more);
     }
@@ -319,14 +320,14 @@ DEFINE PRIO 1000000 <ID> - <INT> AS RUN __DEC__ WITH $0, $1 END END DEFINE\n\
 
   a.root = S(ps);
 
-  while (ps.pos < mar.transformed_sequence.end() && ps.lookahead() != Token::T_EOF) {
-      ps.a.errors.push_back(
-          {ps.pos->line, ps.pos->file,
-           "expected EOF, but got excess input: '" + ps.pos->text + "'"});
-      ps.match(ps.lookahead());
-      if (ps.lookahead() == Token::T_EOF)
-	break;
-      P(ps);
+  while (ps.pos < mar.transformed_sequence.end() &&
+         ps.lookahead() != Token::T_EOF) {
+    ps.a.errors.push_back(
+        {ps.pos->line, ps.pos->file,
+         "expected EOF, but got excess input: '" + ps.pos->text + "'"});
+    ps.match(ps.lookahead());
+    if (ps.lookahead() == Token::T_EOF) break;
+    P(ps);
   }
 
   std::vector<std::vector<ParseError>> errs = {sr.errors, mer.errors,

@@ -118,16 +118,12 @@ IF 0 THEN two := 1 ELSE two := 2 END\n\
   }
 
   if (d["one"] != 1) {
-    std::cout
-      << "Macro error: "
-      << d["one"] << " should be 1" << std::endl;
+    std::cout << "Macro error: " << d["one"] << " should be 1" << std::endl;
     return 1;
   }
 
   if (d["two"] != 2) {
-    std::cout
-      << "Macro error: "
-      << d["two"] << " should be 2" << std::endl;
+    std::cout << "Macro error: " << d["two"] << " should be 2" << std::endl;
     return 1;
   }
 

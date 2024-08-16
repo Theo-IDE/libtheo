@@ -28,7 +28,7 @@ struct Grammar {
   unsigned int max_used_terminal;  // maximum .index value of a terminal symbol,
                                    // filled after first sets are calculated
 
-  Grammar() : total_non_terminals(0), right_sides({}){};
+  Grammar() : total_non_terminals(0), right_sides({}) {};
 
   /**
    * create a new ton-terminal symbol (a new left side)
@@ -65,7 +65,7 @@ struct SemanticGrammar : public Grammar {
   using RightSideAction = std::vector<SemanticAction>;
   std::map<Symbol, RightSideAction> actions;
 
-  SemanticGrammar() : Grammar(){};
+  SemanticGrammar() : Grammar() {};
 
   void add(std::pair<Symbol, std::vector<Symbol>> rule, SemanticAction a) {
     if (rule.first.t != Symbol::NON_TERMINAL) return;

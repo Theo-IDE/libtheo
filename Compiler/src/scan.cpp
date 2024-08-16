@@ -13,7 +13,7 @@ struct Scanner {
 #include <iostream>
 Scanner create_scanner(FileContent &in, FileName key) {
   Scanner s;
-  s.si = new ScannerInfo {key};
+  s.si = new ScannerInfo{key};
   yylex_init(&s.s);
   const char *str = in.c_str();
   s.buf = yy_scan_string(str, s.s);
