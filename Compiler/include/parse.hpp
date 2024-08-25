@@ -1,21 +1,25 @@
 #ifndef __LIBTHEO_C_PARSE_HPP_
 #define __LIBTHEO_C_PARSE_HPP_
 
-#include "Compiler/include/ast.hpp"
 #include <map>
-#include <string>
+
+#include "Compiler/include/ast.hpp"
+#include "Compiler/include/scan.hpp"
+
+#define THEO_MACRO_PASSES 1024
 
 namespace Theo {
 
-  typedef std::string FileName, FileContent;
-
-  /**
-   * parse a number of strings;
-   * When all ASTs of the output have been successfully parsed,
-   * the output map can be passed to the code generator;
-   */
-  std::map<FileName, AST> parse(std::map<FileName, FileContent> files);
-  
+struct ParseResult {
+  std::vector<std::string> missing_files;
+  AST a;
 };
+
+/**
+ * parse a number of strings;
+ */
+ParseResult parse(std::map<FileName, FileContent> files, FileName main);
+
+};  // namespace Theo
 
 #endif

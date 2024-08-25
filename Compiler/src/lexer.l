@@ -1,60 +1,88 @@
 %{
-#define YY_USER_ACTION yylloc->first_line = yylineno;
+#define YY_DECL int yylex(Theo::Token *ret, yyscan_t yyscanner)
+#define TOK(t) {*ret = Theo::Token(t, std::string(yytext), yyextra->filename, yylineno); return 1;}
 %}
 
 %{
-#include "Compiler/include/lexextra.hpp"
+#include "Compiler/include/token.hpp"
+#include "Compiler/include/scanner_info.hpp"
 %}
 
 %option nounistd never-interactive
 %option reentrant noyywrap yylineno noline
-%option bison-bridge bison-locations
-%option extra-type="Theo::yyLexExtra*"
+%option extra-type="Theo::ScannerInfo*"
 
-delim [ \t\n\;]
-ws {delim}+
-name_letter ([a-zA-Z0-9!§\$\%\&\/\?\\\*\+\~\-\<\>\|\_])
-digit [0-9]
-number \-?{digit}+
-id {name_letter}+
-program (PROGRAM|program|Program)
-in (IN|in|In)
-out (OUT|out|Out)
-do (\DO|do|Do)
-end (END|end|End)
-loop (\LOOP|loop|Loop)
-while (\WHILE|while|While)
-goto (\GOTO|goto|Goto)
-if (\IF|if|If)
-then (\THEN|then|Then)
-include (INCLUDE|include|Include)
+id [a-zA-Z\_][a-zA-Z0-9_]*
+nv_id [\!\?\|\_\+\*/\&\^\\\%\§\@\{\}\[\]\'\~\<\>][\!\?\|\_\+\*/\&\^\\%§@\{\}\[\]\'~<>]*
+int (0|([1-9][0-9]*))
+include (INCLUDE|Include|include)
+fname \"[^\"]*\"
+define (DEFINE|Define|Def|define|def)
+as (AS|As|as)
+enddefine (END\ DEFINE|End\ Define|end\ define|ENDDEF|Enddef|enddef)
+priority (PRIORITY|Priority|priority|PRIO|Prio|prio)
+do (DO|do|Do)
+loop (LOOP|Loop|loop)
+while (WHILE|While|while)
+goto (GOTO|Goto|goto)
+if (IF|If|if)
+then (THEN|Then|then)
+stop (STOP|Stop|stop)
+end (END|End|end)
+program (PROGRAM|Program|program|PROG|Prog|prog)
+in (IN|In|in)
+out (OUT|Out|out)
+progtemp (<{program}>|<P>|<p>)
+value (VALUE|Value|value|VAL|Val|val)
+valtemp (<{value}>|<V>|<v>)
+idtemp (<ID>|<id>)
+inttemp (<INT>|<Int>|<int>)
+argstemp (<ARGS>|<Args>|<args>|<A>|<a>)
+run (RUN|Run|run)
+with (WITH|With|with)
+ws [ \t\n]+
 
 %%
 
-\#.* {}
 {ws} {}
-\"[^\"]*\" {*yylval = yyextra->a->mk(Node::Type::INCLUDE, yylineno, strdup(yytext), NULL, NULL); return(STR);}
-{include} {*yylval = NULL; return (KW_INCLUDE);}
-{program} {*yylval = NULL; return(KW_PROGRAM);}
-{in} {*yylval = NULL; return(KW_IN);}
-{out} {*yylval = NULL; return(KW_OUT);}
-{do} {*yylval = NULL; return(KW_DO);}
-{end} {*yylval = yyextra->a->mk(Node::Type::NAME, yylineno, strdup(yytext), NULL, NULL); return(KW_END);}
-{loop} {*yylval = NULL; return(KW_LOOP);}
-{while} {*yylval = NULL; return(KW_WHILE);}
-{goto} {*yylval = NULL; return(KW_GOTO);}
-{if} {*yylval = NULL; return(KW_IF);}
-{then} {*yylval = NULL; return(KW_THEN);}
-\!\={delim}*0 {*yylval = NULL; return(ZERO_INEQUALITY);}
-{id}/{delim}*\: {*yylval = yyextra->a->mk(Node::Type::NAME, yylineno, strdup(yytext), NULL, NULL); return(MARK_NAME);}
-{id}/{delim}*(\=|\:\=) {*yylval = yyextra->a->mk(Node::Type::NAME, yylineno, strdup(yytext), NULL, NULL); return(NAME_L);}
-{number} {*yylval = yyextra->a->mk(Node::Type::NUMBER, yylineno, strdup(yytext), NULL, NULL);  return(CONSTANT);}
-{id} {*yylval = yyextra->a->mk(Node::Type::NAME, yylineno, strdup(yytext), NULL, NULL); return(NAME);}
-\:\= {*yylval = NULL; return (ASSIGN_OPERATOR);}
-\= {*yylval = NULL; return (EQ_OPERATOR);}
-\( {*yylval = NULL; return (PAREN_OPEN);}
-\) {*yylval = NULL; return (PAREN_CLOSE);}
-\, {*yylval = NULL; return (DELIM);}
-\: {*yylval = NULL; return (MARK_DELIM);}
+\( {TOK(Theo::Token::Type::PAREN_OPEN)}
+\) {TOK(Theo::Token::Type::PAREN_CLOSE)}
+\, {TOK(Theo::Token::Type::ARGSEP)}
+\; {TOK(Theo::Token::Type::PROGSEP)}
+\: {TOK(Theo::Token::Type::LABELDEC)}
+\:\= {TOK(Theo::Token::Type::ASSIGN)}
+!=\ 0 {TOK(Theo::Token::Type::NEQ_ZERO)}
+= {TOK(Theo::Token::Type::EQ)}
+{run} {TOK(Theo::Token::Type::RUN)}
+{with} {TOK(Theo::Token::Type::WITH)}
+{do} {TOK(Theo::Token::Type::DO)}
+{loop} {TOK(Theo::Token::Type::LOOP)}
+{while} {TOK(Theo::Token::Type::WHILE)}
+{goto} {TOK(Theo::Token::Type::GOTO)}
+{if} {TOK(Theo::Token::Type::IF)}
+{then} {TOK(Theo::Token::Type::THEN)}
+{stop} {TOK(Theo::Token::Type::STOP)}
+{end} {TOK(Theo::Token::Type::END)}
+{program} {TOK(Theo::Token::Type::PROGRAM)}
+{in} {TOK(Theo::Token::Type::IN)}
+{out} {TOK(Theo::Token::Type::OUT)}
+{include} {TOK(Theo::Token::Type::INCLUDE)}
+{fname} {TOK(Theo::Token::Type::FNAME)}
+{define} {TOK(Theo::Token::Type::DEFINE)}
+{as} {TOK(Theo::Token::Type::AS)}
+{priority} {TOK(Theo::Token::Type::PRIORITY)}
+{enddefine} {TOK(Theo::Token::Type::END_DEFINE)}
+{progtemp} {TOK(Theo::Token::Type::PROG_TEMP)}
+{valtemp} {TOK(Theo::Token::Type::VALUE_TEMP)}
+{idtemp} {TOK(Theo::Token::Type::ID_TEMP)}
+{inttemp} {TOK(Theo::Token::Type::INT_TEMP)}
+\${int} {TOK(Theo::Token::Type::INSERTION)}
+\#{int} {TOK(Theo::Token::Type::TEMP_VAL)}
+{id} {TOK(Theo::Token::Type::ID)}
+{nv_id} {TOK(Theo::Token::Type::NV_ID)}
+{int} {TOK(Theo::Token::Type::INT)}
+{argstemp} {TOK(Theo::Token::Type::ARGS_TEMP)}
+\/\/.* {}
+.|\n   {}
 %%
 
