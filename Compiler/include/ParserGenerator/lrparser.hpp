@@ -47,9 +47,9 @@ struct LRParser {
         translator(t),
         creator(c),
         S(S),
-        eof(eof){};
+        eof(eof) {};
 
-  LRParser(){};
+  LRParser() {};
 
   /**
    * generate the parse tables from the Grammar;
