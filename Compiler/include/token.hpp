@@ -44,7 +44,8 @@ struct Token {
     INSERTION,
     TEMP_VAL,
     RUN,
-    WITH
+    WITH,
+    UNKNOWN
   };
 
   Type t;
