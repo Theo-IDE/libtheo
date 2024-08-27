@@ -137,6 +137,37 @@ Theo::Node *MARGS(ParseState &ps) {
   return ARGS(ps);
 }
 
+void expected_end_or_semicolon(ParseState &ps) {
+  for (;;) switch (ps.lookahead()) {
+      case Token::ID:
+      case Token::LOOP:
+      case Token::WHILE:
+      case Token::GOTO:
+      case Token::IF:
+      case Token::STOP: {
+        ps.a.errors.push_back(
+            {ps.pos->line, ps.pos->file,
+             "probable missing ';' before '" + ps.pos->text + "'"});
+        P(ps);
+        break;
+      }
+      case Token::PROGRAM: {
+        ps.a.errors.push_back(
+            {ps.pos->line, ps.pos->file,
+             "program definition not allowed here; all program definitions "
+             "must happen before global instructions"});
+        S(ps);
+        break;
+      }
+      case Token::PROGSEP: {
+        MOREP(ps);
+        break;
+      }
+      default:
+        return;
+    }
+}
+
 Theo::Node *P(ParseState &ps) {
   switch (ps.lookahead()) {
     case Token::ID: {
@@ -161,6 +192,7 @@ Theo::Node *P(ParseState &ps) {
       }
 
       Node *more = MOREP(ps);
+      expected_end_or_semicolon(ps);
       return ps.a.mk(Node::Type::SPLIT, left->line, left->file, "", comb, more);
     }
     case Token::LOOP: {
@@ -175,6 +207,7 @@ Theo::Node *P(ParseState &ps) {
           ps.a.mk(Node::Type::LOOP, name->line, name->file, "", name, body);
       loop = ps.a.mk(Node::Type::SPLIT, name->line, name->file, "", loop, end);
       Node *more = MOREP(ps);
+      expected_end_or_semicolon(ps);
       return ps.a.mk(Node::Type::SPLIT, name->line, name->file, "", loop, more);
     }
     case Token::WHILE: {
@@ -190,12 +223,14 @@ Theo::Node *P(ParseState &ps) {
           ps.a.mk(Node::Type::WHILE, name->line, name->file, "", name, body);
       loop = ps.a.mk(Node::Type::SPLIT, name->line, name->file, "", loop, end);
       Node *more = MOREP(ps);
+      expected_end_or_semicolon(ps);
       return ps.a.mk(Node::Type::SPLIT, name->line, name->file, "", loop, more);
     }
     case Token::GOTO: {
       ps.match(Token::GOTO);
       Node *name = ps.matchmk(Token::ID, Node::Type::NAME, NULL, NULL);
       Node *more = MOREP(ps);
+      expected_end_or_semicolon(ps);
       Node *go =
           ps.a.mk(Node::Type::GOTO, name->line, name->file, "", name, NULL);
       return ps.a.mk(Node::Type::SPLIT, name->line, name->file, "", go, more);
@@ -209,6 +244,7 @@ Theo::Node *P(ParseState &ps) {
       ps.match(Token::GOTO);
       Node *go = ps.matchmk(Token::ID, Node::Type::NAME, NULL, NULL);
       Node *more = MOREP(ps);
+      expected_end_or_semicolon(ps);
 
       Node *eq = ps.a.mk(Node::Type::EQ, id->line, id->file, "", id, c);
       go = ps.a.mk(Node::Type::GOTO, go->line, go->file, "", go, NULL);
@@ -219,6 +255,7 @@ Theo::Node *P(ParseState &ps) {
     case Token::STOP: {
       Node *stop = ps.matchmk(Token::Type::STOP, Node::Type::STOP, NULL, NULL);
       Node *more = MOREP(ps);
+      expected_end_or_semicolon(ps);
       return ps.a.mk(Node::Type::SPLIT, stop->line, stop->file, "", stop, more);
     }
     default: {
@@ -227,14 +264,22 @@ Theo::Node *P(ParseState &ps) {
            "expected program component: assignment, label declaration, loop / "
            "while / goto statement, but found '" +
                ps.pos->text + "'"});
+      expected_end_or_semicolon(ps);
       return NULL;
     }
   }
 }
 
 Theo::Node *MOREP(ParseState &ps) {
-  if (ps.lookahead() != Theo::Token::PROGSEP) return NULL;
+  if (ps.lookahead() != Theo::Token::PROGSEP) {
+    return NULL;
+  }
   ps.match(Theo::Token::PROGSEP);
+  if (ps.lookahead() == Token::END || ps.lookahead() == Token::T_EOF) {
+    ps.a.errors.push_back(
+        {ps.pos->line, ps.pos->file,
+         "probable excess semicolon before '" + ps.pos->text + "'"});
+  }
   return P(ps);
 }
 
@@ -327,7 +372,7 @@ DEFINE PRIO 1000000 <ID> - <INT> AS RUN __DEC__ WITH $0, $1 END END DEFINE\n\
          "expected EOF, but got excess input: '" + ps.pos->text + "'"});
     ps.match(ps.lookahead());
     if (ps.lookahead() == Token::T_EOF) break;
-    P(ps);
+    S(ps);
   }
 
   std::vector<std::vector<ParseError>> errs = {sr.errors, mer.errors,
