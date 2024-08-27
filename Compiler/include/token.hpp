@@ -51,9 +51,9 @@ struct Token {
   std::string text;
   std::string file;
   int line;
-  Token() {};
+  Token(){};
   Token(Type t, std::string text, std::string file, int line)
-      : t(t), text(text), file(file), line(line) {};
+      : t(t), text(text), file(file), line(line){};
 };
 
 }  // namespace Theo

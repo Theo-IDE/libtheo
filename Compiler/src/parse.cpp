@@ -138,36 +138,33 @@ Theo::Node *MARGS(ParseState &ps) {
 }
 
 void expected_end_or_semicolon(ParseState &ps) {
-  for(;;)
-    switch(ps.lookahead()){
-    case Token::ID:
-    case Token::LOOP:
-    case Token::WHILE:
-    case Token::GOTO:
-    case Token::IF:
-    case Token::STOP: {
-      ps.a.errors.push_back({
-	  ps.pos->line,
-	  ps.pos->file,
-	  "probable missing ';' before '" + ps.pos->text + "'"
-	});
-      P(ps);
-      break;
-    }
-    case Token::PROGRAM: {
-      ps.a.errors.push_back({
-	  ps.pos->line,
-	  ps.pos->file,
-	  "program definition not allowed here; all program definitions must happen before global instructions"
-	});
-      S(ps);
-      break;
-    }
-    case Token::PROGSEP: {
-      MOREP(ps);
-      break;
-    }
-    default: return;
+  for (;;) switch (ps.lookahead()) {
+      case Token::ID:
+      case Token::LOOP:
+      case Token::WHILE:
+      case Token::GOTO:
+      case Token::IF:
+      case Token::STOP: {
+        ps.a.errors.push_back(
+            {ps.pos->line, ps.pos->file,
+             "probable missing ';' before '" + ps.pos->text + "'"});
+        P(ps);
+        break;
+      }
+      case Token::PROGRAM: {
+        ps.a.errors.push_back(
+            {ps.pos->line, ps.pos->file,
+             "program definition not allowed here; all program definitions "
+             "must happen before global instructions"});
+        S(ps);
+        break;
+      }
+      case Token::PROGSEP: {
+        MOREP(ps);
+        break;
+      }
+      default:
+        return;
     }
 }
 
@@ -263,10 +260,10 @@ Theo::Node *P(ParseState &ps) {
     }
     default: {
       ps.a.errors.push_back(
-			    {ps.pos->line, ps.pos->file,
-				"expected program component: assignment, label declaration, loop / "
-				"while / goto statement, but found '" +
-				ps.pos->text + "'"});
+          {ps.pos->line, ps.pos->file,
+           "expected program component: assignment, label declaration, loop / "
+           "while / goto statement, but found '" +
+               ps.pos->text + "'"});
       expected_end_or_semicolon(ps);
       return NULL;
     }
@@ -274,16 +271,14 @@ Theo::Node *P(ParseState &ps) {
 }
 
 Theo::Node *MOREP(ParseState &ps) {
-  if (ps.lookahead() != Theo::Token::PROGSEP){
+  if (ps.lookahead() != Theo::Token::PROGSEP) {
     return NULL;
   }
   ps.match(Theo::Token::PROGSEP);
   if (ps.lookahead() == Token::END || ps.lookahead() == Token::T_EOF) {
-    ps.a.errors.push_back({
-	ps.pos->line,
-	ps.pos->file,
-	"probable excess semicolon before '" + ps.pos->text + "'"
-      });
+    ps.a.errors.push_back(
+        {ps.pos->line, ps.pos->file,
+         "probable excess semicolon before '" + ps.pos->text + "'"});
   }
   return P(ps);
 }
