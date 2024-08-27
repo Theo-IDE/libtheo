@@ -78,6 +78,13 @@ ScanResult Theo::scan(std::map<FileName, FileContent> files, FileName main) {
         continue;
       }
 
+      if (exists_scanner(lex_stack, nfn)) {
+        errors.push_back({ParseError::Type::RECURSIVE_INCLUDE,
+                          "file '" + nfn + "' is included recursively", s.f,
+                          t.line});
+        continue;
+      }
+
       lex_stack.push_back(create_scanner(files[nfn], nfn));
       continue;
     }
