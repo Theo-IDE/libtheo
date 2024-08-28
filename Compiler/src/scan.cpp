@@ -61,6 +61,11 @@ ScanResult Theo::scan(std::map<FileName, FileContent> files, FileName main) {
       continue;
     }
 
+    if (t.t == Token::Type::UNKNOWN) {
+      errors.push_back({ParseError::Type::UNKNOWN_TOKEN,
+                        "unkown token '" + t.text + "'", s.f, t.line});
+    }
+
     if (t.t == Token::Type::INCLUDE) {
       d = yylex(&t, s.s);
       if (d == 0 || t.t != Token::Type::FNAME) {
@@ -133,6 +138,6 @@ std::string token_map[] = {"end of file",
                            "macro temporary designator"};
 
 std::string Theo::token_string(Theo::Token::Type t) {
-  if ((int)t < 0 || (int)t >= 36) return "";
+  if ((int)t < 0 || (int)t >= 36) return "unknown token";
   return token_map[t];
 }
