@@ -92,21 +92,17 @@ IF 0 THEN two := 1 ELSE two := 2 END\n\
 
   auto points = fin.code.getAvailableBreakpoints();
   std::vector<Theo::BreakPoint> mand = {
-    {"math.theo", 3},
-    {"math.theo", 4},
-    {"gen_test.theo", 4},
-    {"gen_test.theo", 5},
-    {"gen_test.theo", 6},
-    {"basemath.theo", 2},
-    {"basemath.theo", 3}
-  };
-  for( auto c : mand) {
-    if (!points.contains(c)){
-      std::cerr << "breakpoint " << c.file << ":" << c.line << " does not exist" << std::endl;
+      {"math.theo", 3},     {"math.theo", 4},     {"gen_test.theo", 4},
+      {"gen_test.theo", 5}, {"gen_test.theo", 6}, {"basemath.theo", 2},
+      {"basemath.theo", 3}};
+  for (auto c : mand) {
+    if (!points.contains(c)) {
+      std::cerr << "breakpoint " << c.file << ":" << c.line << " does not exist"
+                << std::endl;
       return 1;
     }
   }
-  
+
   // run it!
   Theo::VM v(fin.code);
 

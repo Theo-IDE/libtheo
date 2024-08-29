@@ -2,8 +2,8 @@
 #define _LIBTHEO_VM_VM_HPP_
 
 #include <optional>
+#include <set>
 #include <string>
-#include <unordered_set>
 #include <utility>
 #include <vector>
 
@@ -30,7 +30,7 @@ class VM {
                StackMapIndex debug_info);
 
    public:
-    typedef std::unordered_map<std::string, Word> Data;
+    typedef std::map<std::string, Word> Data;
 
     /**
      * get a list of variable names and corresponding current values
@@ -46,7 +46,7 @@ class VM {
   Program code;
   std::vector<Word> data;
   std::vector<Activation> stack;
-  std::unordered_set<BreakPoint> enabled_breakpoints;
+  std::set<BreakPoint> enabled_breakpoints;
 
  public:
   VM(Program code);
@@ -89,7 +89,7 @@ class VM {
   /**
    * reference to the set of currently enabled breakpoints
    */
-  std::unordered_set<BreakPoint>& getEnabledBreakPoints();
+  std::set<BreakPoint>& getEnabledBreakPoints();
 
   /**
    * resets the VM to its initial state;
