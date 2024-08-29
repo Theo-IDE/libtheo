@@ -1,4 +1,5 @@
 #include "VM/include/program.hpp"
+#include <algorithm>
 
 std::string op_to_str[] = {
     "<Potential Breakpoint>", "<Breakpoint>", "HALT", "ADD", "JMP",  "JMPC",
@@ -64,4 +65,10 @@ void Program::disassemble(std::ostream &o) {
         break;
     };
   }
+}
+
+std::unordered_set<BreakPoint> Program::getAvailableBreakpoints() {
+  std::unordered_set<BreakPoint> result = {};
+  std::for_each(potential_breaks.begin(), potential_breaks.end(), [&result](auto &p) -> void {result.insert(p.first);});
+  return result;
 }

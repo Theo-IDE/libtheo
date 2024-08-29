@@ -3,6 +3,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 #include "VM/include/instr.hpp"
@@ -15,8 +16,6 @@ struct BreakPoint {
 
 };  // namespace Theo
 
-// we want Breakpoints as keys in maps and in sets, so we need the following C++
-// bullshit:
 namespace std {
 
 // hashing two breakpoints by xor'ing filename hash and int hash
@@ -56,6 +55,11 @@ struct Program {
 
   /* disassemble the program into triplet code*/
   void disassemble(std::ostream &o);
+
+  /**
+   * get a list of available breakpoints
+   */
+  std::unordered_set<BreakPoint> getAvailableBreakpoints();
 };
 
 }  // namespace Theo
