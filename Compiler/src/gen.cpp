@@ -290,8 +290,9 @@ void dispatchWhile(GenState &gs, Node *c) {
 // dispatch loop construct
 void dispatchLoop(GenState &gs, Node *c) {
   gs.loops++;
-  std::string loop_counter =
-    "Loop Variable " + gs.fs.name + ":" + std::to_string(gs.fs.line) + "[" + std::to_string(gs.loops) + "]";
+  std::string loop_counter = "Loop Variable " + gs.fs.name + ":" +
+                             std::to_string(gs.fs.line) + "[" +
+                             std::to_string(gs.loops) + "]";
 
   RegisterIndex counter = gs.getSymbols().fetchVariableRegister(loop_counter);
 
