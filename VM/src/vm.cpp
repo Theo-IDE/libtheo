@@ -67,7 +67,7 @@ void VM::clearBreakpoints() {
   this->enabled_breakpoints.clear();
 }
 
-std::unordered_set<BreakPoint> &VM::getEnabledBreakPoints() {
+std::set<BreakPoint> &VM::getEnabledBreakPoints() {
   return this->enabled_breakpoints;
 }
 

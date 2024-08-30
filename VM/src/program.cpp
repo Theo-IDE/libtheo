@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "VM/include/program.hpp"
 
 std::string op_to_str[] = {
@@ -64,4 +66,17 @@ void Program::disassemble(std::ostream &o) {
         break;
     };
   }
+}
+
+bool Theo::operator<(const BreakPoint &bp1, const BreakPoint &bp2) {
+  if (bp1.file < bp2.file) return true;
+  if (bp2.file < bp1.file) return false;
+  return bp1.line < bp2.line;
+}
+
+std::set<BreakPoint> Program::getAvailableBreakpoints() {
+  std::set<BreakPoint> result = {};
+  std::for_each(potential_breaks.begin(), potential_breaks.end(),
+                [&result](auto &p) -> void { result.insert(p.first); });
+  return result;
 }
