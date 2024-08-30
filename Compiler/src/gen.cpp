@@ -77,6 +77,8 @@ struct GenState {
 
   std::vector<ProgramIndex> backpatching_todo;
 
+  int loops = 0;
+
   FileState fs;
 
   void err(CodegenResult::Error::Type t, std::string msg) {
@@ -287,8 +289,9 @@ void dispatchWhile(GenState &gs, Node *c) {
 
 // dispatch loop construct
 void dispatchLoop(GenState &gs, Node *c) {
+  gs.loops++;
   std::string loop_counter =
-      "Loop Variable " + gs.fs.name + ":" + std::to_string(gs.fs.line);
+    "Loop Variable " + gs.fs.name + ":" + std::to_string(gs.fs.line) + "[" + std::to_string(gs.loops) + "]";
 
   RegisterIndex counter = gs.getSymbols().fetchVariableRegister(loop_counter);
 
