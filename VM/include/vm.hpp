@@ -103,6 +103,26 @@ class VM {
    * will remain without effect
    */
   void execute();
+
+  /**
+   * execute a single instruction and return;
+   * use this method if you want to control the interpreter
+   * loop yourself (e.g. after executing a instruction you're
+   * able to check if execution was forcefully terminated)
+   * You may construct a loop that can be externally terminated
+   * and also breaks on breakpoints like this:
+   *   bool terminated = false;
+   *   while(!terminated && !vm.executeSingle()) ;
+   * @return true  : a breakpoint (or the end of the prorgram) was reached
+   *         false : no breakpoint was reached
+   */
+  bool executeSingle();
+
+  /**
+   * query if the VM has reached the end of the program
+   * @return true if the end has been reached
+   */
+  bool isDone();
 };
 
 }  // namespace Theo
