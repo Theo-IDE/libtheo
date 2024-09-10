@@ -112,9 +112,9 @@ bool VM::executeSingle() {
     // i.parameters.add.source << " + " << i.parameters.add.constant <<
     // std::endl;
     WordIndex base = this->stack.back().data_start;
-    this->data[base + i.parameters.add.target] =
+    this->data[base + i.parameters.add.target] = std::max(
       this->data[base + i.parameters.add.source] +
-      i.parameters.add.constant;
+      i.parameters.add.constant, 0);
     this->instruction_pointer++;
     break;
   }
