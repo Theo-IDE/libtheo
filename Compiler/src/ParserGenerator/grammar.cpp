@@ -101,7 +101,7 @@ void Grammar::calculateFirstSets() {
       for (auto &alternative : rule.second) {
         bool all_contain_epsilons = true;
         for (auto &symbol : alternative) {
-          int size_before = first_sets[left].size();
+          size_t size_before = first_sets[left].size();
           std::set<Symbol> &sset = first_sets[symbol];
           add_terminals(first_sets[left], sset);
           if (first_sets[left].size() > size_before) changed = true;

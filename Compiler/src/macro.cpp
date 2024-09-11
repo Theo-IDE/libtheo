@@ -356,13 +356,12 @@ struct MacroDetector {
 
   std::vector<ParseError> getErrors() {
     std::vector<ParseError> res = {};
-    for (auto &g : gen_res) {
+    if (!gen_res.empty())
       res.push_back(ParseError{ParseError::MACRO_COMPILE_NON_LR,
-                               "the macro you defined is non-linear; maybe you "
-                               "have <P> or <ARGS> as your last item; or you "
-                               "have ';' following <P> or ',' following <ARGS>",
-                               md.rule.begin()->file, md.rule.begin()->line});
-    }
+			       "the macro you defined is non-linear; maybe you "
+			       "have <P> or <ARGS> as your last item; or you "
+			       "have ';' following <P> or ',' following <ARGS>",
+			       md.rule.begin()->file, md.rule.begin()->line});
     return res;
   }
 
@@ -379,11 +378,11 @@ struct MacroDetector {
   }
 
   std::optional<Response> detect(std::vector<Token> &in) {
-    for (auto i = 0; i < in.size(); i++) {
+    for (std::vector<Token>::size_type i = 0; i < in.size(); i++) {
       auto p = parser.parse(std::ranges::subrange(in.begin() + i, in.end()));
       if (p.t == p.ACCEPT && check_constraint(p.st.split_sequence)) {
         return std::optional<Response>{
-            {i, (int)p.st.total_sequence.size(), p.st.split_sequence}};
+	  {(int)i, (int)p.st.total_sequence.size(), p.st.split_sequence}};
       }
     }
     return std::nullopt;
@@ -424,10 +423,9 @@ std::vector<Token> get_replacement(
         break;
       }
       case Theo::Token::TEMP_VAL: {
-        int ind = std::stoi(cand.text.substr(1, cand.text.size() - 1));
-        std::string text = cand.text + ":" + cand.file + ":" +
-                           std::to_string(def.replacement[0].line) + "_(M" +
-                           std::to_string(pass) + ")";
+	std::string text = cand.text + ":" + cand.file + ":" +
+	  std::to_string(def.replacement[0].line) + "_(M" +
+	  std::to_string(pass) + ")";
         Token next = cand;
         next.text = text;
         next.t = Theo::Token::ID;
@@ -468,7 +466,7 @@ Theo::MacroApplicationResult Theo::apply_macros(
 
   // replace p macros
   bool changed = false;
-  for (int pass = 0; pass < passes; pass++) {
+  for (unsigned int pass = 0; pass < passes; pass++) {
     changed = false;
 
     for (auto p = prios.rbegin(); p != prios.rend(); p++) {
