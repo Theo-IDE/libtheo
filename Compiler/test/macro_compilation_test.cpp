@@ -9,7 +9,7 @@ int main() {
 DEFINE\n\
   <V> + <V>\n\
 AS\n\
-  RUN add WITH $1, $2 END\n\
+  RUN add WITH $0, $1 END\n\
 END DEFINE";
 
   // <P> at the end should cause accept/shift conflicts (do we accept the
@@ -20,7 +20,7 @@ include \"included.theo\"\n\
 DEFINE\n\
   <P> BUT FIRST <P>\n\
 AS\n\
-    $2 ; $1\n\
+    $1 ; $0\n\
 END DEFINE";
 
   Theo::ScanResult sr =

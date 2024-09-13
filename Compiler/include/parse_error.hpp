@@ -16,7 +16,8 @@ struct ParseError {
     MACRO_EXTRACT_EMPTY_DEFINE,
     MACRO_COMPILE_NON_LR,
     MACRO_APPLY_REACHED_MAX_PASSES,
-    UNKNOWN_TOKEN
+    UNKNOWN_TOKEN,
+    RANGE
   };
   Type t;
   std::string msg;

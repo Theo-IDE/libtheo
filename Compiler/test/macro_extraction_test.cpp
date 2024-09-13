@@ -14,7 +14,7 @@ int main() {
       "\
 DEFINE \n\
   <V> + <V>\n\
-AS add($1, $2) END DEFINE\n\
+AS add($0, $1) END DEFINE\n\
 1 +2 +3 +4\n\
 ";
 
@@ -23,7 +23,7 @@ AS add($1, $2) END DEFINE\n\
 INCLUDE \"included.theo\"\n\
 DEFINE PRIORITY 10\n\
   <V> <V> * \n\
-AS mul($1, $2) END DEFINE\n\
+AS mul($0, $1) END DEFINE\n\
 DEFINE AS illegal END DEFINE \n\
 DEFINE DEFINE AS illegal2 illegal3 END DEFINE\n\
 this is some nonsensical input\n\
