@@ -1,7 +1,8 @@
+#include <limits.h>
+
 #include <algorithm>
 #include <ranges>
 #include <string>
-#include <limits.h>
 
 #include "Compiler/include/macro.hpp"
 #include "Compiler/include/scan.hpp"
@@ -26,10 +27,9 @@ int strToInt(ExtractionState &es, std::string tok) {
   long v = std::strtol(tok.c_str(), NULL, 10);
   int tp = MIN(es.tok_pos, es.tokens.size() - 1);
   if (v >= INT_MAX)
-    es.encountered_errors.push_back(
-				    {Theo::ParseError::Type::RANGE,
-				     "value '" + tok + "' is out of range",
-				     es.tokens[tp].file, es.tokens[tp].line});
+    es.encountered_errors.push_back({Theo::ParseError::Type::RANGE,
+                                     "value '" + tok + "' is out of range",
+                                     es.tokens[tp].file, es.tokens[tp].line});
 
   return v;
 }
@@ -134,7 +134,7 @@ void S(ExtractionState &es) {
         advance(es);
         if (match(es, Theo::Token::INT)) {
           es.incomplete_macros.back().priority =
-	    strToInt(es, es.tokens[es.tok_pos - 1].text);
+              strToInt(es, es.tokens[es.tok_pos - 1].text);
         }
       }
 
@@ -253,19 +253,18 @@ Theo::MacroExtractionResult Theo::extract_macros(
                         .tokens = tokens,
                         .output = {}};
   S(es);
-  //test that insertion points actually exist
-  for(auto &m : es.incomplete_macros) {
-    for(auto &t : m.replacement) {
-      if(t.t == Token::INSERTION){
-	int ind = strToInt(es, t.text.substr(1, t.text.size() - 1));
-	if (ind < 0 || ind >= (int)m.template_token_indices.size()){
-	  es.encountered_errors.push_back(
-	      {Theo::ParseError::Type::RANGE,
-	       t.text  + " does not reference a pattern",
-	       t.file, t.line});
-	  t.t = Token::ID;
-	  t.text = "error";
-	}
+  // test that insertion points actually exist
+  for (auto &m : es.incomplete_macros) {
+    for (auto &t : m.replacement) {
+      if (t.t == Token::INSERTION) {
+        int ind = strToInt(es, t.text.substr(1, t.text.size() - 1));
+        if (ind < 0 || ind >= (int)m.template_token_indices.size()) {
+          es.encountered_errors.push_back(
+              {Theo::ParseError::Type::RANGE,
+               t.text + " does not reference a pattern", t.file, t.line});
+          t.t = Token::ID;
+          t.text = "error";
+        }
       }
     }
   }
@@ -392,10 +391,10 @@ struct MacroDetector {
     std::vector<ParseError> res = {};
     if (!gen_res.empty())
       res.push_back(ParseError{ParseError::MACRO_COMPILE_NON_LR,
-			       "the macro you defined is non-linear; maybe you "
-			       "have <P> or <ARGS> as your last item; or you "
-			       "have ';' following <P> or ',' following <ARGS>",
-			       md.rule.begin()->file, md.rule.begin()->line});
+                               "the macro you defined is non-linear; maybe you "
+                               "have <P> or <ARGS> as your last item; or you "
+                               "have ';' following <P> or ',' following <ARGS>",
+                               md.rule.begin()->file, md.rule.begin()->line});
     return res;
   }
 
@@ -416,7 +415,7 @@ struct MacroDetector {
       auto p = parser.parse(std::ranges::subrange(in.begin() + i, in.end()));
       if (p.t == p.ACCEPT && check_constraint(p.st.split_sequence)) {
         return std::optional<Response>{
-	  {(int)i, (int)p.st.total_sequence.size(), p.st.split_sequence}};
+            {(int)i, (int)p.st.total_sequence.size(), p.st.split_sequence}};
       }
     }
     return std::nullopt;
@@ -457,9 +456,9 @@ std::vector<Token> get_replacement(
         break;
       }
       case Theo::Token::TEMP_VAL: {
-	std::string text = cand.text + ":" + cand.file + ":" +
-	  std::to_string(def.replacement[0].line) + "_(M" +
-	  std::to_string(pass) + ")";
+        std::string text = cand.text + ":" + cand.file + ":" +
+                           std::to_string(def.replacement[0].line) + "_(M" +
+                           std::to_string(pass) + ")";
         Token next = cand;
         next.text = text;
         next.t = Theo::Token::ID;

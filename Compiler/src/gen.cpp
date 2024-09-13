@@ -1,4 +1,5 @@
 #include <limits.h>
+
 #include <algorithm>
 #include <cstddef>
 #include <cstdint>
@@ -384,7 +385,13 @@ void dispatchCallArgs(GenState &gs, Node *c,
 int strToInt(GenState &gs, Node *c) {
   long v = std::strtol(c->tok.c_str(), NULL, 10);
   if (v >= INT_MAX)
-    gs.err(Theo::CodegenResult::Error::Type::INTERNAL_ERROR, "value '" + c->tok + "' is out of range");
+    gs.err(Theo::CodegenResult::Error::Type::INTERNAL_ERROR,
+           "value '" + c->tok + "' is out of range");
+  return v;
+}
+
+int strToIntSilent(GenState &gs, Node *c) {
+  long v = std::strtol(c->tok.c_str(), NULL, 10);
   return v;
 }
 
@@ -400,7 +407,8 @@ void dispatchValue(GenState &gs, Node *c, RegisterIndex tgt) {
       break;
     }
     case Node::Type::NUMBER: {
-      int cs = strToInt(gs, c);;
+      int cs = strToInt(gs, c);
+      ;
       gs.emit(Instruction::LoadConstant(tgt, cs));
       break;
     }
@@ -417,7 +425,7 @@ void dispatchValue(GenState &gs, Node *c, RegisterIndex tgt) {
 
       if ((funcname == "__INC__" || funcname == "__DEC__") &&
           register_constant_operation) {
-        int cs = strToInt(gs, c->right->right->left);
+        int cs = strToIntSilent(gs, c->right->right->left);
         if (funcname == "__INC__")
           gs.emit(Instruction::Add(tgt, arglocs[0], cs));
         else
