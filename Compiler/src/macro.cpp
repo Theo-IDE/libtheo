@@ -258,7 +258,7 @@ Theo::MacroExtractionResult Theo::extract_macros(
     for(auto &t : m.replacement) {
       if(t.t == Token::INSERTION){
 	int ind = strToInt(es, t.text.substr(1, t.text.size() - 1));
-	if (ind < 0 || ind >= m.template_token_indices.size()){
+	if (ind < 0 || ind >= (int)m.template_token_indices.size()){
 	  es.encountered_errors.push_back(
 	      {Theo::ParseError::Type::RANGE,
 	       t.text  + " does not reference a pattern",
