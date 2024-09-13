@@ -23,6 +23,7 @@ int main() {
        d = Grammar::Symbol::Terminal(8), e = Grammar::Symbol::Epsilon();
 
   auto nothing = [](std::vector<int> a) -> int {
+    (void)a;
     return 0;
   };  // do nothing action
 

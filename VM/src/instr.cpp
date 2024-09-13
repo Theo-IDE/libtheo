@@ -3,10 +3,12 @@
 using namespace Theo;
 
 Instruction Instruction::PotentialBreak() {
-  return {.op = OpCode::POTENTIAL_BREAK};
+  return {.op = OpCode::POTENTIAL_BREAK, .parameters = {.empty = {}}};
 }
 
-Instruction Instruction::Break() { return {.op = OpCode::BREAK}; }
+Instruction Instruction::Break() {
+  return {.op = OpCode::BREAK, .parameters = {.empty = {}}};
+}
 
 Instruction Instruction::Test(RegisterIndex target, RegisterIndex op1,
                               RegisterIndex op2) {
@@ -22,7 +24,9 @@ Instruction Instruction::Add(RegisterIndex target, RegisterIndex source,
           .add = {.target = target, .source = source, .constant = constant}}};
 }
 
-Instruction Instruction::Halt() { return {.op = OpCode::HALT}; }
+Instruction Instruction::Halt() {
+  return {.op = OpCode::HALT, .parameters = {.empty = {}}};
+}
 
 Instruction Instruction::Jmp(JumpOffset offset) {
   return {.op = OpCode::JMP,

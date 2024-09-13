@@ -22,6 +22,9 @@ struct LRParser {
 
   struct ParseResult {
     enum Type { ACCEPT = 0, REJECT = 1 };
+    ParseResult(Type t, std::string msg) : t(t), msg(msg) {};
+    ParseResult(Type t, std::string msg, SemanticType st)
+        : t(t), msg(msg), st(st) {};
     Type t;
     std::string msg;
     SemanticType st;  // uninitialized when t != ACCEPT
@@ -42,11 +45,10 @@ struct LRParser {
    */
   LRParser(SemanticGrammar<SemanticType> G, bool accept_prefix, Translator t,
            Creator c, Grammar::Symbol S, Grammar::Symbol eof)
-      :
+      : G(G),
         accept_prefix(accept_prefix),
         translator(t),
         creator(c),
-	G(G),
         S(S),
         eof(eof) {};
 
@@ -69,15 +71,16 @@ struct LRParser {
   ParseResult parse(Iterable in);
 
  private:
+  SemanticGrammar<SemanticType> G;
   bool accept_prefix;
   Translator translator;
   Creator creator;
-  SemanticGrammar<SemanticType> G;
   Grammar::Symbol S;
   Grammar::Symbol eof;
 
   struct Action {
     enum Type { SHIFT, REDUCE, ACCEPT, ERR };
+    Action(Type t) : t(t) {};
     Type t;
 
     // shift action
@@ -85,7 +88,7 @@ struct LRParser {
 
     // reduce action
     int left;  // left side of the rule that is reduced, used as index into jump
-               // table
+    // table
     int beta;  // number of symbols popped of the value and state stacks
     std::function<SemanticType(std::vector<SemanticType>)> action;
   };
@@ -106,7 +109,7 @@ LRParser<SemanticType, TokenType>::generateParseTables() {
   int jump_width = G.total_non_terminals;
 
   action = std::vector<std::vector<Action>>(
-      tables_height, std::vector<Action>(action_width, {.t = Action::ERR}));
+      tables_height, std::vector<Action>(action_width, Action(Action::ERR)));
   jump = std::vector<std::vector<int>>(tables_height,
                                        std::vector<int>(jump_width, -1));
 
@@ -120,7 +123,9 @@ LRParser<SemanticType, TokenType>::generateParseTables() {
         break;
       }
       default:
-        action[state][terminal] = {.t = Action::SHIFT, .state = target};
+        Action act(Action::SHIFT);
+        act.state = target;
+        action[state][terminal] = act;
     }
   };
 
@@ -149,10 +154,11 @@ LRParser<SemanticType, TokenType>::generateParseTables() {
       }
       default:
         auto a = G.actions[left.left][left.alternative];
-        action[state][terminal] = {.t = Action::REDUCE,
-                                   .left = (int)left.left.index,
-                                   .beta = size,
-                                   .action = a};
+        Action act(Action::REDUCE);
+        act.left = (int)left.left.index;
+        act.beta = size;
+        act.action = a;
+        action[state][terminal] = act;
     }
   };
 
@@ -171,7 +177,7 @@ LRParser<SemanticType, TokenType>::generateParseTables() {
         break;
       }
       default:
-        action[state][terminal] = {.t = Action::ACCEPT};
+        action[state][terminal] = Action(Action::ACCEPT);
     }
   };
 
@@ -219,7 +225,8 @@ LRParser<SemanticType, TokenType>::parse(Iterable in) {
   for (;;) {
     int s = states.back();
     int a = translator(*ip).index;
-    if ((int)action[s].size() <= a) return {ParseResult::REJECT, "not ok"};
+    if ((int)action[s].size() <= a)
+      return ParseResult(ParseResult::REJECT, "not ok");
     switch (action[s][a].t) {
       case Action::SHIFT: {
         int s_prime = action[s][a].state;
@@ -243,11 +250,11 @@ LRParser<SemanticType, TokenType>::parse(Iterable in) {
         break;
       }
       case Action::ACCEPT: {
-        return {ParseResult::ACCEPT, "ok", values.back()};
+        return ParseResult(ParseResult::ACCEPT, "ok", values.back());
         break;
       }
       default:
-        return {ParseResult::REJECT, "not ok"};
+        return ParseResult(ParseResult::REJECT, "not ok");
         break;
     }
   }

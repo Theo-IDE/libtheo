@@ -390,7 +390,7 @@ int strToInt(GenState &gs, Node *c) {
   return v;
 }
 
-int strToIntSilent(GenState &gs, Node *c) {
+int strToIntSilent(Node *c) {
   long v = std::strtol(c->tok.c_str(), NULL, 10);
   return v;
 }
@@ -425,7 +425,7 @@ void dispatchValue(GenState &gs, Node *c, RegisterIndex tgt) {
 
       if ((funcname == "__INC__" || funcname == "__DEC__") &&
           register_constant_operation) {
-        int cs = strToIntSilent(gs, c->right->right->left);
+        int cs = strToIntSilent(c->right->right->left);
         if (funcname == "__INC__")
           gs.emit(Instruction::Add(tgt, arglocs[0], cs));
         else
@@ -552,6 +552,8 @@ CodegenResult Theo::gen(Theo::AST in) {
       .errors = {},
       .symbols = {},
       .funcAddrs = {},
+      .labels = {},
+      .backpatching_todo = {},
       .fs =
           {
               .name = "#root_file_context",
@@ -573,9 +575,8 @@ CodegenResult Theo::gen(Theo::AST in) {
   gs.emit(Instruction::Halt());
   gs.backpatch();
 
-  return {
-      .generated_correctly = gs.errors.size() == 0,
-      .errors = gs.errors,
-      .code = gs.out,
-  };
+  return {.generated_correctly = gs.errors.size() == 0,
+          .errors = gs.errors,
+          .code = gs.out,
+          .file_requests = {}};
 }

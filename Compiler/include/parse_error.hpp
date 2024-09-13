@@ -23,7 +23,7 @@ struct ParseError {
   std::string msg;
   std::string file;
   int line;
-  std::string file_request;
+  std::string file_request = "";
 };
 
 };  // namespace Theo
