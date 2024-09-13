@@ -1,6 +1,10 @@
+#include <limits.h>
+
 #include <algorithm>
 #include <cstddef>
+#include <cstdint>
 #include <cstdio>
+#include <cstdlib>
 #include <map>
 #include <string>
 
@@ -378,6 +382,19 @@ void dispatchCallArgs(GenState &gs, Node *c,
   arglocs.push_back(tmp);
 }
 
+int strToInt(GenState &gs, Node *c) {
+  long v = std::strtol(c->tok.c_str(), NULL, 10);
+  if (v >= INT_MAX)
+    gs.err(Theo::CodegenResult::Error::Type::INTERNAL_ERROR,
+           "value '" + c->tok + "' is out of range");
+  return v;
+}
+
+int strToIntSilent(Node *c) {
+  long v = std::strtol(c->tok.c_str(), NULL, 10);
+  return v;
+}
+
 void dispatchValue(GenState &gs, Node *c, RegisterIndex tgt) {
   if (c == NULL) return;
   gs.advanceLine(c->line, c->file);
@@ -390,7 +407,8 @@ void dispatchValue(GenState &gs, Node *c, RegisterIndex tgt) {
       break;
     }
     case Node::Type::NUMBER: {
-      int cs = std::stoi(std::string(c->tok));
+      int cs = strToInt(gs, c);
+      ;
       gs.emit(Instruction::LoadConstant(tgt, cs));
       break;
     }
@@ -407,7 +425,7 @@ void dispatchValue(GenState &gs, Node *c, RegisterIndex tgt) {
 
       if ((funcname == "__INC__" || funcname == "__DEC__") &&
           register_constant_operation) {
-        int cs = std::stoi(std::string(c->right->right->left->tok));
+        int cs = strToIntSilent(c->right->right->left);
         if (funcname == "__INC__")
           gs.emit(Instruction::Add(tgt, arglocs[0], cs));
         else
@@ -534,6 +552,8 @@ CodegenResult Theo::gen(Theo::AST in) {
       .errors = {},
       .symbols = {},
       .funcAddrs = {},
+      .labels = {},
+      .backpatching_todo = {},
       .fs =
           {
               .name = "#root_file_context",
@@ -555,9 +575,8 @@ CodegenResult Theo::gen(Theo::AST in) {
   gs.emit(Instruction::Halt());
   gs.backpatch();
 
-  return {
-      .generated_correctly = gs.errors.size() == 0,
-      .errors = gs.errors,
-      .code = gs.out,
-  };
+  return {.generated_correctly = gs.errors.size() == 0,
+          .errors = gs.errors,
+          .code = gs.out,
+          .file_requests = {}};
 }

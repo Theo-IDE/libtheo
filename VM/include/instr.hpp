@@ -60,6 +60,8 @@ struct Instruction {
     struct {
       RegisterIndex source;
     } ret;
+    struct {
+    } empty;
   } parameters;
 
   static Instruction PotentialBreak();
