@@ -90,7 +90,7 @@ END DEFINE\n\
     return 1;
   }
 
-  for (auto i = 0; i < expect.size(); i++) {
+  for (size_t i = 0; i < expect.size(); i++) {
     if (expect[i].t != mar.transformed_sequence[i].t ||
         expect[i].text != mar.transformed_sequence[i].text) {
       std::cerr << "Token " << i << " mismatch: " << std::endl

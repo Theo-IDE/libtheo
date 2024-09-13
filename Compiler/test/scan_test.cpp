@@ -62,7 +62,7 @@ INCLUDE \"nothing\"\n\
     std::cerr << "expected 5 tokens, got " << res.toks.size() << std::endl;
     err = true;
   } else
-    for (auto i = 0; i < compare.size(); i++) {
+    for (size_t i = 0; i < compare.size(); i++) {
       std::cout << compare[i].t << " " << res.toks[i].t << std::endl
                 << compare[i].text << " " << res.toks[i].text << std::endl
                 << compare[i].file << " " << res.toks[i].file << std::endl

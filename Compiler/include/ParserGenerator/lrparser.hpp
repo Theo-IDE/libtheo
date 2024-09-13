@@ -42,10 +42,11 @@ struct LRParser {
    */
   LRParser(SemanticGrammar<SemanticType> G, bool accept_prefix, Translator t,
            Creator c, Grammar::Symbol S, Grammar::Symbol eof)
-      : G(G),
+      :
         accept_prefix(accept_prefix),
         translator(t),
         creator(c),
+	G(G),
         S(S),
         eof(eof) {};
 
@@ -125,7 +126,7 @@ LRParser<SemanticType, TokenType>::generateParseTables() {
 
   auto is_reduce_rule = [&](const LRElement &e) -> std::pair<bool, int> {
     Grammar::Alternative a = G.right_sides[e.left][e.alternative];
-    int s = a.size();
+    const unsigned int s = a.size();
     return std::make_pair(e.dot == s, s);
   };
 
@@ -218,7 +219,7 @@ LRParser<SemanticType, TokenType>::parse(Iterable in) {
   for (;;) {
     int s = states.back();
     int a = translator(*ip).index;
-    if (action[s].size() <= a) return {ParseResult::REJECT, "not ok"};
+    if ((int)action[s].size() <= a) return {ParseResult::REJECT, "not ok"};
     switch (action[s][a].t) {
       case Action::SHIFT: {
         int s_prime = action[s][a].state;

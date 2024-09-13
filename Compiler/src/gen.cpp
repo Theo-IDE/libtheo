@@ -424,7 +424,7 @@ void dispatchValue(GenState &gs, Node *c, RegisterIndex tgt) {
 
       Prog p = gs.funcAddrs[funcname];
 
-      if (p.argnum != arglocs.size()) {
+      if (p.argnum != (int)arglocs.size()) {
         gs.err(CodegenResult::Error::Type::ARGSIZE_MISMATCH,
                "expected " + std::to_string(p.argnum) + " arguments but got " +
                    std::to_string(arglocs.size()));
